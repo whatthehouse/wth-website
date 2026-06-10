@@ -1,0 +1,81 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Used as preview path / media handling
+media_folder: "public/assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+locale: "th"
+
+collections:
+  - name: "blog"
+    label: "บทความ (Blog)"
+    label_singular: "บทความ"
+    folder: "src/content/blog"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    summary: "{{title}} — {{pubDate}}"
+    sortable_fields: ["pubDate", "title", "category"]
+    fields:
+      - { label: "หัวข้อ (ภาษาไทย)", name: "title", widget: "string" }
+      - { label: "Title (English)", name: "titleEn", widget: "string", required: false }
+      - { label: "คำอธิบายสั้น (ภาษาไทย)", name: "description", widget: "text" }
+      - { label: "Description (English)", name: "descriptionEn", widget: "text", required: false }
+      - { label: "วันที่เผยแพร่", name: "pubDate", widget: "datetime" }
+      - { label: "หมวดหมู่ (ภาษาไทย)", name: "category", widget: "string" }
+      - { label: "Category (English)", name: "categoryEn", widget: "string", required: false }
+      - { label: "รูปปก", name: "coverImage", widget: "image", required: false }
+      - { label: "ซ่อนบทความนี้ (Draft)", name: "draft", widget: "boolean", default: false }
+      - { label: "เนื้อหาบทความ", name: "body", widget: "markdown" }
+
+  - name: "portfolio"
+    label: "ผลงาน (Portfolio)"
+    label_singular: "ผลงาน"
+    folder: "src/content/portfolio"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    summary: "{{title}} ({{type}})"
+    sortable_fields: ["order", "title", "type"]
+    fields:
+      - { label: "ลำดับการแสดงผล", name: "order", widget: "number", default: 0, hint: "ตัวเลขน้อยแสดงก่อน" }
+      - label: "ประเภทผลงาน"
+        name: "type"
+        widget: "select"
+        options:
+          - { label: "บ้าน / ทาวน์เฮ้าส์", value: "house" }
+          - { label: "คอนโด", value: "condo" }
+          - { label: "ควบคุมงานก่อสร้าง", value: "supervision" }
+          - { label: "ตรวจปัญหา/ข้อบกพร่อง", value: "defect" }
+      - { label: "แท็ก (ภาษาไทย)", name: "tagTh", widget: "string" }
+      - { label: "Tag (English)", name: "tagEn", widget: "string" }
+      - { label: "ชื่อผลงาน (ภาษาไทย)", name: "title", widget: "string" }
+      - { label: "Title (English)", name: "titleEn", widget: "string" }
+      - { label: "พื้นที่ให้บริการ (ภาษาไทย)", name: "areaTh", widget: "string" }
+      - { label: "Area (English)", name: "areaEn", widget: "string" }
+      - { label: "ขนาดพื้นที่", name: "size", widget: "string", hint: "เช่น 220 ตร.ม." }
+      - { label: "ประเภทบริการ (ภาษาไทย)", name: "serviceTh", widget: "string" }
+      - { label: "Service (English)", name: "serviceEn", widget: "string" }
+      - { label: "รูปภาพผลงาน", name: "image", widget: "image", required: false }
+
+  - name: "settings"
+    label: "ตั้งค่าเว็บไซต์ (Settings)"
+    editor:
+      preview: false
+    files:
+      - name: "general"
+        label: "ข้อมูลติดต่อ (Contact Info)"
+        file: "src/data/settings.json"
+        fields:
+          - { label: "เบอร์โทร (สำหรับปุ่มโทร, รูปแบบ +66XXXXXXXXX)", name: "phone", widget: "string" }
+          - { label: "เบอร์โทร (รูปแบบที่แสดงบนเว็บ)", name: "phoneDisplay", widget: "string" }
+          - { label: "LINE ID", name: "lineId", widget: "string" }
+          - { label: "ลิงก์ LINE (Add Friend / line.me)", name: "lineUrl", widget: "string" }
+          - { label: "ลิงก์ Facebook เพจ", name: "facebookUrl", widget: "string" }
+          - { label: "ชื่อ Facebook ที่แสดงผล", name: "facebookDisplay", widget: "string" }
+          - { label: "อีเมล", name: "email", widget: "string" }
+          - { label: "Google Analytics 4 Measurement ID", name: "gaId", widget: "string", required: false, hint: "เช่น G-XXXXXXXXXX (เว้นว่างถ้ายังไม่ใช้)" }

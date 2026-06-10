@@ -1,0 +1,343 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const services = [
+  {
+    id: "s1",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>`,
+    title: { th: "ตรวจบ้าน / คอนโด ก่อนรับมอบ", en: "Home & Condo Pre-Handover Inspection" },
+    tagline: { th: "บริการหลัก — ตรวจก่อนรับมอบ ก่อนโอนกรรมสิทธิ์", en: "Core service — inspect before handover and before transfer" },
+    desc: {
+      th: "บริการตรวจสอบสภาพบ้านหรือคอนโดอย่างละเอียดก่อนที่คุณจะเซ็นรับมอบ เพื่อให้มั่นใจว่าทรัพย์สินที่คุณรับมอบนั้นอยู่ในสภาพที่ถูกต้องตามมาตรฐาน และปัญหาทุกจุดได้รับการแก้ไขก่อนที่จะสายเกินไป",
+      en: "A thorough inspection of your home or condo before you sign the handover documents — ensuring the property meets standards and every defect is addressed before it becomes your problem."
+    },
+    items: {
+      th: ["โครงสร้างและฐานราก รอยแตกร้าว การทรุดตัว","ผนัง เพดาน พื้น ฝ้า งานปูกระเบื้อง","ระบบไฟฟ้า สวิตช์ เต้ารับ แผงไฟ สายดิน","ระบบประปา ก๊อกน้ำ ท่อ แรงดัน การรั่วซึม","ระบบระบายน้ำและสุขาภิบาล","หลังคา โครงสร้าง จุดรั่วซึม รางน้ำ","ประตู หน้าต่าง วงกบ บานพับ กลอน","ระบบปรับอากาศ การติดตั้ง การทำงาน","งานสี การตกแต่ง ความเรียบร้อยโดยรวม","บริเวณภายนอก รั้ว ที่จอดรถ พื้นที่ส่วนกลาง"],
+      en: ["Structure and foundation — cracks, settling","Walls, ceilings, floors and tiling","Electrical system — switches, outlets, panel, earthing","Plumbing — taps, pipes, water pressure, leaks","Drainage and sanitation systems","Roof structure, leak points, guttering","Doors, windows, frames and hardware","Air-conditioning installation and operation","Paint and finishes — overall quality","Exterior, fencing, parking and common areas"]
+    },
+    highlight: { th: "รวมตรวจ 2 รอบ — รอบก่อนรับมอบ + รอบหลังแก้ไข", en: "Includes 2 rounds — pre-handover + post-repair re-inspection" }
+  },
+  {
+    id: "s2",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M4 20V8l8-5 8 5v12"/><path d="M9 20v-6h6v6"/></svg>`,
+    title: { th: "ควบคุมงานก่อสร้าง", en: "Construction Supervision" },
+    tagline: { th: "ตรวจคุณภาพและความคืบหน้าตามงวด ก่อนจ่ายเงิน", en: "Quality and progress checks at each milestone — before you pay" },
+    desc: {
+      th: "หากคุณกำลังสร้างบ้านเองกับผู้รับเหมา บริการนี้จะช่วยให้คุณมั่นใจว่างานแต่ละงวดเสร็จตามมาตรฐานและแบบแปลนที่ตกลงไว้ ก่อนที่คุณจะจ่ายเงินค่างวดนั้น",
+      en: "If you're building with a private contractor, this service ensures each phase is completed to standard and matches the agreed drawings — before you release payment."
+    },
+    items: {
+      th: ["ตรวจงานโครงสร้าง เสา คาน พื้น ตามแบบแปลน","ตรวจงานก่ออิฐ ฉาบปูน ก่อนทาสีหรือติดกระเบื้อง","ตรวจงานระบบไฟฟ้าและประปา ก่อนปิดผนัง","ตรวจงานหลังคาและกันซึม","ตรวจงานตกแต่งภายในและภายนอก","รายงานความคืบหน้าพร้อมภาพถ่ายทุกครั้ง","แจ้งประเด็นที่ต้องแก้ไขก่อนรับงวดงาน"],
+      en: ["Structural work — columns, beams, floors vs drawings","Brickwork and plastering before paint or tiling","Electrical and plumbing rough-in before wall closure","Roofing and waterproofing inspection","Interior and exterior finishing review","Progress report with photos each visit","Flag issues before each milestone payment"]
+    },
+    highlight: { th: "ช่วยให้คุณควบคุมคุณภาพงาน แม้ไม่ได้อยู่หน้างานเอง", en: "Quality control for you — even when you can't be on site" }
+  },
+  {
+    id: "s3",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>`,
+    title: { th: "ที่ปรึกษาก่อนสร้างบ้าน", en: "Pre-Construction Consulting" },
+    tagline: { th: "รีวิวแบบแปลน วัสดุ และ BOQ ก่อนเซ็นสัญญา", en: "Review plans, materials and BOQ before signing" },
+    desc: {
+      th: "ก่อนที่คุณจะเซ็นสัญญากับผู้รับเหมา เราช่วยตรวจสอบแบบแปลน สเปควัสดุ และ BOQ เพื่อให้แน่ใจว่าสิ่งที่คุณจ่ายไปนั้นคุ้มค่า และป้องกันปัญหาที่จะเกิดขึ้นในอนาคต",
+      en: "Before you sign with a contractor, we review plans, material specs and the BOQ to make sure you're getting value for money and to prevent future problems."
+    },
+    items: {
+      th: ["วิเคราะห์แบบแปลนสถาปัตยกรรมและโครงสร้าง","ตรวจสอบความสมเหตุสมผลของ BOQ และราคา","แนะนำสเปควัสดุที่เหมาะสมกับงบประมาณ","ชี้จุดเสี่ยงในแบบที่อาจก่อให้เกิดปัญหาภายหลัง","ให้คำแนะนำด้านฟังก์ชันและการใช้งาน","จัดทำรายงานสรุปพร้อมข้อเสนอแนะ"],
+      en: ["Analyse architectural and structural plans","Verify BOQ reasonableness and pricing","Recommend material specs suited to your budget","Flag design risks that may cause future problems","Advise on functionality and practical use","Summary report with recommendations"]
+    },
+    highlight: { th: "ลงทุนน้อย ป้องกันปัญหาใหญ่ในอนาคต", en: "Small investment now — prevent major problems later" }
+  },
+  {
+    id: "s4",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>`,
+    title: { th: "ที่ปรึกษางานต่อเติม / รีโนเวท", en: "Renovation & Extension Consulting" },
+    tagline: { th: "ประเมิน วางแผน และตรวจคุณภาพงานต่อเติม", en: "Assess, plan and QC your renovation or extension" },
+    desc: {
+      th: "การต่อเติมหรือรีโนเวทบ้านที่ไม่ได้วางแผนดีพอ อาจส่งผลเสียต่อโครงสร้างเดิม เราช่วยประเมินความเป็นไปได้ วางแผนให้ถูกต้อง และตรวจสอบคุณภาพงานระหว่างดำเนินการ",
+      en: "Poorly planned renovations can damage existing structure. We assess feasibility, help plan correctly, and check quality throughout the work."
+    },
+    items: {
+      th: ["ประเมินความเป็นไปได้และผลกระทบต่อโครงสร้างเดิม","ให้คำแนะนำด้านการออกแบบและวัสดุ","ตรวจสอบงานระหว่างดำเนินการ","ตรวจรับงานเมื่อแล้วเสร็จ","จัดทำรายงานการตรวจพร้อมภาพถ่าย"],
+      en: ["Feasibility assessment and structural impact","Design and material recommendations","Quality checks during the work","Final inspection on completion","Inspection report with photos"]
+    },
+    highlight: { th: "ต่อเติมถูกต้อง ปลอดภัย ไม่มีปัญหาตามมา", en: "Extend the right way — safe, sound, no surprises" }
+  },
+  {
+    id: "s5",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
+    title: { th: "ตรวจปัญหาบ้าน / วินิจฉัยข้อบกพร่อง", en: "Defect & Problem Diagnosis" },
+    tagline: { th: "หาสาเหตุที่แท้จริง ไม่ใช่แค่แก้อาการ", en: "Find the real cause — not just treat the symptoms" },
+    desc: {
+      th: "หากบ้านของคุณมีปัญหาที่แก้แล้วแก้อีก เช่น น้ำรั่ว น้ำซึม ผนังแตกร้าว พื้นทรุด หรือปัญหาไฟฟ้า เราจะช่วยหาสาเหตุที่แท้จริงและแนวทางการแก้ไขที่ถูกต้อง",
+      en: "If your home has recurring problems — leaks, cracks, sinking floors, electrical issues — we find the real root cause and the right solution, not just a patch."
+    },
+    items: {
+      th: ["วินิจฉัยสาเหตุน้ำรั่วและน้ำซึม","ตรวจสอบรอยแตกร้าวในผนังและโครงสร้าง","ประเมินการทรุดตัวของพื้นและฐานราก","ตรวจสอบปัญหาระบบไฟฟ้าและประปา","ใช้อุปกรณ์เฉพาะทาง เช่น กล้องความร้อน","จัดทำรายงานพร้อมแนวทางแก้ไขที่ชัดเจน"],
+      en: ["Diagnose sources of water leaks and seepage","Inspect wall and structural cracks","Assess floor and foundation settlement","Identify electrical and plumbing faults","Specialist tools including thermal imaging","Report with clear, actionable repair guidance"]
+    },
+    highlight: { th: "แก้ถูกจุด ไม่เสียเงินซ่อมซ้ำไปเรื่อย ๆ", en: "Fix it right the first time — stop paying for repeat repairs" }
+  },
+  {
+    id: "s6",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
+    title: { th: "ตรวจรับงานผู้รับเหมา", en: "Contractor Work Inspection" },
+    tagline: { th: "คนกลางตรวจคุณภาพงาน ก่อนคุณจ่ายเงิน", en: "Independent QC before you release payment" },
+    desc: {
+      th: "เมื่อผู้รับเหมาแจ้งว่างานแล้วเสร็จ คุณควรให้ผู้เชี่ยวชาญอิสระตรวจก่อนจ่ายเงิน ไม่ว่าจะเป็นงานก่อสร้างใหม่ งานรีโนเวท งานซ่อมแซม หรืองานต่อเติม",
+      en: "When a contractor says the job is done, have an independent expert verify it before you pay — whether it's new construction, renovation, repairs or an extension."
+    },
+    items: {
+      th: ["ตรวจงานก่อสร้างใหม่ตามแบบแปลนและสัญญา","ตรวจงานรีโนเวทและต่อเติม","ตรวจงานซ่อมแซมหลังเกิดความเสียหาย","เปรียบเทียบงานที่ทำจริงกับ BOQ ที่ตกลงไว้","จัดทำรายงานพร้อมรายการที่ยังต้องแก้ไข","ช่วยเจรจาหักเงินในกรณีงานไม่ครบถ้วน"],
+      en: ["Inspect new construction against plans and contract","Review renovation and extension work","Assess post-damage repair quality","Compare actual work against agreed BOQ","Report listing outstanding items to fix","Support payment negotiation for incomplete work"]
+    },
+    highlight: { th: "จ่ายเงินด้วยความมั่นใจ ไม่ตามแก้ปัญหาในภายหลัง", en: "Pay with confidence — no chasing problems afterwards" }
+  },
+];
+---
+<BaseLayout
+  title="บริการตรวจบ้าน ตรวจคอนโด เชียงใหม่ | WHAT THE HOUSE"
+  description="บริการตรวจบ้านและคอนโดครบวงจร เชียงใหม่ ลำพูน ลำปาง เชียงราย ตรวจก่อนรับมอบ ควบคุมงานก่อสร้าง ที่ปรึกษา ตรวจปัญหาบ้าน | Home inspection services Chiang Mai"
+>
+  <Header />
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">บริการ</span><span class="lang-en">Services</span></p>
+        <span class="eyebrow"><span class="lang-th">บริการของเรา</span><span class="lang-en">Our Services</span></span>
+        <h1><span class="lang-th">บริการครบ ตั้งแต่ก่อนสร้าง<br>จนถึงรับมอบ</span><span class="lang-en">Full-spectrum services —<br>from planning to handover</span></h1>
+        <p><span class="lang-th">6 บริการที่ครอบคลุมทุกความต้องการของเจ้าของบ้านและนักลงทุนอสังหาริมทรัพย์</span><span class="lang-en block">6 services covering every need for homeowners and property investors.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ SERVICE OVERVIEW CARDS ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="grid grid-3">
+          {services.map((s) => (
+            <a class="card svc-overview-card" href={`#${s.id}`}>
+              <div class="svc-ic" set:html={s.icon} />
+              <h3>
+                <span class="lang-th">{s.title.th}</span>
+                <span class="lang-en">{s.title.en}</span>
+              </h3>
+              <p>
+                <span class="lang-th">{s.tagline.th}</span>
+                <span class="lang-en block">{s.tagline.en}</span>
+              </p>
+              <span class="more"><span class="lang-th">ดูรายละเอียด</span><span class="lang-en">See details</span> ↓</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICE DETAILS ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="svc-detail">
+          {services.map((s, i) => (
+            <div class="svc-block" id={s.id}>
+              <div class="head">
+                <div class="svc-ic" set:html={s.icon} />
+                <div>
+                  <span class="svc-num">0{i + 1}</span>
+                  <h2>
+                    <span class="lang-th">{s.title.th}</span>
+                    <span class="lang-en">{s.title.en}</span>
+                  </h2>
+                </div>
+              </div>
+
+              <p class="tagline">
+                <span class="lang-th">{s.tagline.th}</span>
+                <span class="lang-en block">{s.tagline.en}</span>
+              </p>
+
+              <p class="svc-desc">
+                <span class="lang-th">{s.desc.th}</span>
+                <span class="lang-en block">{s.desc.en}</span>
+              </p>
+
+              <div class="svc-check-grid">
+                <div>
+                  <h4 class="svc-check-title">
+                    <span class="lang-th">สิ่งที่เราตรวจ / ดูแล</span>
+                    <span class="lang-en">What we inspect / cover</span>
+                  </h4>
+                  <ul class="svc-check-list">
+                    {s.items.th.map((item, idx) => (
+                      <li>
+                        <span class="lang-th">{item}</span>
+                        <span class="lang-en block">{s.items.en[idx]}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div class="svc-highlight-box">
+                  <div class="sh-icon">
+                    <svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+                  </div>
+                  <p>
+                    <span class="lang-th">{s.highlight.th}</span>
+                    <span class="lang-en block">{s.highlight.en}</span>
+                  </p>
+                  <a href="/contact" class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center">
+                    <span class="lang-th">จองบริการนี้</span>
+                    <span class="lang-en">Book this service</span>
+                  </a>
+                  {s.id === 's1' ? (
+                    <a href="/pricing" class="btn btn-ghost" style="margin-top:8px;width:100%;justify-content:center">
+                      <span class="lang-th">ดูราคา</span>
+                      <span class="lang-en">View pricing</span>
+                    </a>
+                  ) : (
+                    <a href="/contact" class="btn btn-ghost" style="margin-top:8px;width:100%;justify-content:center">
+                      <span class="lang-th">ขอราคา</span>
+                      <span class="lang-en">Get a Quote</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">ไม่แน่ใจว่าต้องการบริการไหน?</span><span class="lang-en">Not sure which service you need?</span></h2>
+          <p><span class="lang-th">ติดต่อเราได้เลย เราจะช่วยแนะนำบริการที่เหมาะสมกับสถานการณ์ของคุณโดยเฉพาะ</span><span class="lang-en block">Just reach out — we'll recommend the right service for your exact situation.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">ปรึกษาฟรี</span><span class="lang-en">Free Consultation</span></a>
+            <a class="btn btn-ghost btn-lg" href="/contact"><span class="lang-th">ขอราคา</span><span class="lang-en">Get a Quote</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+/* overview cards */
+.svc-overview-card { text-decoration: none; }
+.svc-overview-card h3 { font-size: 1rem; margin: 0 0 .3em; }
+.svc-overview-card p { font-size: .88rem; color: var(--grey); margin: 0; }
+
+/* detail blocks */
+.svc-block {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 36px;
+  scroll-margin-top: 90px;
+}
+.svc-block .head {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.svc-block .head .svc-ic { margin-bottom: 0; flex: none; }
+.svc-num {
+  display: block;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.svc-block h2 { font-size: 1.35rem; margin: 0; }
+.tagline {
+  color: var(--green-dark);
+  font-weight: 600;
+  font-size: .95rem;
+  margin: 0 0 14px;
+  padding-left: 72px;
+}
+.svc-desc {
+  color: var(--grey);
+  font-size: .97rem;
+  line-height: 1.75;
+  margin: 0 0 24px;
+  padding-left: 72px;
+}
+.svc-check-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 28px;
+  align-items: start;
+}
+.svc-check-title {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin: 0 0 12px;
+}
+.svc-check-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+.svc-check-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: .9rem;
+  color: var(--grey);
+}
+.svc-check-list li::before {
+  content: "✓";
+  color: var(--green);
+  font-weight: 700;
+  flex: none;
+  margin-top: 1px;
+}
+
+/* highlight box */
+.svc-highlight-box {
+  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  border-radius: var(--radius-sm);
+  padding: 22px;
+  color: #fff;
+}
+.sh-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: rgba(127, 227, 154, .2);
+  color: #7fe39a;
+  display: grid; place-items: center;
+  margin-bottom: 12px;
+}
+.svc-highlight-box p {
+  color: #d0dde8;
+  font-size: .9rem;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 500;
+}
+
+@media (max-width: 980px) {
+  .svc-check-grid { grid-template-columns: 1fr; }
+  .svc-highlight-box { order: -1; }
+  .tagline, .svc-desc { padding-left: 0; }
+}
+@media (max-width: 720px) {
+  .svc-block { padding: 24px 18px; }
+  .svc-check-list { grid-template-columns: 1fr; }
+}
+</style>

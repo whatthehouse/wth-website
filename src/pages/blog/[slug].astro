@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+function formatDateEn(date: Date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .filter((p) => p.id !== post.id)
+  .slice(0, 3);
+---
+<BaseLayout
+  title={`${post.data.title} | WHAT THE HOUSE`}
+  description={post.data.description}
+>
+  <Header />
+  <main>
+
+    <!-- POST HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb">
+          <a href="/">หน้าแรก</a> /
+          <a href="/blog"><span class="lang-th">บทความ</span><span class="lang-en">Blog</span></a> /
+          <span class="lang-th">{post.data.category}</span><span class="lang-en">{post.data.categoryEn ?? post.data.category}</span>
+        </p>
+        <span class="eyebrow">
+          <span class="lang-th">{post.data.category}</span>
+          <span class="lang-en">{post.data.categoryEn ?? post.data.category}</span>
+        </span>
+        <h1 style="max-width:760px;margin:0 auto .4em">
+          <span class="lang-th">{post.data.title}</span>
+          <span class="lang-en block">{post.data.titleEn ?? post.data.title}</span>
+        </h1>
+        <p style="color:var(--grey-light);font-size:.9rem">
+          <span class="lang-th">{formatDate(post.data.pubDate)}</span>
+          <span class="lang-en">{formatDateEn(post.data.pubDate)}</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- POST CONTENT -->
+    <section class="section">
+      <div class="container">
+        <div class="post-layout">
+
+          <!-- Article -->
+          <article class="post-article">
+            {post.data.coverImage && (
+              <img src={post.data.coverImage} alt={post.data.title} class="post-cover" loading="eager" />
+            )}
+            <div class="prose lang-th">
+              <Content />
+            </div>
+            <div class="prose lang-en block" style="display:none">
+              <p style="background:var(--green-soft);padding:16px 20px;border-radius:10px;color:var(--green-dark);font-size:.9rem">
+                <strong>English version:</strong> This article is currently available in Thai. An English translation will be added soon.
+              </p>
+            </div>
+          </article>
+
+          <!-- Sidebar -->
+          <aside class="post-sidebar">
+            <div class="sidebar-box">
+              <h4><span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></h4>
+              <p><span class="lang-th">พร้อมให้บริการในเชียงใหม่ ลำพูน ลำปาง และเชียงราย</span><span class="lang-en block">Serving Chiang Mai, Lamphun, Lampang and Chiang Rai.</span></p>
+              <a href="/contact" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px">
+                <span class="lang-th">จองคิว</span><span class="lang-en">Book now</span>
+              </a>
+              <a href="/pricing" class="btn btn-outline" style="width:100%;justify-content:center">
+                <span class="lang-th">ดูราคา</span><span class="lang-en">View pricing</span>
+              </a>
+            </div>
+
+            {allPosts.length > 0 && (
+              <div class="sidebar-box">
+                <h4><span class="lang-th">บทความอื่น ๆ</span><span class="lang-en">More articles</span></h4>
+                <div class="related-posts">
+                  {allPosts.map((p) => (
+                    <a href={`/blog/${p.slug}`} class="related-post">
+                      <span class="rp-cat lang-th">{p.data.category}</span>
+                      <span class="rp-cat lang-en">{p.data.categoryEn ?? p.data.category}</span>
+                      <span class="rp-title">
+                        <span class="lang-th">{p.data.title}</span>
+                        <span class="lang-en block">{p.data.titleEn ?? p.data.title}</span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.post-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: start;
+}
+
+/* article */
+.post-cover {
+  width: 100%;
+  border-radius: var(--radius);
+  margin-bottom: 32px;
+  aspect-ratio: 16/7;
+  object-fit: cover;
+}
+.prose { line-height: 1.85; color: var(--grey); }
+.prose h2 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin: 2rem 0 .6rem; }
+.prose h3 { font-size: 1.1rem; font-weight: 600; color: var(--navy); margin: 1.5rem 0 .5rem; }
+.prose p  { margin-bottom: 1.1rem; }
+.prose ul, .prose ol { margin: .6rem 0 1.1rem 1.4rem; }
+.prose li { margin-bottom: .4rem; }
+.prose li::marker { color: var(--green); }
+.prose strong { color: var(--navy); font-weight: 600; }
+.prose a { color: var(--green-dark); text-decoration: underline; }
+.prose a:hover { color: var(--green); }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
+.prose blockquote { border-left: 3px solid var(--green); padding-left: 1rem; color: var(--grey); font-style: italic; margin: 1.2rem 0; }
+
+/* sidebar */
+.post-sidebar { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 20px; }
+.sidebar-box {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.sidebar-box h4 { font-size: 1rem; margin: 0 0 8px; color: var(--navy); }
+.sidebar-box p { color: var(--grey); font-size: .88rem; margin: 0 0 14px; }
+
+.related-posts { display: flex; flex-direction: column; gap: 12px; }
+.related-post { display: block; text-decoration: none; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); transition: .15s; }
+.related-post:hover { border-color: var(--green); background: var(--green-soft); }
+.rp-cat { font-size: .72rem; font-weight: 600; color: var(--green-dark); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 3px; }
+.rp-title { font-size: .88rem; color: var(--navy); font-weight: 500; line-height: 1.4; }
+
+@media (max-width: 900px) {
+  .post-layout { grid-template-columns: 1fr; }
+  .post-sidebar { position: static; }
+}
+</style>

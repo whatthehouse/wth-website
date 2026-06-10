@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('portfolio'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => ({
+    id: p.id,
+    type: p.data.type,
+    tag: { th: p.data.tagTh, en: p.data.tagEn },
+    title: { th: p.data.title, en: p.data.titleEn },
+    area: { th: p.data.areaTh, en: p.data.areaEn },
+    size: p.data.size,
+    service: { th: p.data.serviceTh, en: p.data.serviceEn },
+    img: p.data.image ?? null,
+  }));
+
+const filters = [
+  { key: "all",        th: "ทั้งหมด",       en: "All" },
+  { key: "house",      th: "บ้าน/ทาวน์เฮ้าส์", en: "House" },
+  { key: "condo",      th: "คอนโด",         en: "Condo" },
+  { key: "supervision",th: "ควบคุมงาน",     en: "Supervision" },
+  { key: "defect",     th: "ตรวจปัญหา",     en: "Defect" },
+];
+---
+<BaseLayout
+  title="ผลงานตรวจบ้าน | WHAT THE HOUSE – Home Inspection Chiang Mai"
+  description="ผลงานการตรวจบ้านและคอนโดในเชียงใหม่ ลำพูน ลำปาง เชียงราย กว่า 800 หลัง | Portfolio of home inspections in Chiang Mai"
+>
+  <Header />
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ผลงาน</span><span class="lang-en">Portfolio</span></p>
+        <span class="eyebrow"><span class="lang-th">ผลงานของเรา</span><span class="lang-en">Our Portfolio</span></span>
+        <h1><span class="lang-th">กว่า 800 หลัง<br>ที่เราดูแลมาแล้ว</span><span class="lang-en">Over 800 properties<br>inspected and counting</span></h1>
+        <p><span class="lang-th">ตัวอย่างผลงานการตรวจบ้าน คอนโด และการควบคุมงานก่อสร้างในเชียงใหม่และภาคเหนือ</span><span class="lang-en block">A selection of our home, condo and construction supervision work across Chiang Mai and Northern Thailand.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="section tight soft">
+      <div class="container">
+        <div class="stats">
+          <div class="s"><b>800+</b><span class="lang-th">หลังที่ตรวจแล้ว</span><span class="lang-en">properties inspected</span></div>
+          <div class="s"><b>4</b><span class="lang-th">จังหวัดให้บริการ</span><span class="lang-en">provinces served</span></div>
+          <div class="s"><b>10+</b><span class="lang-th">ปีประสบการณ์</span><span class="lang-en">years experience</span></div>
+          <div class="s"><b>48h</b><span class="lang-th">ส่งรายงาน</span><span class="lang-en">report turnaround</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PORTFOLIO GRID ============ -->
+    <section class="section">
+      <div class="container">
+
+        <!-- Filter tabs -->
+        <div class="port-filters">
+          {filters.map((f) => (
+            <button class={`pf-btn ${f.key === 'all' ? 'active' : ''}`} data-filter={f.key}>
+              <span class="lang-th">{f.th}</span>
+              <span class="lang-en">{f.en}</span>
+            </button>
+          ))}
+        </div>
+
+        <!-- Grid -->
+        <div class="port-grid" id="portGrid">
+          {projects.map((p) => (
+            <div class="port-item" data-type={p.type}>
+              <div class="port-thumb">
+                <div class="port-tag">
+                  <span class="lang-th">{p.tag.th}</span>
+                  <span class="lang-en">{p.tag.en}</span>
+                </div>
+                {p.img ? (
+                  <img src={p.img} alt={p.title.th} loading="lazy" />
+                ) : (
+                  <!-- placeholder graphic -->
+                  <div class="port-ph">
+                    <svg viewBox="0 0 24 24" width="36" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".4">
+                      {p.type === 'condo'
+                        ? <><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></>
+                        : p.type === 'supervision'
+                        ? <><path d="M2 20h20"/><path d="M4 20V8l8-5 8 5v12"/><path d="M9 20v-6h6v6"/></>
+                        : p.type === 'defect'
+                        ? <><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></>
+                        : <><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></>
+                      }
+                    </svg>
+                    <span class="lang-th">รูปผลงาน</span>
+                    <span class="lang-en block">Project photo</span>
+                  </div>
+                )}
+              </div>
+              <div class="port-body">
+                <b>
+                  <span class="lang-th">{p.title.th}</span>
+                  <span class="lang-en block">{p.title.en}</span>
+                </b>
+                <div class="port-meta">
+                  <span class="port-chip">
+                    <svg viewBox="0 0 24 24" width="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span class="lang-th">{p.area.th}</span>
+                    <span class="lang-en">{p.area.en}</span>
+                  </span>
+                  <span class="port-chip">
+                    <svg viewBox="0 0 24 24" width="12" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+                    {p.size}
+                  </span>
+                </div>
+                <span class="port-service">
+                  <span class="lang-th">{p.service.th}</span>
+                  <span class="lang-en">{p.service.en}</span>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Coming soon note -->
+        <p class="port-note">
+          <span class="lang-th">* รูปภาพผลงานจริงจะอัปเดตเร็ว ๆ นี้ · มีผลงานกว่า 800 หลังในพื้นที่เชียงใหม่และภาคเหนือ</span>
+          <span class="lang-en block">* Real project photos coming soon · 800+ completed inspections across Chiang Mai and Northern Thailand</span>
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">อยากให้เราตรวจบ้านของคุณบ้าง?</span><span class="lang-en">Want us to inspect your property?</span></h2>
+          <p><span class="lang-th">ติดต่อเราวันนี้ รับใบเสนอราคาและยืนยันวันตรวจภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us today — get a quote and confirm your inspection date within 24 hours.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-ghost btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+/* filter tabs */
+.port-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.pf-btn {
+  padding: 8px 20px;
+  border: 1.5px solid var(--line);
+  border-radius: 50px;
+  background: #fff;
+  font-family: inherit;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--grey);
+  cursor: pointer;
+  transition: .15s;
+}
+.pf-btn:hover { border-color: var(--green); color: var(--green-dark); }
+.pf-btn.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+
+/* portfolio grid */
+.port-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.port-item {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+  transition: .2s;
+}
+.port-item:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.port-item.hidden { display: none; }
+
+.port-thumb {
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, #dfeee4, #cfe0d6);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.port-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.port-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255,255,255,.92);
+  color: var(--navy);
+  font-size: .75rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 50px;
+  backdrop-filter: blur(4px);
+}
+.port-ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--green-dark);
+  font-size: .8rem;
+  opacity: .7;
+}
+
+.port-body { padding: 16px 18px; }
+.port-body b { display: block; color: var(--navy); font-size: .97rem; margin-bottom: 8px; line-height: 1.4; }
+.port-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.port-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .78rem;
+  color: var(--grey-light);
+}
+.port-chip svg { flex: none; }
+.port-service {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  background: var(--green-soft);
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+
+.port-note {
+  text-align: center;
+  margin-top: 32px;
+  font-size: .82rem;
+  color: var(--grey-light);
+  font-style: italic;
+}
+
+@media (max-width: 980px) { .port-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .port-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  // Filter logic
+  (function () {
+    const btns = document.querySelectorAll('.pf-btn');
+    const items = document.querySelectorAll('.port-item');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = (btn as HTMLElement).dataset.filter;
+        items.forEach(item => {
+          const type = (item as HTMLElement).dataset.type;
+          const show = filter === 'all' || type === filter;
+          item.classList.toggle('hidden', !show);
+        });
+      });
+    });
+  })();
+</script>

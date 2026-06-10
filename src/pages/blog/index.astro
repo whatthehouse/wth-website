@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+function formatDateEn(date: Date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+<BaseLayout
+  title="บทความตรวจบ้าน ความรู้อสังหาริมทรัพย์ | WHAT THE HOUSE"
+  description="บทความและคู่มือเกี่ยวกับการตรวจบ้าน ตรวจคอนโด และการซื้ออสังหาริมทรัพย์ในเชียงใหม่"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">บทความ</span><span class="lang-en">Blog</span></p>
+        <span class="eyebrow"><span class="lang-th">บทความ</span><span class="lang-en">Blog</span></span>
+        <h1><span class="lang-th">ความรู้เรื่องบ้าน<br>และการตรวจบ้าน</span><span class="lang-en">Home inspection<br>knowledge &amp; guides</span></h1>
+        <p><span class="lang-th">คู่มือ เคล็ดลับ และความรู้จากทีมผู้เชี่ยวชาญ เพื่อให้คุณตัดสินใจเรื่องบ้านได้อย่างมั่นใจ</span><span class="lang-en block">Guides, tips and insights from our expert team — helping you make confident decisions about your home.</span></p>
+      </div>
+    </section>
+
+    <!-- POSTS GRID -->
+    <section class="section">
+      <div class="container">
+        {posts.length === 0 ? (
+          <div class="blog-empty">
+            <svg viewBox="0 0 24 24" width="48" fill="none" stroke="currentColor" stroke-width="1.2" style="color:var(--grey-light);margin:0 auto 16px;display:block"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <p style="color:var(--grey-light);text-align:center"><span class="lang-th">บทความกำลังจะมาเร็ว ๆ นี้</span><span class="lang-en">Articles coming soon</span></p>
+          </div>
+        ) : (
+          <div class="blog-grid">
+            {posts.map((post) => (
+              <a href={`/blog/${post.id.replace(/\.md$/, '')}`} class="post">
+                <div class="post-thumb">
+                  {post.data.coverImage
+                    ? <img src={post.data.coverImage} alt={post.data.title} loading="lazy" />
+                    : <svg viewBox="0 0 24 24" width="40" fill="none" stroke="currentColor" stroke-width="1.2" style="opacity:.35"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  }
+                </div>
+                <div class="post-body">
+                  <span class="cat">
+                    <span class="lang-th">{post.data.category}</span>
+                    <span class="lang-en">{post.data.categoryEn ?? post.data.category}</span>
+                  </span>
+                  <h3>
+                    <span class="lang-th">{post.data.title}</span>
+                    <span class="lang-en block">{post.data.titleEn ?? post.data.title}</span>
+                  </h3>
+                  <p>
+                    <span class="lang-th">{post.data.description}</span>
+                    <span class="lang-en block">{post.data.descriptionEn ?? post.data.description}</span>
+                  </p>
+                  <div class="meta">
+                    <span class="lang-th">{formatDate(post.data.pubDate)}</span>
+                    <span class="lang-en">{formatDateEn(post.data.pubDate)}</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">พร้อมจองคิวตรวจบ้านแล้วหรือยัง?</span><span class="lang-en">Ready to book your inspection?</span></h2>
+          <p><span class="lang-th">ติดต่อเราวันนี้ รับใบเสนอราคาภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us today — get a quote within 24 hours.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-ghost btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.blog-empty { padding: 60px 0; }
+</style>

@@ -1,0 +1,326 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import settings from '../data/settings.json';
+---
+<BaseLayout
+  title="ติดต่อเรา / จองคิวตรวจบ้าน | WHAT THE HOUSE – Home Inspection Chiang Mai"
+  description="ติดต่อ WHAT THE HOUSE เพื่อจองคิวตรวจบ้านและตรวจคอนโดในเชียงใหม่ ลำพูน ลำปาง เชียงราย | Contact us to book a home inspection in Chiang Mai"
+>
+  <Header />
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ติดต่อเรา</span><span class="lang-en">Contact</span></p>
+        <span class="eyebrow"><span class="lang-th">ติดต่อเรา</span><span class="lang-en">Contact Us</span></span>
+        <h1><span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></h1>
+        <p><span class="lang-th">กรอกแบบฟอร์มด้านล่าง หรือทักหาเราผ่าน LINE / โทรศัพท์ ตอบกลับภายใน 24 ชั่วโมง</span><span class="lang-en block">Fill in the form below, or reach us via LINE or phone. We reply within 24 hours.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT GRID ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="contact-grid">
+
+          <!-- Left: contact info -->
+          <div>
+            <h2 class="contact-section-title">
+              <span class="lang-th">ช่องทางติดต่อ</span>
+              <span class="lang-en">Get in touch</span>
+            </h2>
+            <p class="contact-intro">
+              <span class="lang-th">เลือกช่องทางที่สะดวกที่สุดสำหรับคุณ เราพร้อมตอบทุกคำถามและจัดคิวตรวจให้</span>
+              <span class="lang-en block">Choose the channel that's most convenient for you. We're ready to answer questions and schedule your inspection.</span>
+            </p>
+
+            <div class="contact-cards">
+              <a href={settings.lineUrl} target="_blank" rel="noopener" class="contact-card">
+                <div class="cic" style="background:#06c755">
+                  <svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.01 2 11c0 3.53 2.1 6.6 5.24 8.29-.07.63-.48 2.4-.55 2.76-.09.48.18.47.37.34.15-.1 2.4-1.59 3.37-2.24.51.07 1.03.11 1.57.11 5.52 0 10-4.01 10-9S17.52 2 12 2z"/></svg>
+                </div>
+                <div>
+                  <b>LINE</b>
+                  <span>{settings.lineId}</span>
+                </div>
+              </a>
+
+              <a href={`tel:${settings.phone}`} class="contact-card">
+                <div class="cic" style="background:var(--green)">
+                  <svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2H7a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z"/></svg>
+                </div>
+                <div>
+                  <b><span class="lang-th">โทรศัพท์</span><span class="lang-en">Phone</span></b>
+                  <span>{settings.phoneDisplay}</span>
+                </div>
+              </a>
+
+              <a href={settings.facebookUrl} target="_blank" rel="noopener" class="contact-card">
+                <div class="cic" style="background:#1877f2">
+                  <svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </div>
+                <div>
+                  <b>Facebook</b>
+                  <span>{settings.facebookDisplay}</span>
+                </div>
+              </a>
+
+              <a href={`mailto:${settings.email}`} class="contact-card">
+                <div class="cic" style="background:var(--navy)">
+                  <svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div>
+                  <b>Email</b>
+                  <span>{settings.email}</span>
+                </div>
+              </a>
+            </div>
+
+            <!-- Areas served -->
+            <div class="service-area-box">
+              <h4><span class="lang-th">🗺 พื้นที่ให้บริการ</span><span class="lang-en">🗺 Service Areas</span></h4>
+              <div class="area-tags">
+                <span class="area-tag"><span class="lang-th">เชียงใหม่</span><span class="lang-en">Chiang Mai</span></span>
+                <span class="area-tag out"><span class="lang-th">ลำพูน*</span><span class="lang-en">Lamphun*</span></span>
+                <span class="area-tag out"><span class="lang-th">ลำปาง*</span><span class="lang-en">Lampang*</span></span>
+                <span class="area-tag out"><span class="lang-th">เชียงราย*</span><span class="lang-en">Chiang Rai*</span></span>
+              </div>
+              <p class="area-note"><span class="lang-th">* มีค่าเดินทางเพิ่มเติมสำหรับพื้นที่นอกเชียงใหม่</span><span class="lang-en block">* Travel fee applies for areas outside Chiang Mai</span></p>
+            </div>
+
+            <!-- Map placeholder -->
+            <div class="map-embed">
+              <div>
+                <svg viewBox="0 0 24 24" width="32" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 8px;display:block;color:var(--grey-light)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span class="lang-th">เชียงใหม่ ประเทศไทย</span>
+                <span class="lang-en block">Chiang Mai, Thailand</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: booking form -->
+          <div>
+            <div class="form">
+              <h3 class="form-title">
+                <span class="lang-th">📋 แบบฟอร์มจองคิวตรวจบ้าน</span>
+                <span class="lang-en">📋 Booking Form</span>
+              </h3>
+
+              <!-- Success message (hidden by default) -->
+              <div id="formOk" class="form-ok" style="display:none">
+                <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.01l-3-3"/></svg>
+                <div>
+                  <b><span class="lang-th">ส่งข้อมูลเรียบร้อยแล้ว!</span><span class="lang-en">Message sent!</span></b>
+                  <p><span class="lang-th">เราจะติดต่อกลับภายใน 24 ชั่วโมง</span><span class="lang-en block">We'll get back to you within 24 hours.</span></p>
+                </div>
+              </div>
+
+              <form
+                id="contactForm"
+                name="contact"
+                method="POST"
+                data-netlify="true"
+                netlify-honeypot="company"
+                action="/contact?success=1"
+              >
+                <!-- Netlify hidden fields -->
+                <input type="hidden" name="form-name" value="contact" />
+                <div class="honey" aria-hidden="true">
+                  <label>Company (leave blank): <input name="company" tabindex="-1" autocomplete="off" /></label>
+                </div>
+
+                <div class="form-row">
+                  <div class="field">
+                    <label for="fname">
+                      <span class="lang-th">ชื่อ-นามสกุล *</span>
+                      <span class="lang-en">Full Name *</span>
+                    </label>
+                    <input type="text" id="fname" name="name" required placeholder="คุณ..." />
+                  </div>
+                  <div class="field">
+                    <label for="fphone">
+                      <span class="lang-th">เบอร์โทรศัพท์ *</span>
+                      <span class="lang-en">Phone *</span>
+                    </label>
+                    <input type="tel" id="fphone" name="phone" required placeholder="08X-XXX-XXXX" />
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="femail">
+                    <span class="lang-th">อีเมล (ถ้ามี)</span>
+                    <span class="lang-en">Email (optional)</span>
+                  </label>
+                  <input type="email" id="femail" name="email" placeholder="hello@example.com" />
+                </div>
+
+                <div class="form-row">
+                  <div class="field">
+                    <label for="fproptype">
+                      <span class="lang-th">ประเภทอสังหาริมทรัพย์ *</span>
+                      <span class="lang-en">Property Type *</span>
+                    </label>
+                    <select id="fproptype" name="property_type" required>
+                      <option value="" disabled selected>-- เลือก / Select --</option>
+                      <option value="house_new">บ้านเดี่ยว (ก่อนรับมอบ) / New House</option>
+                      <option value="townhouse_new">ทาวน์เฮ้าส์ (ก่อนรับมอบ) / Townhouse</option>
+                      <option value="condo_new">คอนโด (ก่อนรับมอบ) / Condo</option>
+                      <option value="house_exist">บ้านมือสอง / Existing House</option>
+                      <option value="supervision">ควบคุมงานก่อสร้าง / Construction Supervision</option>
+                      <option value="defect">ตรวจปัญหาบ้าน / Defect Diagnosis</option>
+                      <option value="other">อื่น ๆ / Other</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="fsize">
+                      <span class="lang-th">ขนาดพื้นที่ (ตร.ม.)</span>
+                      <span class="lang-en">Floor Area (sq.m.)</span>
+                    </label>
+                    <input type="number" id="fsize" name="area_sqm" placeholder="เช่น 120" min="1" />
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="fproject">
+                    <span class="lang-th">ชื่อโครงการ / ที่อยู่</span>
+                    <span class="lang-en">Project / Address</span>
+                  </label>
+                  <input type="text" id="fproject" name="project" placeholder="เช่น Nirvana Beyond เชียงใหม่" />
+                </div>
+
+                <div class="field">
+                  <label for="fdate">
+                    <span class="lang-th">วันที่ต้องการตรวจ (โดยประมาณ)</span>
+                    <span class="lang-en">Preferred Inspection Date</span>
+                  </label>
+                  <input type="date" id="fdate" name="preferred_date" />
+                </div>
+
+                <div class="field">
+                  <label for="fmsg">
+                    <span class="lang-th">รายละเอียดเพิ่มเติม</span>
+                    <span class="lang-en">Additional Details</span>
+                  </label>
+                  <textarea id="fmsg" name="message" placeholder="..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%">
+                  <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/></svg>
+                  <span class="lang-th">ส่งข้อมูล / จองคิว</span>
+                  <span class="lang-en">Send Booking Request</span>
+                </button>
+
+                <p class="form-note" style="text-align:center;margin-top:12px">
+                  <span class="lang-th">เราจะติดต่อกลับเพื่อยืนยันนัดหมายภายใน 24 ชั่วโมง</span>
+                  <span class="lang-en block">We'll confirm your appointment within 24 hours.</span>
+                </p>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">มีคำถามก่อนจองคิว?</span><span class="lang-en">Have questions before booking?</span></h2>
+          <p><span class="lang-th">ดูคำถามที่พบบ่อย หรือดูราคาค่าบริการก่อนได้เลย</span><span class="lang-en block">Check our FAQ or view our pricing first.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/faq"><span class="lang-th">คำถามที่พบบ่อย</span><span class="lang-en">FAQ</span></a>
+            <a class="btn btn-ghost btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.contact-section-title { font-size: 1.4rem; margin-bottom: .4em; }
+.contact-intro { color: var(--grey); margin: 0 0 24px; font-size: .97rem; }
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 15px 18px;
+  transition: .2s;
+  text-decoration: none;
+  color: inherit;
+}
+.contact-card:hover { border-color: var(--green); box-shadow: var(--shadow-sm); transform: translateX(4px); }
+.contact-card .cic {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; flex: none; color: #fff;
+}
+.contact-card b { display: block; color: var(--navy); font-size: .95rem; }
+.contact-card span { color: var(--grey); font-size: .88rem; }
+
+/* service area */
+.service-area-box {
+  margin-top: 24px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+}
+.service-area-box h4 { font-size: .95rem; margin: 0 0 12px; color: var(--navy); }
+.area-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.area-tag {
+  padding: 5px 14px; border-radius: 50px; font-size: .83rem; font-weight: 500;
+  background: var(--green-soft); color: var(--green-dark); border: 1px solid #cfe9d6;
+}
+.area-tag.out { background: #fff; color: var(--grey); border-color: var(--line); }
+.area-note { font-size: .82rem; color: var(--grey-light); margin: 0; }
+
+/* form */
+.form-title { font-size: 1.1rem; margin: 0 0 20px; color: var(--navy); }
+.form-ok {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--green-soft);
+  border: 1px solid #cfe9d6;
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  color: var(--green-dark);
+}
+.form-ok svg { flex: none; margin-top: 2px; }
+.form-ok b { display: block; font-size: 1rem; margin-bottom: 2px; }
+.form-ok p { margin: 0; font-size: .88rem; color: var(--green-dark); }
+</style>
+
+<script>
+  // Contact form: honeypot check + success message
+  (function () {
+    // Check for ?success=1 (Netlify redirect after real submit)
+    if (window.location.search.includes('success=1')) {
+      const ok = document.getElementById('formOk');
+      const form = document.getElementById('contactForm');
+      if (ok) ok.style.display = 'flex';
+      if (form) (form as HTMLFormElement).style.display = 'none';
+    }
+
+    const form = document.getElementById('contactForm') as HTMLFormElement;
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      // Honeypot: if filled → silently drop (bot)
+      const hp = form.querySelector('input[name="company"]') as HTMLInputElement;
+      if (hp && hp.value) { e.preventDefault(); return; }
+      // Let Netlify handle the real submit (no e.preventDefault())
+    });
+  })();
+</script>

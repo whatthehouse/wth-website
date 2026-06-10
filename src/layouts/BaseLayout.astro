@@ -1,0 +1,138 @@
+---
+import '../styles/global.css';
+import settings from '../data/settings.json';
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+const {
+  title,
+  description = 'WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง เชียงราย ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ | Home Inspection Chiang Mai',
+  ogImage = '/assets/img/logo.jpg',
+} = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content="ตรวจบ้านเชียงใหม่, ตรวจคอนโดเชียงใหม่, ตรวจบ้านก่อนโอน, ตรวจรับบ้าน, Home Inspection Chiang Mai, Condo Inspection Chiang Mai" />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:image" content={ogImage} />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/img/logo.jpg" type="image/jpeg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Google Analytics 4 (set settings.gaId to enable) -->
+  {settings.gaId && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${settings.gaId}`}></script>
+      <script is:inline define:vars={{ gaId: settings.gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
+    </>
+  )}
+
+  <!-- Schema: LocalBusiness -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "WHAT THE HOUSE – Home Inspections",
+    "description": "บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่และภาคเหนือ",
+    "url": "https://whatthehouse.co",
+    "telephone": settings.phone,
+    "email": settings.email,
+    "image": "/assets/img/logo.jpg",
+    "areaServed": ["Chiang Mai","Lamphun","Lampang","Chiang Rai"],
+    "knowsLanguage": ["th","en"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Chiang Mai",
+      "addressCountry": "TH"
+    },
+    "sameAs": [settings.facebookUrl, settings.lineUrl],
+    "slogan": "Trusted • Professional • Detailed"
+  })} />
+</head>
+<body>
+  <slot />
+
+  <!-- Netlify Identity (handles invite/recovery links -> redirects to CMS login) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" is:inline></script>
+  <script is:inline>
+    (function () {
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", function (user) {
+          if (!user) {
+            window.netlifyIdentity.on("login", function () {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    })();
+  </script>
+
+  <!-- Language + mobile nav script -->
+  <script>
+    (function () {
+      "use strict";
+      var KEY = "wth_lang";
+      function applyLang(lang) {
+        document.body.classList.toggle("en", lang === "en");
+        document.documentElement.lang = lang === "en" ? "en" : "th";
+        document.querySelectorAll("[data-lang-btn]").forEach(function (b) {
+          b.classList.toggle("on", b.getAttribute("data-lang-btn") === lang);
+        });
+        try { localStorage.setItem(KEY, lang); } catch (e) {}
+      }
+      var saved = "th";
+      try { saved = localStorage.getItem(KEY) || "th"; } catch (e) {}
+      applyLang(saved);
+      document.addEventListener("click", function (e) {
+        var btn = (e.target as HTMLElement).closest("[data-lang-btn]");
+        if (btn) applyLang(btn.getAttribute("data-lang-btn") || "th");
+      });
+
+      // mobile nav
+      document.addEventListener("DOMContentLoaded", function () {
+        var burger = document.querySelector(".burger");
+        var links = document.querySelector(".nav-links");
+        if (burger && links) {
+          burger.addEventListener("click", function () {
+            links!.classList.toggle("open");
+          });
+          links.addEventListener("click", function (e) {
+            if ((e.target as HTMLElement).closest("a")) links!.classList.remove("open");
+          });
+        }
+
+        // FAQ accordion
+        document.querySelectorAll(".faq-q").forEach(function (q) {
+          q.addEventListener("click", function () {
+            (q.parentElement as HTMLElement).classList.toggle("open");
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

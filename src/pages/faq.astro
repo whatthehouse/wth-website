@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const faqs = [
+  {
+    category: { th: "ทั่วไป", en: "General" },
+    items: [
+      {
+        q: { th: "การตรวจบ้านคืออะไร?", en: "What is a home inspection?" },
+        a: { th: "การตรวจบ้านคือการตรวจสอบสภาพทางกายภาพของบ้านหรือคอนโดอย่างละเอียดโดยผู้เชี่ยวชาญ ครอบคลุมโครงสร้าง งานสถาปัตยกรรม ระบบไฟฟ้า ระบบประปา หลังคา และระบบอื่น ๆ เพื่อให้คุณทราบสภาพจริงก่อนรับมอบหรือก่อนซื้อ", en: "A home inspection is a thorough physical assessment of a property by a qualified professional, covering structure, architecture, electrical, plumbing, roofing and all major systems — so you know the true condition before accepting or purchasing." },
+      },
+      {
+        q: { th: "ใครควรจ้างตรวจบ้าน?", en: "Who should get a home inspection?" },
+        a: { th: "ทุกคนที่กำลังจะรับมอบบ้านหรือคอนโดใหม่ ซื้อบ้านมือสอง หรือต้องการหาสาเหตุของปัญหาในบ้าน เช่น น้ำรั่ว รอยแตก ปัญหาไฟฟ้า รวมถึงเจ้าของโครงการที่ต้องการตรวจคุณภาพงานผู้รับเหมา", en: "Anyone accepting a new home or condo, buying a second-hand property, diagnosing existing problems (leaks, cracks, electrical issues), or verifying contractor work quality before making payment." },
+      },
+      {
+        q: { th: "ตรวจบ้านใช้เวลานานแค่ไหน?", en: "How long does an inspection take?" },
+        a: { th: "ขึ้นอยู่กับขนาดและสภาพของทรัพย์สิน โดยทั่วไปบ้านขนาด 150–200 ตร.ม. ใช้เวลาประมาณ 3–5 ชั่วโมง คอนโดขนาดกลางใช้เวลา 2–3 ชั่วโมง", en: "It depends on size and condition. A 150–200 sq.m. house typically takes 3–5 hours; a mid-size condo takes 2–3 hours." },
+      },
+      {
+        q: { th: "ต้องอยู่ร่วมในวันตรวจด้วยไหม?", en: "Do I need to be present during the inspection?" },
+        a: { th: "แนะนำให้อยู่ร่วมด้วยครับ เพราะช่างตรวจจะอธิบายปัญหาที่พบให้ฟังโดยตรง ช่วยให้เข้าใจรายงานได้ดีขึ้น หากไม่สะดวก เราสามารถดำเนินการแทนและส่งรายงานให้ได้", en: "We recommend being present — the inspector can walk you through findings in real time. If you can't attend, we'll conduct the inspection and deliver a complete report." },
+      },
+    ],
+  },
+  {
+    category: { th: "รายงานและผลการตรวจ", en: "Report & Results" },
+    items: [
+      {
+        q: { th: "รายงานมีอะไรบ้าง?", en: "What does the report include?" },
+        a: { th: "รายงาน PDF ประกอบด้วย รูปภาพทุกจุดที่พบปัญหา คำอธิบายสภาพและระดับความรุนแรง แนวทางการแก้ไขที่แนะนำ และสรุปภาพรวมสภาพทรัพย์สิน รายงานจัดทำทั้งภาษาไทยและอังกฤษ", en: "The PDF report includes photos of every issue found, descriptions and severity ratings, recommended repairs, and an overall property summary — in both Thai and English." },
+      },
+      {
+        q: { th: "ได้รับรายงานเมื่อไหร่?", en: "When will I receive the report?" },
+        a: { th: "ส่งรายงานภายใน 48 ชั่วโมง หลังการตรวจ ระยะเวลาอาจปรับได้ตามขนาดและความซับซ้อนของโครงการ", en: "Reports are delivered within 48 hours of the inspection. Timeline may vary depending on project size and complexity." },
+      },
+      {
+        q: { th: "รายงานมีภาษาอังกฤษด้วยไหม?", en: "Is the report available in English?" },
+        a: { th: "มีครับ รายงานของเราจัดทำเป็นทั้งภาษาไทยและภาษาอังกฤษในเอกสารเดียว เหมาะสำหรับทั้งลูกค้าชาวไทยและชาวต่างชาติ", en: "Yes. Our report is fully bilingual — Thai and English in the same document — ideal for both Thai and foreign clients." },
+      },
+    ],
+  },
+  {
+    category: { th: "กระบวนการและขั้นตอน", en: "Process & Steps" },
+    items: [
+      {
+        q: { th: "ตรวจกี่รอบ?", en: "How many inspection rounds are included?" },
+        a: { th: "2 รอบครับ รอบแรกคือตรวจก่อนรับมอบ หลังจากนั้นผู้รับเหมาหรือโครงการแก้ไขตามรายการในรายงาน รอบสองคือตรวจซ้ำเพื่อยืนยันว่าการแก้ไขครบถ้วน ก่อนที่คุณจะเซ็นรับมอบ", en: "2 rounds. The first is the initial pre-handover inspection. After the contractor makes repairs, we return for a re-inspection to confirm everything is fixed before you sign off." },
+      },
+      {
+        q: { th: "ถ้าโครงการไม่ยอมแก้ไข ช่วยได้ไหม?", en: "What if the developer refuses to fix the issues?" },
+        a: { th: "รายงานของเราเป็นเอกสารอย่างเป็นทางการที่คุณสามารถใช้เป็นหลักฐานในการเจรจาหรือร้องเรียนกับโครงการได้ เราเป็นกลาง 100% และไม่มีความสัมพันธ์กับผู้รับเหมาหรือโครงการใด", en: "Our report is an official document you can use as evidence when negotiating or filing a complaint. We are 100% independent with no ties to any developer or contractor." },
+      },
+      {
+        q: { th: "จองคิวล่วงหน้านานแค่ไหน?", en: "How far in advance should I book?" },
+        a: { th: "แนะนำให้จองล่วงหน้าอย่างน้อย 3–7 วัน เพื่อให้เราจัดตารางและเตรียมทีมได้อย่างเหมาะสม โดยเฉพาะช่วงที่มีงานมาก", en: "We recommend booking at least 3–7 days in advance so we can schedule the team properly, especially during busy periods." },
+      },
+    ],
+  },
+  {
+    category: { th: "ราคาและการชำระเงิน", en: "Pricing & Payment" },
+    items: [
+      {
+        q: { th: "ราคาเริ่มต้นเท่าไหร่?", en: "What's the starting price?" },
+        a: { th: "คอนโดเริ่มต้น 3,000 บาท บ้านเดี่ยว/ทาวน์เฮ้าส์เริ่มต้น 5,000 บาท ราคารวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว สามารถคำนวณราคาตามขนาดพื้นที่ได้ที่หน้า ค่าบริการ", en: "Condos start from 3,000 THB; houses/townhouses from 5,000 THB. All prices include 2 inspection rounds and the bilingual PDF report. Use our price calculator on the Pricing page." },
+      },
+      {
+        q: { th: "ชำระเงินอย่างไร?", en: "How do I pay?" },
+        a: { th: "ชำระได้หลายช่องทาง ทั้งโอนเงินผ่านธนาคาร พร้อมเพย์ หรือชำระเงินสดหน้างาน รายละเอียดจะแจ้งให้ทราบเมื่อยืนยันนัดหมาย", en: "We accept bank transfer, PromptPay, or cash on-site. Payment details will be provided when confirming your appointment." },
+      },
+      {
+        q: { th: "มีค่าใช้จ่ายอื่นนอกจากค่าตรวจไหม?", en: "Are there any extra charges?" },
+        a: { th: "สำหรับพื้นที่นอกเชียงใหม่ (ลำพูน ลำปาง เชียงราย) มีค่าเดินทางเพิ่มเติม ซึ่งจะแจ้งราคาชัดเจนก่อนยืนยัน นอกจากนั้นไม่มีค่าใช้จ่ายซ่อนเร้น", en: "For areas outside Chiang Mai (Lamphun, Lampang, Chiang Rai), a travel fee applies — we'll quote the exact amount before confirming. No other hidden charges." },
+      },
+    ],
+  },
+  {
+    category: { th: "พื้นที่และบริการพิเศษ", en: "Areas & Special Services" },
+    items: [
+      {
+        q: { th: "ให้บริการนอกเชียงใหม่ได้ไหม?", en: "Do you serve areas outside Chiang Mai?" },
+        a: { th: "ได้ครับ เราให้บริการในเชียงใหม่ ลำพูน ลำปาง และเชียงราย สำหรับพื้นที่นอกเชียงใหม่จะมีค่าเดินทางเพิ่มขึ้นตามระยะทาง", en: "Yes. We serve Chiang Mai, Lamphun, Lampang and Chiang Rai. A travel surcharge applies for areas outside Chiang Mai, based on distance." },
+      },
+      {
+        q: { th: "ตรวจบ้านมือสองได้ไหม?", en: "Can you inspect second-hand properties?" },
+        a: { th: "ได้ครับ เราตรวจได้ทั้งบ้านและคอนโดใหม่ก่อนรับมอบ และบ้านมือสองก่อนตัดสินใจซื้อ เพื่อให้ทราบสภาพจริงและประเมินค่าซ่อมแซมที่อาจเกิดขึ้น", en: "Absolutely. We inspect both new properties before handover and existing/second-hand homes before purchase, giving you a clear picture of condition and potential repair costs." },
+      },
+      {
+        q: { th: "ตรวจระหว่างก่อสร้างได้ไหม?", en: "Can you inspect during construction?" },
+        a: { th: "ได้ครับ บริการ \"ควบคุมงานก่อสร้าง\" ของเราจะตรวจสอบคุณภาพงานและความคืบหน้าตามงวด ช่วยให้มั่นใจก่อนจ่ายเงินค่างวดแต่ละครั้ง", en: "Yes. Our Construction Supervision service checks quality and progress at each milestone — helping you confirm work is completed properly before releasing payment." },
+      },
+    ],
+  },
+];
+---
+<BaseLayout
+  title="คำถามที่พบบ่อย (FAQ) | WHAT THE HOUSE – Home Inspection Chiang Mai"
+  description="คำถามที่พบบ่อยเกี่ยวกับการตรวจบ้านและคอนโดเชียงใหม่ ราคา กระบวนการ รายงาน | FAQ about home inspection in Chiang Mai"
+>
+  <Header />
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">คำถามที่พบบ่อย</span><span class="lang-en">FAQ</span></p>
+        <span class="eyebrow"><span class="lang-th">คำถามที่พบบ่อย</span><span class="lang-en">FAQ</span></span>
+        <h1><span class="lang-th">มีคำถาม? เราตอบได้</span><span class="lang-en">Frequently Asked Questions</span></h1>
+        <p><span class="lang-th">รวมคำถามที่ลูกค้าถามบ่อยเกี่ยวกับการตรวจบ้าน กระบวนการ ราคา และรายงาน</span><span class="lang-en block">Common questions about home inspection, our process, pricing and reports.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ FAQ SECTIONS ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="faq-layout">
+
+          <!-- Sticky category nav (desktop) -->
+          <nav class="faq-nav">
+            {faqs.map((cat, i) => (
+              <a href={`#cat-${i}`} class="faq-nav-link">
+                <span class="lang-th">{cat.category.th}</span>
+                <span class="lang-en">{cat.category.en}</span>
+              </a>
+            ))}
+            <div class="faq-nav-cta">
+              <p><span class="lang-th">ยังไม่เจอคำตอบ?</span><span class="lang-en">Still have questions?</span></p>
+              <a href="/contact" class="btn btn-primary" style="width:100%;justify-content:center">
+                <span class="lang-th">ติดต่อเรา</span>
+                <span class="lang-en">Contact us</span>
+              </a>
+            </div>
+          </nav>
+
+          <!-- FAQ accordion -->
+          <div class="faq-content">
+            {faqs.map((cat, i) => (
+              <div class="faq-section" id={`cat-${i}`}>
+                <h2 class="faq-cat-title">
+                  <span class="lang-th">{cat.category.th}</span>
+                  <span class="lang-en">{cat.category.en}</span>
+                </h2>
+                <div class="faq-list">
+                  {cat.items.map((item) => (
+                    <div class="faq-item">
+                      <button class="faq-q">
+                        <span>
+                          <span class="lang-th">{item.q.th}</span>
+                          <span class="lang-en">{item.q.en}</span>
+                        </span>
+                        <span class="pm">+</span>
+                      </button>
+                      <div class="faq-a">
+                        <p>
+                          <span class="lang-th">{item.a.th}</span>
+                          <span class="lang-en block">{item.a.en}</span>
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">พร้อมจองคิวตรวจบ้านแล้วหรือยัง?</span><span class="lang-en">Ready to book your inspection?</span></h2>
+          <p><span class="lang-th">ติดต่อเราวันนี้ รับใบเสนอราคาและยืนยันวันตรวจภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us today — get a quote and confirm your inspection date within 24 hours.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-ghost btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.faq-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* sticky side nav */
+.faq-nav {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.faq-nav-link {
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--grey);
+  transition: .15s;
+  border-left: 3px solid transparent;
+}
+.faq-nav-link:hover,
+.faq-nav-link.active {
+  background: var(--green-soft);
+  color: var(--green-dark);
+  border-left-color: var(--green);
+}
+.faq-nav-cta {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.faq-nav-cta p {
+  font-size: .85rem;
+  color: var(--grey);
+  margin: 0 0 10px;
+}
+
+/* faq content */
+.faq-section { margin-bottom: 40px; }
+.faq-cat-title {
+  font-size: 1.1rem;
+  color: var(--navy);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--green-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.faq-cat-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: var(--green);
+  border-radius: 2px;
+  flex: none;
+}
+
+@media (max-width: 768px) {
+  .faq-layout { grid-template-columns: 1fr; }
+  .faq-nav { position: static; flex-direction: row; flex-wrap: wrap; }
+  .faq-nav-cta { display: none; }
+  .faq-nav-link { border-left: 0; border-bottom: 3px solid transparent; padding: 7px 12px; font-size: .82rem; }
+  .faq-nav-link:hover, .faq-nav-link.active { border-bottom-color: var(--green); border-left: 0; }
+}
+</style>
+
+<script>
+  // Highlight active nav link on scroll
+  (function () {
+    const sections = document.querySelectorAll('.faq-section');
+    const navLinks = document.querySelectorAll('.faq-nav-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+          });
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  })();
+</script>

@@ -1,0 +1,57 @@
+---
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/">
+      <img src="/assets/img/logo.jpg" class="logo" alt="What The House" />
+      <span class="brand-text">
+        <b>WHAT THE HOUSE</b>
+        <span>HOME INSPECTIONS</span>
+      </span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="/" class={isActive('/') ? 'active' : ''}>
+        <span class="lang-th">หน้าแรก</span><span class="lang-en">Home</span>
+      </a></li>
+      <li><a href="/about" class={isActive('/about') ? 'active' : ''}>
+        <span class="lang-th">เกี่ยวกับเรา</span><span class="lang-en">About</span>
+      </a></li>
+      <li><a href="/services" class={isActive('/services') ? 'active' : ''}>
+        <span class="lang-th">บริการ</span><span class="lang-en">Services</span>
+      </a></li>
+      <li><a href="/pricing" class={isActive('/pricing') ? 'active' : ''}>
+        <span class="lang-th">ค่าบริการ</span><span class="lang-en">Pricing</span>
+      </a></li>
+      <li><a href="/portfolio" class={isActive('/portfolio') ? 'active' : ''}>
+        <span class="lang-th">ผลงาน</span><span class="lang-en">Portfolio</span>
+      </a></li>
+      <li><a href="/blog" class={isActive('/blog') ? 'active' : ''}>
+        <span class="lang-th">บทความ</span><span class="lang-en">Blog</span>
+      </a></li>
+      <li><a href="/faq" class={isActive('/faq') ? 'active' : ''}>
+        <span class="lang-th">คำถามที่พบบ่อย</span><span class="lang-en">FAQ</span>
+      </a></li>
+      <li><a href="/contact" class={isActive('/contact') ? 'active' : ''}>
+        <span class="lang-th">ติดต่อเรา</span><span class="lang-en">Contact</span>
+      </a></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button data-lang-btn="th" class="on">TH</button>
+        <button data-lang-btn="en">EN</button>
+      </div>
+      <a class="btn btn-primary nav-cta" href="/contact">
+        <span class="lang-th">ขอราคา</span>
+        <span class="lang-en">Get a Quote</span>
+      </a>
+      <button class="burger" aria-label="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
