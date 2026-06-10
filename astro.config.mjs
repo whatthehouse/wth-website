@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://whatthehouse.co',
+  site: 'https://whatthehouse.net',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()]
