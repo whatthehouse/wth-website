@@ -322,7 +322,8 @@ h2.section-title{font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:.2em}
 .float-contact{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
 .float-contact a{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:var(--shadow);transition:.2s;font-weight:700;font-size:.7rem;text-align:center;line-height:1;text-decoration:none}
 .float-contact a:hover{transform:scale(1.08)}
-.fc-line{background:#06c755;width:auto !important;border-radius:50px !important;padding:0 18px !important;gap:8px;font-size:.85rem !important;display:flex !important;align-items:center}
+.fc-line{background:#06c755}
+.fc-msg{background:#0084ff}
 .fc-call{background:var(--green)}
 
 /* ---------- responsive ---------- */
