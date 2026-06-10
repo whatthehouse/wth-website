@@ -141,46 +141,6 @@ import Footer from '../components/Footer.astro';
       </div>
     </section>
 
-    <!-- ============ TEAM ============ -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">ทีมงาน</span><span class="lang-en">Our Team</span></span>
-          <h2 class="section-title"><span class="lang-th">ผู้เชี่ยวชาญที่คุณไว้ใจได้</span><span class="lang-en">Experts you can trust</span></h2>
-          <p><span class="lang-th">ทีมงานของเรามีพื้นฐานจากวิศวกรรม สถาปัตยกรรม และงานก่อสร้างโดยตรง</span><span class="lang-en block">Our team has direct backgrounds in engineering, architecture and construction.</span></p>
-        </div>
-        <div class="team-grid">
-
-          <div class="team-card">
-            <div class="team-photo">
-              <svg viewBox="0 0 24 24" width="36" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>
-            <div class="team-info">
-              <h4><span class="lang-th">ชื่อ นามสกุล</span><span class="lang-en">Name Surname</span></h4>
-              <span class="team-role"><span class="lang-th">ผู้ก่อตั้ง / หัวหน้าทีมตรวจ</span><span class="lang-en">Founder / Lead Inspector</span></span>
-              <p><span class="lang-th">ประสบการณ์ด้านวิศวกรรมและก่อสร้างกว่า 10 ปี ผ่านการตรวจบ้านและคอนโดมาแล้วกว่า 800 หลังทั่วภาคเหนือ</span><span class="lang-en block">10+ years in engineering and construction. Has personally inspected over 800 properties across Northern Thailand.</span></p>
-            </div>
-          </div>
-
-          <div class="team-card">
-            <div class="team-photo">
-              <svg viewBox="0 0 24 24" width="36" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>
-            <div class="team-info">
-              <h4><span class="lang-th">ชื่อ นามสกุล</span><span class="lang-en">Name Surname</span></h4>
-              <span class="team-role"><span class="lang-th">วิศวกรตรวจสอบ</span><span class="lang-en">Inspection Engineer</span></span>
-              <p><span class="lang-th">เชี่ยวชาญด้านระบบโครงสร้าง ระบบไฟฟ้า และระบบประปา มีประสบการณ์ทำงานกับโครงการที่อยู่อาศัยชั้นนำในเชียงใหม่</span><span class="lang-en block">Specialises in structural systems, electrical and plumbing. Experience with leading residential projects in Chiang Mai.</span></p>
-            </div>
-          </div>
-
-        </div>
-        <p class="team-note">
-          <span class="lang-th">* ข้อมูลทีมงานจะอัปเดตเร็ว ๆ นี้</span>
-          <span class="lang-en block">* Team profiles coming soon</span>
-        </p>
-      </div>
-    </section>
-
     <!-- ============ CTA ============ -->
     <section class="section soft">
       <div class="container">
@@ -253,40 +213,7 @@ import Footer from '../components/Footer.astro';
 .value-card h4 { font-size: 1rem; margin-bottom: .3em; }
 .value-card p { color: var(--grey); font-size: .9rem; margin: 0; line-height: 1.65; }
 
-/* team */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-.team-card {
-  display: flex;
-  gap: 20px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 24px;
-  align-items: flex-start;
-}
-.team-photo {
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: var(--green-soft);
-  color: var(--green-dark);
-  display: grid; place-items: center;
-  flex: none;
-  border: 2px solid #cfe9d6;
-}
-.team-info h4 { font-size: 1.05rem; margin-bottom: 2px; }
-.team-role { font-size: .82rem; font-weight: 600; color: var(--green-dark); display: block; margin-bottom: 8px; }
-.team-info p { color: var(--grey); font-size: .88rem; margin: 0; line-height: 1.6; }
-.team-note { text-align: center; color: var(--grey-light); font-size: .82rem; margin-top: 20px; font-style: italic; }
-
 @media (max-width: 720px) {
-  .team-grid { grid-template-columns: 1fr; }
-  .team-card { flex-direction: column; align-items: center; text-align: center; }
   .about-badge-wrap { flex-direction: row; }
 }
 </style>
