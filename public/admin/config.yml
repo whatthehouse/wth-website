@@ -79,3 +79,4 @@ collections:
           - { label: "ชื่อ Facebook ที่แสดงผล", name: "facebookDisplay", widget: "string" }
           - { label: "อีเมล", name: "email", widget: "string" }
           - { label: "Google Analytics 4 Measurement ID", name: "gaId", widget: "string", required: false, hint: "เช่น G-XXXXXXXXXX (เว้นว่างถ้ายังไม่ใช้)" }
+          - { label: "รูปภาพหน้า เกี่ยวกับเรา (About)", name: "aboutImage", widget: "image", required: false, hint: "รูปทีมงาน/หน้างาน แสดงในหน้า เกี่ยวกับเรา" }
