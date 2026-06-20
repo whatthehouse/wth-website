@@ -123,10 +123,18 @@ h2.section-title{font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:.2em}
 .burger span{width:24px;height:2.4px;background:var(--navy);border-radius:2px;transition:.25s}
 
 /* ---------- hero ---------- */
-.hero{position:relative;background:
-   radial-gradient(1100px 500px at 80% -10%,rgba(46,158,79,.14),transparent 60%),
-   linear-gradient(180deg,#fbfdfe,#f3f7fa);
+.hero{position:relative;
+   background:
+     linear-gradient(rgba(10,30,15,.62),rgba(10,30,15,.62)),
+     url('https://images.unsplash.com/photo-1676630656246-3047520adfdf?w=1400&q=80&fit=crop&crop=center') center/cover no-repeat;
    padding:72px 0 64px;overflow:hidden}
+.hero .eyebrow{color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.25)}
+.hero h1{color:#fff}
+.hero .lead{color:rgba(255,255,255,.88)}
+.hero-trust .t b{color:#6ee08a}
+.hero-trust .t span{color:rgba(255,255,255,.7)}
+.hero .btn-outline{border-color:rgba(255,255,255,.6);color:#fff}
+.hero .btn-outline:hover{background:rgba(255,255,255,.12);border-color:#fff}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
 .hero h1{margin-bottom:.35em}
 .hero .lead{margin:0 0 26px}
