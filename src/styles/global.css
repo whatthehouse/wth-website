@@ -126,7 +126,7 @@ h2.section-title{font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:.2em}
 .hero{position:relative;
    background:
      linear-gradient(rgba(10,30,15,.62),rgba(10,30,15,.62)),
-     url('https://images.unsplash.com/photo-1676630656246-3047520adfdf?w=1400&q=80&fit=crop&crop=center') center/cover no-repeat;
+     url('/assets/img/hero-inspection.jpg') center/cover no-repeat;
    padding:72px 0 64px;overflow:hidden}
 .hero .eyebrow{color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.25)}
 .hero h1{color:#fff}
