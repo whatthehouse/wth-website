@@ -13,24 +13,61 @@ import Footer from '../components/Footer.astro';
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="container hero-grid">
-        <div>
+        <div class="hero-copy">
           <span class="eyebrow">Chiang Mai • Lamphun • Lampang • Chiang Rai</span>
           <h1>
             <span class="lang-th">ตรวจบ้านและคอนโด<br>ก่อนรับมอบ อย่างมั่นใจ</span>
             <span class="lang-en block">Inspect your home &amp; condo<br>before you accept it</span>
           </h1>
           <p class="lead">
-            <span class="lang-th">ทีมตรวจบ้านมืออาชีพ ตรวจละเอียดทุกระบบ พร้อมรายงาน PDF ภาษาไทยและอังกฤษ ช่วยให้คุณรับมอบบ้านหรือคอนโดได้อย่างสบายใจ</span>
-            <span class="lang-en block">A professional inspection team that checks every system in detail and delivers a clear Thai–English PDF report — so you can accept your new home with confidence.</span>
+            <span class="lang-th">ตรวจละเอียดทุกระบบ พร้อมรายงานภาพถ่ายและคำอธิบายโดยวิศวกรมืออาชีพ ช่วยให้คุณรับมอบบ้านได้อย่างมั่นใจ</span>
+            <span class="lang-en block">Every system inspected in detail, with a clear photo report by professional engineers — so you can accept your new home with confidence.</span>
           </p>
+          <ul class="hero-benefits">
+            <li>
+              <span class="ic">✓</span>
+              <span>
+                <span class="lang-th">ตรวจโครงสร้าง ระบบไฟฟ้า และระบบประปา</span>
+                <span class="lang-en block">Structure, electrical &amp; plumbing systems</span>
+              </span>
+            </li>
+            <li>
+              <span class="ic">✓</span>
+              <span>
+                <span class="lang-th">ตรวจหลังคา ห้องใต้หลังคา และพื้นที่ซ่อนเร้น</span>
+                <span class="lang-en block">Roof, attic &amp; hidden areas</span>
+              </span>
+            </li>
+            <li>
+              <span class="ic">✓</span>
+              <span>
+                <span class="lang-th">ใช้อุปกรณ์ตรวจเฉพาะทาง เช่น กล้องความร้อน เครื่องวัดความชื้น</span>
+                <span class="lang-en block">Specialized equipment — thermal camera, moisture meter</span>
+              </span>
+            </li>
+            <li>
+              <span class="ic">✓</span>
+              <span>
+                <span class="lang-th">รายงานพร้อมภาพถ่ายภายใน 48 ชั่วโมง</span>
+                <span class="lang-en block">Photo report within 48 hours</span>
+              </span>
+            </li>
+            <li>
+              <span class="ic">✓</span>
+              <span>
+                <span class="lang-th">ตรวจซ้ำก่อนรับมอบ</span>
+                <span class="lang-en block">Re-inspection before handover</span>
+              </span>
+            </li>
+          </ul>
           <div class="hero-cta">
             <a class="btn btn-primary btn-lg" href="/contact">
-              <span class="lang-th">จองคิวตรวจบ้าน</span>
+              <span class="lang-th">จองตรวจบ้าน</span>
               <span class="lang-en">Book an Inspection</span>
             </a>
             <a class="btn btn-outline btn-lg" href="/services">
-              <span class="lang-th">ดูบริการทั้งหมด</span>
-              <span class="lang-en">Our Services</span>
+              <span class="lang-th">ดูตัวอย่างรายงาน</span>
+              <span class="lang-en">View Sample Report</span>
             </a>
           </div>
           <div class="hero-trust">
@@ -41,48 +78,28 @@ import Footer from '../components/Footer.astro';
           </div>
         </div>
 
-        <div class="hero-art">
+        <div class="hero-visual">
+          <img src="/assets/img/uploads/s__31154264_0.jpg"
+               alt="ทีม WHAT THE HOUSE กำลังทดสอบน้ำรั่วซึมที่หน้าต่างบ้าน — WHAT THE HOUSE inspector performing a window water-leak test"
+               fetchpriority="high" />
           <span class="badge">
             <span class="lang-th">ตรวจ 2 รอบ</span>
             <span class="lang-en">2 inspection rounds</span>
           </span>
-          <ul class="checklist">
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจโครงสร้าง สถาปัตยกรรม และงานระบบครบทุกจุด</span>
-                <span class="lang-en block">Structure, architecture and all building systems</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ใช้อุปกรณ์ตรวจสอบเฉพาะทาง เช่น กล้องระบบ ตรวจไฟฟ้า</span>
-                <span class="lang-en block">Specialized inspection equipment &amp; tools</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจน้ำรั่ว น้ำซึม จำลองฝน หลังคา ระบบประปา</span>
-                <span class="lang-en block">Leak &amp; water testing, roof and plumbing checks</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">รายงานพร้อมรูปภาพและคำอธิบายชัดเจน</span>
-                <span class="lang-en block">Full photo report with clear explanations</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจรอบแก้ไขซ้ำ ก่อนคุณเซ็นรับมอบ</span>
-                <span class="lang-en block">Free re-inspection round before you sign off</span>
-              </span>
-            </li>
-          </ul>
+          <div class="hero-check-card">
+            <b class="hc-title">
+              <span class="lang-th">จุดตรวจหลัก</span>
+              <span class="lang-en">Key checkpoints</span>
+            </b>
+            <ul>
+              <li><span class="ic">✓</span><span class="lang-th">โครงสร้าง</span><span class="lang-en">Structure</span></li>
+              <li><span class="ic">✓</span><span class="lang-th">หลังคา</span><span class="lang-en">Roof</span></li>
+              <li><span class="ic">✓</span><span class="lang-th">ไฟฟ้า</span><span class="lang-en">Electrical</span></li>
+              <li><span class="ic">✓</span><span class="lang-th">ประปา</span><span class="lang-en">Plumbing</span></li>
+              <li><span class="ic">✓</span><span class="lang-th">ความชื้น</span><span class="lang-en">Moisture</span></li>
+              <li><span class="ic">✓</span><span class="lang-th">กล้องความร้อน</span><span class="lang-en">Thermal camera</span></li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
