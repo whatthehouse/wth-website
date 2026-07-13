@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const tools = [
+  {
+    href: "/tools/btu-calculator",
+    ready: true,
+    title: { th: "คำนวณขนาดแอร์ (BTU)", en: "BTU Calculator" },
+    desc: { th: "หาขนาดแอร์ที่เหมาะกับห้อง จากขนาดพื้นที่และลักษณะการใช้งาน", en: "Find the right air-conditioner size for your room." },
+    icon: 'ac',
+  },
+  {
+    href: "#",
+    ready: false,
+    title: { th: "คำนวณโหลดไฟฟ้าในบ้าน", en: "Home Electrical Load" },
+    desc: { th: "ประเมินขนาดมิเตอร์และเบรกเกอร์ที่เหมาะกับเครื่องใช้ไฟฟ้า", en: "Estimate the meter and breaker size for your appliances." },
+    icon: 'bolt',
+  },
+  {
+    href: "#",
+    ready: false,
+    title: { th: "คำนวณกระเบื้อง / พื้นที่ปู", en: "Tile / Area Estimator" },
+    desc: { th: "คำนวณจำนวนกระเบื้องและวัสดุปูพื้นตามขนาดพื้นที่", en: "Estimate tiles and flooring materials by area." },
+    icon: 'grid',
+  },
+  {
+    href: "#",
+    ready: false,
+    title: { th: "คำนวณสีทาบ้าน", en: "Paint Estimator" },
+    desc: { th: "ประเมินปริมาณสีที่ต้องใช้ตามพื้นที่ผนัง", en: "Estimate how much paint you need by wall area." },
+    icon: 'roller',
+  },
+];
+---
+<BaseLayout
+  title="เครื่องมือช่าง | คำนวณแอร์ ไฟฟ้า วัสดุ | WHAT THE HOUSE"
+  description="รวมเครื่องมือคำนวณสำหรับเจ้าของบ้าน คำนวณขนาดแอร์ (BTU) โหลดไฟฟ้า วัสดุก่อสร้าง ใช้ฟรี โดยทีมตรวจบ้าน WHAT THE HOUSE | Free homeowner tools"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">เครื่องมือช่าง</span><span class="lang-en">Tools</span></p>
+        <span class="eyebrow"><span class="lang-th">เครื่องมือช่าง</span><span class="lang-en">Free Tools</span></span>
+        <h1><span class="lang-th">เครื่องมือคำนวณ<br>สำหรับเจ้าของบ้าน</span><span class="lang-en">Free tools for homeowners</span></h1>
+        <p><span class="lang-th">เครื่องมือคำนวณที่ทีมช่างของเราใช้จริง แบ่งปันให้คุณใช้ฟรี ช่วยตัดสินใจเรื่องบ้านได้ง่ายขึ้น</span><span class="lang-en block">The calculators our team actually uses — shared free to help you make better decisions about your home.</span></p>
+      </div>
+    </section>
+
+    <!-- TOOLS GRID -->
+    <section class="section">
+      <div class="container">
+        <div class="tool-grid">
+          {tools.map((t) => (
+            <a href={t.href} class={`tool-card${t.ready ? '' : ' soon'}`}>
+              <div class="tool-ic">
+                {t.icon === 'ac' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="4" width="20" height="9" rx="2"/><path d="M6 17v1M10 17c0 1.5-1 2-1 3M14 17c0 1.5 1 2 1 3M18 17v1M5 9h14"/></svg>}
+                {t.icon === 'bolt' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>}
+                {t.icon === 'grid' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>}
+                {t.icon === 'roller' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="14" height="6" rx="1"/><path d="M17 7h3v4h-9v3M11 14v7"/></svg>}
+              </div>
+              <h3><span class="lang-th">{t.title.th}</span><span class="lang-en">{t.title.en}</span></h3>
+              <p><span class="lang-th">{t.desc.th}</span><span class="lang-en block">{t.desc.en}</span></p>
+              {t.ready
+                ? <span class="tool-go"><span class="lang-th">เปิดเครื่องมือ</span><span class="lang-en">Open tool</span> →</span>
+                : <span class="tool-soon"><span class="lang-th">เร็ว ๆ นี้</span><span class="lang-en">Coming soon</span></span>}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">อยากให้ผู้เชี่ยวชาญตรวจบ้านให้?</span><span class="lang-en">Want a professional inspection?</span></h2>
+          <p><span class="lang-th">เครื่องมือช่วยประเมินเบื้องต้นได้ แต่การตรวจจริงโดยทีมของเราแม่นยำกว่า</span><span class="lang-en block">Tools give you an estimate — a real inspection by our team gives you certainty.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-outline btn-lg" href="/services"><span class="lang-th">ดูบริการทั้งหมด</span><span class="lang-en">Our Services</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.tool-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.tool-card {
+  display: flex; flex-direction: column; background: var(--panel);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 30px;
+  transition: .22s; color: inherit; text-decoration: none;
+}
+.tool-card:hover { transform: translateY(-4px); border-color: rgba(47,224,124,.35); box-shadow: var(--shadow); }
+.tool-card.soon { opacity: .62; cursor: default; }
+.tool-card.soon:hover { transform: none; border-color: var(--line); box-shadow: none; }
+.tool-ic {
+  width: 54px; height: 54px; border-radius: 13px; background: var(--green-soft);
+  border: 1px solid rgba(47,224,124,.18); color: var(--green-bright);
+  display: grid; place-items: center; margin-bottom: 18px;
+}
+.tool-ic svg { width: 28px; height: 28px; }
+.tool-card h3 { font-size: 1.18rem; margin-bottom: .35em; }
+.tool-card p { color: var(--grey); font-size: .94rem; margin: 0 0 18px; flex: 1; }
+.tool-go { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--green-bright); font-weight: 600; }
+.tool-soon { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); border: 1px solid var(--line-2); border-radius: 50px; padding: 5px 12px; align-self: flex-start; }
+@media (max-width: 720px) { .tool-grid { grid-template-columns: 1fr; } }
+</style>
