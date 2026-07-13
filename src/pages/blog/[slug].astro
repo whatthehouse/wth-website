@@ -71,7 +71,7 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
               <Content />
             </div>
             <div class="prose lang-en block" style="display:none">
-              <p style="background:var(--green-soft);padding:16px 20px;border-radius:10px;color:var(--green-dark);font-size:.9rem">
+              <p style="background:var(--green-soft);padding:16px 20px;border-radius:10px;color:var(--green-bright);font-size:.9rem">
                 <strong>English version:</strong> This article is currently available in Thai. An English translation will be added soon.
               </p>
             </div>
@@ -141,27 +141,27 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
 .prose li { margin-bottom: .4rem; }
 .prose li::marker { color: var(--green); }
 .prose strong { color: var(--navy); font-weight: 600; }
-.prose a { color: var(--green-dark); text-decoration: underline; }
-.prose a:hover { color: var(--green); }
+.prose a { color: var(--green-bright); text-decoration: underline; }
+.prose a:hover { color: #fff; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .prose blockquote { border-left: 3px solid var(--green); padding-left: 1rem; color: var(--grey); font-style: italic; margin: 1.2rem 0; }
 
 /* sidebar */
 .post-sidebar { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 20px; }
 .sidebar-box {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 22px;
 }
-.sidebar-box h4 { font-size: 1rem; margin: 0 0 8px; color: var(--navy); }
+.sidebar-box h4 { font-size: 1rem; margin: 0 0 8px; color: var(--heading); }
 .sidebar-box p { color: var(--grey); font-size: .88rem; margin: 0 0 14px; }
 
 .related-posts { display: flex; flex-direction: column; gap: 12px; }
 .related-post { display: block; text-decoration: none; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); transition: .15s; }
 .related-post:hover { border-color: var(--green); background: var(--green-soft); }
-.rp-cat { font-size: .72rem; font-weight: 600; color: var(--green-dark); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 3px; }
-.rp-title { font-size: .88rem; color: var(--navy); font-weight: 500; line-height: 1.4; }
+.rp-cat { font-family: var(--mono); font-size: .62rem; font-weight: 600; color: var(--green-bright); text-transform: uppercase; letter-spacing: .12em; display: block; margin-bottom: 4px; }
+.rp-title { font-size: .88rem; color: var(--heading); font-weight: 500; line-height: 1.4; }
 
 @media (max-width: 900px) {
   .post-layout { grid-template-columns: 1fr; }

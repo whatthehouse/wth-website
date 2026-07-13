@@ -285,7 +285,7 @@ import Footer from '../components/Footer.astro';
   align-items: start;
 }
 .calc-box {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 36px;
@@ -322,15 +322,15 @@ import Footer from '../components/Footer.astro';
   transition: .2s;
 }
 .type-btn svg { color: var(--grey); transition: .2s; }
-.type-btn:hover { border-color: var(--green); color: var(--green-dark); }
-.type-btn:hover svg { color: var(--green-dark); }
+.type-btn:hover { border-color: var(--green); color: var(--green-bright); }
+.type-btn:hover svg { color: var(--green-bright); }
 .type-btn.active {
   border-color: var(--green);
   background: var(--green-soft);
-  color: var(--green-dark);
+  color: var(--green-bright);
   font-weight: 600;
 }
-.type-btn.active svg { color: var(--green-dark); }
+.type-btn.active svg { color: var(--green-bright); }
 
 /* area input */
 .area-input-wrap {
@@ -340,7 +340,7 @@ import Footer from '../components/Footer.astro';
   border: 2px solid var(--line);
   border-radius: var(--radius-sm);
   padding: 0 14px;
-  background: #fff;
+  background: var(--panel-2);
   transition: .15s;
 }
 .area-input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
@@ -351,7 +351,7 @@ import Footer from '../components/Footer.astro';
   padding: 14px 0;
   font-size: 1.1rem;
   font-family: inherit;
-  color: var(--ink);
+  color: #fff;
   background: transparent;
 }
 .area-unit { color: var(--grey-light); font-size: .88rem; white-space: nowrap; }
@@ -360,14 +360,14 @@ import Footer from '../components/Footer.astro';
   padding: 5px 12px;
   border: 1px solid var(--line);
   border-radius: 50px;
-  background: #fff;
+  background: var(--panel-2);
   cursor: pointer;
   font-size: .82rem;
   font-family: inherit;
-  color: var(--navy);
+  color: var(--body);
   transition: .15s;
 }
-.quick-btn:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-soft); }
+.quick-btn:hover { border-color: var(--green); color: var(--green-bright); background: var(--green-soft); }
 
 /* location radios */
 .area-btns { display: flex; flex-direction: column; gap: 10px; }
@@ -379,7 +379,7 @@ import Footer from '../components/Footer.astro';
   padding: 12px 14px;
   border: 2px solid var(--line);
   border-radius: var(--radius-sm);
-  background: #fff;
+  background: var(--panel-2);
   transition: .15s;
   font-size: .93rem;
 }
@@ -390,7 +390,8 @@ import Footer from '../components/Footer.astro';
 /* result box */
 .calc-result {
   margin-top: 28px;
-  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  background: linear-gradient(135deg, var(--panel-3), var(--panel-2));
+  border: 1px solid rgba(47,224,124,.25);
   border-radius: var(--radius);
   padding: 24px;
   display: flex;
@@ -399,14 +400,16 @@ import Footer from '../components/Footer.astro';
   gap: 20px;
   flex-wrap: wrap;
 }
-.result-label { color: #aebccb; font-size: .85rem; margin-bottom: 4px; }
+.result-label { color: var(--grey); font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
 .result-price {
+  font-family: var(--mono);
   font-size: 2.2rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   line-height: 1;
+  letter-spacing: -.02em;
 }
-.result-note { color: #7fe39a; font-size: .82rem; margin-top: 4px; min-height: 1.2em; }
+.result-note { color: var(--green-bright); font-family: var(--mono); font-size: .78rem; margin-top: 6px; min-height: 1.2em; }
 .result-cta { white-space: nowrap; }
 
 /* notes side */
@@ -428,7 +431,7 @@ import Footer from '../components/Footer.astro';
 }
 .nc {
   width: 22px; height: 22px; border-radius: 50%;
-  background: var(--green-soft); color: var(--green-dark);
+  background: var(--green-soft); color: var(--green-bright);
   display: grid; place-items: center; flex: none;
   font-size: .72rem; font-weight: 700; margin-top: 1px;
 }
@@ -436,7 +439,7 @@ import Footer from '../components/Footer.astro';
 /* price tables */
 .price-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .price-table-wrap {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -445,11 +448,12 @@ import Footer from '../components/Footer.astro';
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--navy);
+  background: var(--panel-3);
+  border-bottom: 1px solid var(--line);
   color: #fff;
   padding: 16px 22px;
 }
-.pt-header svg { color: #7fe39a; }
+.pt-header svg { color: var(--green-bright); }
 .pt-header h3 { margin: 0; font-size: 1rem; color: #fff; }
 .price-tbl { width: 100%; border-collapse: collapse; }
 .price-tbl th {
@@ -467,11 +471,11 @@ import Footer from '../components/Footer.astro';
   padding: 13px 22px;
   border-bottom: 1px solid var(--line);
   font-size: .95rem;
-  color: var(--ink);
+  color: var(--body);
 }
 .price-tbl tr:last-child td { border-bottom: 0; }
-.price-tbl tr:hover td { background: var(--bg-soft); }
-.price-cell { font-weight: 700; color: var(--green-dark); font-size: 1.05rem; }
+.price-tbl tr:hover td { background: var(--panel-2); }
+.price-cell { font-family: var(--mono); font-weight: 600; color: var(--green-bright); font-size: 1.05rem; }
 .pt-foot {
   text-align: center;
   margin-top: 18px;

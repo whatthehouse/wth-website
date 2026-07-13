@@ -170,16 +170,16 @@ import settings from '../data/settings.json';
 .about-img-placeholder {
   width: 100%;
   aspect-ratio: 4/3;
-  background: linear-gradient(135deg, var(--green-soft), #dfeee4);
+  background: linear-gradient(150deg, #12201a, #0b1310);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: var(--green-dark);
+  color: var(--green-bright);
   font-size: .88rem;
-  border: 1px solid #cfe9d6;
+  border: 1px solid var(--line);
 }
 .about-img-placeholder svg { opacity: .5; }
 .about-img {
@@ -196,29 +196,31 @@ import settings from '../data/settings.json';
 }
 .about-badge {
   flex: 1;
-  background: var(--navy);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
   color: #fff;
   border-radius: var(--radius-sm);
   padding: 16px;
   text-align: center;
 }
-.about-badge b { display: block; font-size: 1.8rem; color: var(--green); line-height: 1; font-weight: 700; }
-.about-badge span { font-size: .8rem; color: #aebccb; margin-top: 2px; display: block; }
+.about-badge b { display: block; font-family: var(--mono); font-size: 1.8rem; color: var(--green-bright); line-height: 1; font-weight: 600; }
+.about-badge span { font-size: .8rem; color: var(--grey); margin-top: 4px; display: block; }
 
 /* value cards */
 .value-card {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 26px;
   transition: .2s;
 }
-.value-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+.value-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); border-color: var(--line-2); }
 .vc-icon {
   width: 52px; height: 52px;
   border-radius: 14px;
   background: var(--green-soft);
-  color: var(--green-dark);
+  color: var(--green-bright);
+  border: 1px solid rgba(47,224,124,.18);
   display: grid; place-items: center;
   margin-bottom: 14px;
 }

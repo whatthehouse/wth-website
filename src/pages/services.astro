@@ -234,7 +234,7 @@ const services = [
 
 /* detail blocks */
 .svc-block {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 36px;
@@ -249,16 +249,17 @@ const services = [
 .svc-block .head .svc-ic { margin-bottom: 0; flex: none; }
 .svc-num {
   display: block;
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--green-dark);
-  letter-spacing: .1em;
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--green-bright);
+  letter-spacing: .16em;
   text-transform: uppercase;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 .svc-block h2 { font-size: 1.35rem; margin: 0; }
 .tagline {
-  color: var(--green-dark);
+  color: var(--green-bright);
   font-weight: 600;
   font-size: .95rem;
   margin: 0 0 14px;
@@ -310,7 +311,8 @@ const services = [
 
 /* highlight box */
 .svc-highlight-box {
-  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  background: linear-gradient(135deg, var(--panel-3), var(--panel-2));
+  border: 1px solid rgba(47,224,124,.2);
   border-radius: var(--radius-sm);
   padding: 22px;
   color: #fff;
@@ -318,13 +320,13 @@ const services = [
 .sh-icon {
   width: 42px; height: 42px;
   border-radius: 10px;
-  background: rgba(127, 227, 154, .2);
-  color: #7fe39a;
+  background: var(--green-soft);
+  color: var(--green-bright);
   display: grid; place-items: center;
   margin-bottom: 12px;
 }
 .svc-highlight-box p {
-  color: #d0dde8;
+  color: var(--body);
   font-size: .9rem;
   line-height: 1.6;
   margin: 0;
