@@ -13,21 +13,21 @@
    ========================================================= */
 
 :root{
-  /* grounds (green-biased neutrals, deliberately chosen) */
-  --ink:#0A0E0C;
-  --ink-2:#0E1310;
-  --panel:#10160F;
-  --panel-2:#151C13;
-  --panel-3:#1A231A;
+  /* grounds (green-biased charcoal — lifted for a softer, less oppressive dark) */
+  --ink:#151B17;
+  --ink-2:#1A211C;
+  --panel:#1C241E;
+  --panel-2:#232C25;
+  --panel-3:#2A342C;
   /* lines */
-  --line:rgba(255,255,255,.08);
-  --line-2:rgba(255,255,255,.14);
+  --line:rgba(255,255,255,.10);
+  --line-2:rgba(255,255,255,.17);
   /* text */
-  --heading:#F1F5F1;
-  --body:#AEB9B0;
-  --grey:#94A096;
-  --grey-light:#727C73;
-  --faint:#68726A;
+  --heading:#F3F7F3;
+  --body:#BAC5BC;
+  --grey:#9BA79D;
+  --grey-light:#7C877E;
+  --faint:#79837B;
   /* brand */
   --green:#1D9E56;
   --green-bright:#2FE07C;
@@ -245,7 +245,10 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .step{position:relative;padding-top:8px}
-.step .n{width:44px;height:44px;border-radius:11px;background:var(--panel-2);border:1px solid var(--line-2);color:var(--green-bright);display:grid;place-items:center;font-family:var(--mono);font-weight:600;margin-bottom:16px}
+.step-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.step .n{width:36px;height:36px;flex:none;border-radius:10px;background:var(--panel-2);border:1px solid var(--line-2);color:var(--faint);display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:.9rem}
+.step-ic{width:48px;height:48px;flex:none;border-radius:12px;background:var(--green-soft);border:1px solid rgba(47,224,124,.2);color:var(--green-bright);display:grid;place-items:center}
+.step-ic svg{width:24px;height:24px}
 .step h4{font-size:1.05rem;margin-bottom:.3em;color:var(--heading)}
 .step p{color:var(--grey);font-size:.92rem;margin:0}
 
@@ -420,18 +423,20 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .hs-live i{width:6px;height:6px;border-radius:50%;background:var(--green-bright);box-shadow:0 0 8px var(--green-bright);animation:blink 1.6s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ---------- equipment spec-sheet ---------- */
+/* ---------- equipment spec-sheet (photo cards) ---------- */
 .eq-lead{flex:none;max-width:300px;color:var(--grey);font-size:.95rem;margin-bottom:6px;align-self:flex-end}
-.eq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.eq{background:var(--panel);padding:26px 22px;min-height:180px;display:flex;flex-direction:column;transition:.22s;position:relative}
-.eq:hover{background:var(--panel-2)}
-.eq-no{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;color:var(--faint)}
-.eq-ic{margin:16px 0 auto;color:var(--green-bright)}
-.eq-ic svg{width:30px;height:30px}
-.eq h3{font-size:1rem;margin:0 0 5px;letter-spacing:-.01em;color:var(--heading)}
+.eq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.eq{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.22s;display:flex;flex-direction:column}
+.eq:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--shadow)}
+.eq-img{position:relative;aspect-ratio:16/11;background:linear-gradient(150deg,#1e2b23,#141d17);overflow:hidden}
+.eq-img>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.eq-ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--green-bright);opacity:.5}
+.eq-ph svg{width:38px;height:38px}
+.eq-body{padding:16px 18px;display:flex;flex-direction:column}
+.eq-no{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--faint);margin-bottom:8px}
+.eq h3{font-size:.98rem;margin:0 0 5px;letter-spacing:-.01em;color:var(--heading)}
 .eq-en{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-.eq.eq-more{background:var(--ink-2)}
-.eq.eq-more .eq-ic{color:var(--green-bright)}
+.eq.eq-more .eq-img{background:var(--ink-2)}
 
 /* scroll reveal */
 .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
