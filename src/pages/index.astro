@@ -46,10 +46,14 @@ const homeFaqs = [
   <Header />
   <main>
 
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
+    <!-- ============ HERO (full-bleed) ============ -->
+    <section class="hero hero-bleed">
+      <img class="hero-bg" src="/assets/img/uploads/s__31154264_0.jpg"
+           alt="ทีม WHAT THE HOUSE กำลังทดสอบน้ำรั่วซึมที่หน้าต่างบ้าน — WHAT THE HOUSE inspector performing a window water-leak test"
+           fetchpriority="high" />
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-content">
           <span class="eyebrow">
             <span class="lang-th">บริษัทตรวจบ้านที่ลูกค้าบอกต่อ ในเชียงใหม่และภาคเหนือ</span>
             <span class="lang-en">Northern Thailand's trusted home inspection team</span>
@@ -62,49 +66,12 @@ const homeFaqs = [
             <span class="lang-th">ตรวจละเอียดทุกระบบ พร้อมรายงานภาพถ่ายและคำอธิบายโดยวิศวกรมืออาชีพ ช่วยให้คุณรับมอบบ้านได้อย่างมั่นใจ</span>
             <span class="lang-en block">Every system inspected in detail, with a clear photo report by professional engineers — so you can accept your new home with confidence.</span>
           </p>
-          <ul class="hero-benefits">
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจโครงสร้าง ระบบไฟฟ้า และระบบประปา</span>
-                <span class="lang-en block">Structure, electrical &amp; plumbing systems</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจหลังคา ห้องใต้หลังคา และพื้นที่ซ่อนเร้น</span>
-                <span class="lang-en block">Roof, attic &amp; hidden areas</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ใช้อุปกรณ์ตรวจเฉพาะทาง เช่น กล้องความร้อน เครื่องวัดความชื้น</span>
-                <span class="lang-en block">Specialized equipment — thermal camera, moisture meter</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">รายงานพร้อมภาพถ่ายภายใน 48 ชั่วโมง</span>
-                <span class="lang-en block">Photo report within 48 hours</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจซ้ำก่อนรับมอบ</span>
-                <span class="lang-en block">Re-inspection before handover</span>
-              </span>
-            </li>
-          </ul>
           <div class="hero-cta">
             <a class="btn btn-primary btn-lg" href="/contact">
               <span class="lang-th">จองตรวจบ้าน</span>
               <span class="lang-en">Book an Inspection</span>
             </a>
-            <a class="btn btn-outline btn-lg" href="/services">
+            <a class="btn btn-glass btn-lg" href="/services">
               <span class="lang-th">ดูตัวอย่างรายงาน</span>
               <span class="lang-en">View Sample Report</span>
             </a>
@@ -116,29 +83,14 @@ const homeFaqs = [
             <div class="t"><b>TH/EN</b><span class="lang-th">รายงาน 2 ภาษา</span><span class="lang-en">bilingual report</span></div>
           </div>
         </div>
-
-        <div class="hero-stage">
-          <div class="hero-frame">
-            <span class="ftick tl"></span><span class="ftick tr"></span>
-            <span class="ftick bl"></span><span class="ftick br"></span>
-            <img src="/assets/img/uploads/s__31154264_0.jpg"
-                 alt="ทีม WHAT THE HOUSE กำลังทดสอบน้ำรั่วซึมที่หน้าต่างบ้าน — WHAT THE HOUSE inspector performing a window water-leak test"
-                 fetchpriority="high" />
-            <span class="scanline"></span>
-            <span class="hpin p1"><i></i>ROOF</span>
-            <span class="hpin p2"><i></i>MOISTURE</span>
-            <span class="hpin p3"><i></i>WINDOW · LEAK TEST</span>
-            <span class="hbadge"><span class="lang-th">ตรวจ 2 รอบ</span><span class="lang-en">2 rounds</span></span>
-            <div class="fcaption">
-              <span>WTH-INSPECT · FIELD UNIT</span>
-              <span class="live"><i></i>SCAN ACTIVE</span>
-            </div>
-          </div>
-          <div class="hero-readout">
-            <div class="ro"><span class="rk">MOISTURE</span><span class="rv">18.4%</span></div>
-            <div class="ro"><span class="rk">Δ THERMAL</span><span class="rv">6.2°C</span></div>
-            <div class="ro"><span class="rk">REPORT</span><span class="rv">48H</span></div>
-          </div>
+      </div>
+      <div class="hero-strip">
+        <div class="container hero-strip-in">
+          <span class="hs-label"><span class="lang-th">จุดตรวจหลัก</span><span class="lang-en">Inspection scope</span></span>
+          <span class="hs-tags">
+            <span>Structure</span><span>Roof</span><span>Electrical</span><span>Plumbing</span><span>Moisture</span><span>Thermal</span>
+          </span>
+          <span class="hs-live"><i></i><span class="lang-th">ตรวจ 2 รอบ</span><span class="lang-en">2 rounds</span></span>
         </div>
       </div>
     </section>
