@@ -145,7 +145,9 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .burger span{width:24px;height:2.4px;background:var(--heading);border-radius:2px;transition:.25s}
 
 /* ---------- hero ---------- */
-.hero{position:relative;background:var(--ink);padding:0;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero{position:relative;background:var(--ink);padding:0;overflow:hidden;border-bottom:1px solid var(--line);
+  min-height:calc(100svh - 72px);display:flex;align-items:center}
+.hero>.container{width:100%}
 .hero::before{content:"";position:absolute;inset:0;
   background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
