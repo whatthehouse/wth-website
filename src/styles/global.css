@@ -199,18 +199,21 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .grid-4{grid-template-columns:repeat(4,1fr)}
 .card{
   background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-  padding:28px;transition:.22s;height:100%;display:block;color:inherit;
+  padding:28px;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;height:100%;display:block;color:inherit;
 }
-.card:hover{transform:translateY(-4px);border-color:rgba(47,224,124,.35);box-shadow:var(--shadow)}
+.card:hover{transform:translateY(-6px);border-color:rgba(47,224,124,.45);box-shadow:var(--shadow)}
 .svc-ic{
   width:52px;height:52px;border-radius:13px;background:var(--green-soft);border:1px solid rgba(47,224,124,.18);
-  display:grid;place-items:center;margin-bottom:18px;color:var(--green-bright)
+  display:grid;place-items:center;margin-bottom:18px;color:var(--green-bright);transition:background .22s ease,border-color .22s ease,box-shadow .22s ease
 }
 .svc-ic svg{width:26px;height:26px}
+.card:hover .svc-ic{background:rgba(47,224,124,.2);border-color:rgba(47,224,124,.5);box-shadow:0 0 20px -4px rgba(47,224,124,.4)}
 .card h3{font-size:1.16rem;margin-bottom:.35em;color:var(--heading)}
 .card .num{font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--green);letter-spacing:.14em;display:block;margin-bottom:8px}
 .card p{color:var(--grey);font-size:.94rem;margin:0 0 14px}
 .card .more{display:inline-flex;align-items:center;gap:6px;color:var(--green-bright);font-family:var(--mono);font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-top:16px}
+.card .more .arw{transition:transform .22s ease;display:inline-block}
+.card:hover .more .arw{transform:translateX(4px)}
 
 /* feature / why-us */
 .feat{display:flex;gap:16px;align-items:flex-start}
