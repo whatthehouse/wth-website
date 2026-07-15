@@ -121,7 +121,7 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 }
 .nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:18px}
 .brand{display:flex;align-items:center;gap:11px;font-weight:700;color:var(--heading)}
-.brand .logo{width:40px;height:40px;flex:none;object-fit:contain;border-radius:8px}
+.brand .logo{height:52px;width:auto;flex:none;object-fit:contain}
 .brand .brand-text{display:flex;flex-direction:column;line-height:1.05}
 .brand .brand-text b{font-size:1rem;letter-spacing:-.01em}
 .brand .brand-text span{font-family:var(--mono);font-size:.56rem;letter-spacing:.24em;color:var(--faint);font-weight:500;text-transform:uppercase;margin-top:2px}
@@ -248,8 +248,8 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 /* steps — minimal (prominent numbers only) */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
 .step{position:relative;padding:28px 28px 0 0;border-top:1px solid var(--line-2)}
-.step .s-num{display:block;font-family:var(--mono);font-size:3.4rem;font-weight:500;line-height:1;letter-spacing:-.04em;color:var(--heading);margin-bottom:24px;transition:.25s}
-.step:hover .s-num{color:var(--green-bright)}
+.step .s-num{width:58px;height:58px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-family:var(--mono);font-size:1.55rem;font-weight:500;line-height:1;color:var(--heading);margin-bottom:22px;transition:.25s}
+.step:hover .s-num{border-color:var(--green-bright);color:var(--green-bright)}
 .step h4{font-size:1.02rem;margin-bottom:.35em;color:var(--heading);letter-spacing:-.01em}
 .step p{color:var(--grey);font-size:.9rem;margin:0;max-width:26ch}
 
