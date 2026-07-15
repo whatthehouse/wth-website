@@ -242,14 +242,11 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .head-split .section-head{margin:0;text-align:left;max-width:640px}
 .head-split .btn{flex:none;margin-bottom:6px}
 
-/* steps — minimal */
+/* steps — minimal (prominent numbers only) */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-.step{position:relative;padding:26px 28px 0 0;border-top:1px solid var(--line-2)}
-.step .s-num{display:block;font-family:var(--mono);font-size:2.4rem;font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--faint);opacity:.5;margin-bottom:22px;transition:.25s}
-.step .s-ic{position:absolute;top:26px;right:22px;color:var(--faint);transition:.25s}
-.step .s-ic svg{width:20px;height:20px}
-.step:hover .s-num{color:var(--green-bright);opacity:1}
-.step:hover .s-ic{color:var(--green-bright)}
+.step{position:relative;padding:28px 28px 0 0;border-top:1px solid var(--line-2)}
+.step .s-num{display:block;font-family:var(--mono);font-size:3.4rem;font-weight:500;line-height:1;letter-spacing:-.04em;color:var(--heading);margin-bottom:24px;transition:.25s}
+.step:hover .s-num{color:var(--green-bright)}
 .step h4{font-size:1.02rem;margin-bottom:.35em;color:var(--heading);letter-spacing:-.01em}
 .step p{color:var(--grey);font-size:.9rem;margin:0;max-width:26ch}
 
