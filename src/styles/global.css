@@ -215,6 +215,17 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .card .more .arw{transition:transform .22s ease;display:inline-block}
 .card:hover .more .arw{transform:translateX(4px)}
 
+/* service cards with photo background */
+.svc-card{position:relative;padding:0;overflow:hidden;min-height:290px;display:flex}
+.svc-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+  transition:transform .5s ease;opacity:.85}
+.svc-card:hover .svc-bg{transform:scale(1.06)}
+.svc-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(20,21,23,.35) 0%,rgba(20,21,23,.82) 55%,rgba(20,21,23,.95) 100%)}
+.svc-body{position:relative;z-index:2;padding:26px;margin-top:auto;width:100%}
+.svc-card h3{color:#fff}
+.svc-card p{color:#C6CBCC}
+
 /* feature / why-us */
 .feat{display:flex;gap:16px;align-items:flex-start}
 .feat .fic{width:46px;height:46px;border-radius:12px;background:var(--green-soft);color:var(--green-bright);display:grid;place-items:center;flex:none;border:1px solid rgba(47,224,124,.18)}

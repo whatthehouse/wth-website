@@ -26,6 +26,39 @@ function formatDateEn(date: Date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+const services = [
+  {
+    href: "/services#s1", img: "/assets/img/services/service-handover.jpg",
+    title: { th: "ตรวจรับบ้านและคอนโด", en: "Home & Condo Handover Inspection" },
+    desc: { th: "รู้ทุกจุดที่ต้องแก้ก่อนเซ็นรับมอบ ตรวจครบทุกระบบพร้อมรายงานภาพถ่ายที่ใช้เจรจากับโครงการได้จริง", en: "Know every defect before you sign — every system checked, with a photo report you can negotiate with." },
+  },
+  {
+    href: "/services#s2", img: "/assets/img/services/service-supervision.jpg",
+    title: { th: "ควบคุมงานสร้างบ้าน", en: "Home Construction Supervision" },
+    desc: { th: "ติดตามความคืบหน้าและตรวจคุณภาพตามงวด เพื่อให้แก้ไขได้ก่อนงานถูกปิดทับ", en: "Track progress and quality each phase — so issues get fixed before they're sealed over." },
+  },
+  {
+    href: "/services#s3", img: "/assets/img/services/service-planning.jpg",
+    title: { th: "วางแผนก่อนสร้างบ้าน", en: "Pre-Construction Planning" },
+    desc: { th: "ตรวจแบบ ฟังก์ชัน วัสดุ และ BOQ ช่วยลดจุดพลาดก่อนเซ็นสัญญาและเริ่มก่อสร้าง", en: "Review plans, function, materials and BOQ — cutting costly mistakes before you sign and build." },
+  },
+  {
+    href: "/services#s4", img: "/assets/img/services/service-renovation.jpg",
+    title: { th: "ที่ปรึกษางานต่อเติม", en: "Renovation & Extension Advisory" },
+    desc: { th: "ต่อเติมได้อย่างมั่นใจ ประเมินความเป็นไปได้และคุมคุณภาพงาน ให้ตรงตามมาตรฐานที่ควรจะเป็น", en: "Extend with confidence — feasibility checks plus quality control throughout the work." },
+  },
+  {
+    href: "/services#s5", img: "/assets/img/services/service-diagnosis.jpg",
+    title: { th: "ตรวจหาสาเหตุปัญหาบ้าน", en: "Home Problem Diagnosis" },
+    desc: { th: "ตรวจหาสาเหตุน้ำรั่ว น้ำซึม ผนังแตกร้าว และปัญหาระบบ พร้อมแนวทางแก้ไขที่ทำได้จริง", en: "Find the real cause of leaks, cracks and system faults — with a clear, workable fix plan." },
+  },
+  {
+    href: "/services#s6", img: "/assets/img/services/service-contractor.jpg",
+    title: { th: "ตรวจคุณภาพงานผู้รับเหมา", en: "Contractor Work Quality Check" },
+    desc: { th: "ตรวจคุณภาพงานให้ได้มาตรฐานก่อนจ่ายเงินงวดสุดท้าย ในฐานะคนกลางที่เป็นธรรม", en: "Verify the work meets standard before the final payment — as a fair, independent third party." },
+  },
+];
+
 const homeFaqs = [
   { q: { th: "การตรวจบ้านคืออะไร?", en: "What is a home inspection?" },
     a: { th: "การตรวจสอบสภาพทางกายภาพของบ้านหรือคอนโดอย่างละเอียดโดยผู้เชี่ยวชาญ ครอบคลุมโครงสร้าง ระบบไฟฟ้า ประปา หลังคา และระบบอื่น ๆ เพื่อให้คุณทราบสภาพจริงก่อนรับมอบ", en: "A thorough physical assessment of a property by a qualified professional — structure, electrical, plumbing, roofing and all major systems — so you know the true condition before accepting." } },
@@ -112,61 +145,16 @@ const homeFaqs = [
           <p><span class="lang-th">ไม่ว่าคุณกำลังสร้าง กำลังจะรับมอบ หรือมีปัญหาบ้านอยู่แล้ว เรามีบริการที่ช่วยให้คุณตัดสินใจได้อย่างมั่นใจในทุกขั้นตอน</span><span class="lang-en block">Whether you're building, about to accept a home, or facing a problem — we help you decide with confidence at every stage.</span></p>
         </div>
         <div class="grid grid-3">
-
-          <a class="card" href="/services#s1">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
-            </div>
-            <h3><span class="lang-th">ตรวจรับบ้านและคอนโด</span><span class="lang-en">Home &amp; Condo Handover Inspection</span></h3>
-            <p><span class="lang-th">รู้ทุกจุดที่ต้องแก้ก่อนเซ็นรับมอบ ตรวจครบทุกระบบพร้อมรายงานภาพถ่ายที่ใช้เจรจากับโครงการได้จริง</span><span class="lang-en block">Know every defect before you sign — every system checked, with a photo report you can negotiate with.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
-          </a>
-
-          <a class="card" href="/services#s2">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M4 20V8l8-5 8 5v12"/><path d="M9 20v-6h6v6"/></svg>
-            </div>
-            <h3><span class="lang-th">ควบคุมงานสร้างบ้าน</span><span class="lang-en">Home Construction Supervision</span></h3>
-            <p><span class="lang-th">ติดตามความคืบหน้าและตรวจคุณภาพตามงวด เพื่อให้แก้ไขได้ก่อนงานถูกปิดทับ</span><span class="lang-en block">Track progress and quality each phase — so issues get fixed before they're sealed over.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
-          </a>
-
-          <a class="card" href="/services#s3">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>
-            </div>
-            <h3><span class="lang-th">วางแผนก่อนสร้างบ้าน</span><span class="lang-en">Pre-Construction Planning</span></h3>
-            <p><span class="lang-th">ตรวจแบบ ฟังก์ชัน วัสดุ และ BOQ ช่วยลดจุดพลาดก่อนเซ็นสัญญาและเริ่มก่อสร้าง</span><span class="lang-en block">Review plans, function, materials and BOQ — cutting costly mistakes before you sign and build.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
-          </a>
-
-          <a class="card" href="/services#s4">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>
-            </div>
-            <h3><span class="lang-th">ที่ปรึกษางานต่อเติม</span><span class="lang-en">Renovation &amp; Extension Advisory</span></h3>
-            <p><span class="lang-th">ต่อเติมได้อย่างมั่นใจ ประเมินความเป็นไปได้และคุมคุณภาพงาน ให้ตรงตามมาตรฐานที่ควรจะเป็น</span><span class="lang-en block">Extend with confidence — feasibility checks plus quality control throughout the work.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
-          </a>
-
-          <a class="card" href="/services#s5">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-            </div>
-            <h3><span class="lang-th">ตรวจหาสาเหตุปัญหาบ้าน</span><span class="lang-en">Home Problem Diagnosis</span></h3>
-            <p><span class="lang-th">ตรวจหาสาเหตุน้ำรั่ว น้ำซึม ผนังแตกร้าว และปัญหาระบบ พร้อมแนวทางแก้ไขที่ทำได้จริง</span><span class="lang-en block">Find the real cause of leaks, cracks and system faults — with a clear, workable fix plan.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
-          </a>
-
-          <a class="card" href="/services#s6">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            </div>
-            <h3><span class="lang-th">ตรวจคุณภาพงานผู้รับเหมา</span><span class="lang-en">Contractor Work Quality Check</span></h3>
-            <p><span class="lang-th">ตรวจคุณภาพงานให้ได้มาตรฐานก่อนจ่ายเงินงวดสุดท้าย ในฐานะคนกลางที่เป็นธรรม</span><span class="lang-en block">Verify the work meets standard before the final payment — as a fair, independent third party.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
-          </a>
-
+          {services.map((s) => (
+            <a class="card svc-card" href={s.href}>
+              <img class="svc-bg" src={s.img} alt="" loading="lazy" onerror="this.remove()" />
+              <div class="svc-body">
+                <h3><span class="lang-th">{s.title.th}</span><span class="lang-en">{s.title.en}</span></h3>
+                <p><span class="lang-th">{s.desc.th}</span><span class="lang-en block">{s.desc.en}</span></p>
+                <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </section>
