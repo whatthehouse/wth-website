@@ -4,12 +4,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 const gallery = [
-  { img: "/assets/img/blog/roof-leak.webp",                 th: "ตรวจหลังคา",          en: "Roof inspection" },
-  { img: "/assets/img/equipment/thermal-camera.webp",       th: "กล้องความร้อน",        en: "Thermal imaging" },
-  { img: "/assets/img/blog/electrical-system.webp",         th: "ตรวจระบบไฟฟ้า",        en: "Electrical checks" },
-  { img: "/assets/img/uploads/s__31154264_0.jpg",           th: "ทดสอบรอยรั่วซึม",      en: "Leak testing" },
-  { img: "/assets/img/blog/plumbing-system.webp",           th: "ตรวจระบบประปา",        en: "Plumbing checks" },
-  { img: "/assets/img/uploads/hero-inspector.webp",         th: "อธิบายรายงานกับลูกค้า", en: "Report walk-through" },
+  { img: "/assets/img/about/about-roof.jpg",       fallback: "/assets/img/blog/roof-leak.webp",           th: "ตรวจหลังคา",          en: "Roof inspection" },
+  { img: "/assets/img/about/about-thermal.jpg",    fallback: "/assets/img/equipment/thermal-camera.webp", th: "กล้องความร้อน",        en: "Thermal imaging" },
+  { img: "/assets/img/about/about-electrical.jpg", fallback: "/assets/img/blog/electrical-system.webp",   th: "ตรวจระบบไฟฟ้า",        en: "Electrical checks" },
+  { img: "/assets/img/about/about-leak-test.jpg",  fallback: "/assets/img/uploads/s__31154264_0.jpg",     th: "ทดสอบรอยรั่วซึม",      en: "Leak testing" },
+  { img: "/assets/img/about/about-plumbing.jpg",   fallback: "/assets/img/blog/plumbing-system.webp",     th: "ตรวจระบบประปา",        en: "Plumbing checks" },
+  { img: "/assets/img/about/about-client.jpg",     fallback: "/assets/img/uploads/hero-inspector.webp",   th: "อธิบายรายงานกับลูกค้า", en: "Report walk-through" },
 ];
 ---
 <BaseLayout
@@ -21,9 +21,9 @@ const gallery = [
 
     <!-- ============ HERO (full-bleed) ============ -->
     <section class="hero hero-bleed about-hero">
-      <img class="hero-bg" src="/assets/img/blog/thermal-camera-inspection.webp"
+      <img class="hero-bg" src="/assets/img/about/about-hero.jpg"
            alt="ช่างตรวจบ้าน WHAT THE HOUSE ใช้กล้องถ่ายภาพความร้อนตรวจภายในบ้าน"
-           fetchpriority="high" onerror="this.src='/assets/img/uploads/hero-inspector.webp'" />
+           fetchpriority="high" onerror="this.onerror=null;this.src='/assets/img/blog/thermal-camera-inspection.webp'" />
       <div class="hero-overlay"></div>
       <div class="container">
         <div class="hero-content">
@@ -83,7 +83,7 @@ const gallery = [
           <div class="story-grid">
             {gallery.map((g) => (
               <figure class="story-shot">
-                <img src={g.img} alt={g.th} loading="lazy" />
+                <img src={g.img} alt={g.th} loading="lazy" onerror={`this.onerror=null;this.src='${g.fallback}'`} />
                 <figcaption><span class="lang-th">{g.th}</span><span class="lang-en">{g.en}</span></figcaption>
               </figure>
             ))}
