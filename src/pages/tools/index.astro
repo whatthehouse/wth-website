@@ -12,6 +12,13 @@ const tools = [
     icon: 'ac',
   },
   {
+    href: "/tools/unit-converter",
+    ready: true,
+    title: { th: "ตัวแปลงหน่วย", en: "Unit Converter" },
+    desc: { th: "แปลงหน่วยพื้นที่แบบไทย ไร่ งาน ตารางวา ตร.ม. รวมถึงความยาวและปริมาตร", en: "Convert Thai land units — rai, ngan, wah, sq.m — plus lengths and volumes." },
+    icon: 'convert',
+  },
+  {
     href: "#",
     ready: false,
     title: { th: "คำนวณโหลดไฟฟ้าในบ้าน", en: "Home Electrical Load" },
@@ -59,6 +66,7 @@ const tools = [
             <a href={t.href} class={`tool-card${t.ready ? '' : ' soon'}`}>
               <div class="tool-ic">
                 {t.icon === 'ac' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="4" width="20" height="9" rx="2"/><path d="M6 17v1M10 17c0 1.5-1 2-1 3M14 17c0 1.5 1 2 1 3M18 17v1M5 9h14"/></svg>}
+                {t.icon === 'convert' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 16H3l3-3m-3 3l3 3M17 8h4l-3-3m3 3l-3 3"/><path d="M7 16h14M17 8H3"/></svg>}
                 {t.icon === 'bolt' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>}
                 {t.icon === 'grid' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>}
                 {t.icon === 'roller' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="14" height="6" rx="1"/><path d="M17 7h3v4h-9v3M11 14v7"/></svg>}
