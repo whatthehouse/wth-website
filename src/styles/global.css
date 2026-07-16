@@ -264,9 +264,21 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   border:1.5px solid var(--line-2);background:var(--ink);
   display:grid;place-items:center;font-family:var(--mono);font-size:1.55rem;font-weight:500;
   line-height:1;color:var(--heading);margin-bottom:22px;
-  transition:border-color .25s ease,color .25s ease,transform .25s ease
+  transition:border-color .25s ease,color .25s ease,transform .25s ease;
+  animation:numGlow 8s ease-in-out infinite
 }
-.step:hover .s-num{border-color:var(--green-bright);color:var(--green-bright);transform:translateY(-3px)}
+/* the pulse lights each number in turn, then flows on down the line */
+.step:nth-child(1) .s-num{animation-delay:0s}
+.step:nth-child(2) .s-num{animation-delay:1.9s}
+.step:nth-child(3) .s-num{animation-delay:3.8s}
+.step:nth-child(4) .s-num{animation-delay:5.7s}
+@keyframes numGlow{
+  0%,100%{border-color:var(--line-2);color:var(--heading);box-shadow:none}
+  3%{border-color:var(--green-bright);color:var(--green-bright);box-shadow:0 0 22px -4px rgba(47,224,124,.65)}
+  13%{border-color:var(--green-bright);color:var(--green-bright);box-shadow:0 0 14px -6px rgba(47,224,124,.45)}
+  24%{border-color:var(--line-2);color:var(--heading);box-shadow:none}
+}
+.step:hover .s-num{animation:none;border-color:var(--green-bright);color:var(--green-bright);transform:translateY(-3px)}
 /* connector line between the circles */
 .step:not(:last-child)::after{
   content:"";position:absolute;top:29px;left:66px;right:6px;height:1px;
@@ -276,14 +288,16 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   background-size:55% 100%,100% 100%;
   background-repeat:no-repeat,no-repeat;
   background-position:-55% 0,0 0;
-  animation:stepFlow 4.5s ease-in-out infinite
+  animation:lineFlow 8s linear infinite
 }
-@keyframes stepFlow{
+@keyframes lineFlow{
   0%{background-position:-55% 0,0 0}
+  15%{background-position:155% 0,0 0}
   100%{background-position:155% 0,0 0}
 }
-.step:nth-child(2)::after{animation-delay:.5s}
-.step:nth-child(3)::after{animation-delay:1s}
+.step:nth-child(1)::after{animation-delay:.7s}
+.step:nth-child(2)::after{animation-delay:2.6s}
+.step:nth-child(3)::after{animation-delay:4.5s}
 .step h4{font-size:1.02rem;margin-bottom:.35em;color:var(--heading);letter-spacing:-.01em}
 .step p{color:var(--grey);font-size:.9rem;margin:0;max-width:26ch}
 
@@ -529,7 +543,7 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 }
 @media(prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
-  .step::after,.hs-live i{animation:none}
+  .step::after,.step .s-num,.hs-live i{animation:none}
   .svc-card:hover .svc-bg{transform:none}
   *{scroll-behavior:auto}
 }

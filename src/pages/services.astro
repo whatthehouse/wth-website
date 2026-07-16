@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 const services = [
   {
     id: "s1",
+    img: "/assets/img/services/service-handover.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>`,
     title: { th: "ตรวจรับบ้านและคอนโด", en: "Home & Condo Handover Inspection" },
     tagline: { th: "รู้ทุกจุดที่ต้องแก้ก่อนเซ็นรับมอบและก่อนโอน", en: "Know every defect before you sign off and transfer" },
@@ -21,6 +22,7 @@ const services = [
   },
   {
     id: "s2",
+    img: "/assets/img/services/service-supervision.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M4 20V8l8-5 8 5v12"/><path d="M9 20v-6h6v6"/></svg>`,
     title: { th: "ควบคุมงานสร้างบ้าน", en: "Home Construction Supervision" },
     tagline: { th: "ตรวจคุณภาพตามงวด เพื่อแก้ไขได้ก่อนงานถูกปิดทับ", en: "Phase-by-phase quality checks — fix issues before they're sealed over" },
@@ -36,6 +38,7 @@ const services = [
   },
   {
     id: "s3",
+    img: "/assets/img/services/service-planning.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>`,
     title: { th: "วางแผนก่อนสร้างบ้าน", en: "Pre-Construction Planning" },
     tagline: { th: "ตรวจแบบ วัสดุ และ BOQ ลดจุดพลาดก่อนเซ็นสัญญา", en: "Review plans, materials and BOQ — cut mistakes before you sign" },
@@ -51,6 +54,7 @@ const services = [
   },
   {
     id: "s4",
+    img: "/assets/img/services/service-renovation.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>`,
     title: { th: "ที่ปรึกษางานต่อเติม", en: "Renovation & Extension Advisory" },
     tagline: { th: "ต่อเติมได้อย่างมั่นใจ ประเมินและคุมคุณภาพงานให้ถูกต้อง", en: "Extend with confidence — feasibility plus quality control" },
@@ -66,6 +70,7 @@ const services = [
   },
   {
     id: "s5",
+    img: "/assets/img/services/service-diagnosis.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
     title: { th: "ตรวจหาสาเหตุปัญหาบ้าน", en: "Home Problem Diagnosis" },
     tagline: { th: "หาสาเหตุที่แท้จริง ไม่ใช่แค่แก้อาการ", en: "Find the real cause — not just treat the symptoms" },
@@ -81,6 +86,7 @@ const services = [
   },
   {
     id: "s6",
+    img: "/assets/img/services/service-contractor.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
     title: { th: "ตรวจคุณภาพงานผู้รับเหมา", en: "Contractor Work Quality Check" },
     tagline: { th: "ตรวจให้ได้มาตรฐานก่อนจ่ายงวดสุดท้าย ในฐานะคนกลางที่เป็นธรรม", en: "Verify quality before the final payment — as a fair third party" },
@@ -118,17 +124,19 @@ const services = [
       <div class="container">
         <div class="grid grid-3">
           {services.map((s) => (
-            <a class="card svc-overview-card" href={`#${s.id}`}>
-              <div class="svc-ic" set:html={s.icon} />
-              <h3>
-                <span class="lang-th">{s.title.th}</span>
-                <span class="lang-en">{s.title.en}</span>
-              </h3>
-              <p>
-                <span class="lang-th">{s.tagline.th}</span>
-                <span class="lang-en block">{s.tagline.en}</span>
-              </p>
-              <span class="more"><span class="lang-th">ดูรายละเอียด</span><span class="lang-en">See details</span> ↓</span>
+            <a class="card svc-card svc-overview-card" href={`#${s.id}`}>
+              <img class="svc-bg" src={s.img} alt="" loading="lazy" onerror="this.remove()" />
+              <div class="svc-body">
+                <h3>
+                  <span class="lang-th">{s.title.th}</span>
+                  <span class="lang-en">{s.title.en}</span>
+                </h3>
+                <p>
+                  <span class="lang-th">{s.tagline.th}</span>
+                  <span class="lang-en block">{s.tagline.en}</span>
+                </p>
+                <span class="more"><span class="lang-th">ดูรายละเอียด</span><span class="lang-en">See details</span> <span class="arw">↓</span></span>
+              </div>
             </a>
           ))}
         </div>
@@ -227,10 +235,10 @@ const services = [
 </BaseLayout>
 
 <style>
-/* overview cards */
-.svc-overview-card { text-decoration: none; }
-.svc-overview-card h3 { font-size: 1rem; margin: 0 0 .3em; }
-.svc-overview-card p { font-size: .88rem; color: var(--grey); margin: 0; }
+/* overview cards (photo) */
+.svc-overview-card { text-decoration: none; min-height: 250px; }
+.svc-overview-card h3 { font-size: 1.05rem; margin: 0 0 .35em; }
+.svc-overview-card p { font-size: .88rem; margin: 0 0 12px; }
 
 /* detail blocks */
 .svc-block {
