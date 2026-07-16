@@ -129,10 +129,12 @@ import Footer from '../../components/Footer.astro';
 .uc-swap:hover { border-color: var(--green); transform: rotate(180deg); }
 
 .uc-all-wrap { display: block; }
-.uc-all { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-top: 12px; }
-.uc-all .r { display: flex; justify-content: space-between; gap: 10px; font-family: var(--mono); font-size: .82rem; padding: 5px 0; border-bottom: 1px solid var(--line); }
-.uc-all .r span { color: var(--faint); }
-.uc-all .r b { color: #fff; font-weight: 600; }
+/* rows are injected by JS, so they carry no scope attribute — use :global() */
+.uc-all { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 40px; margin-top: 12px; }
+.uc-all :global(.r) { display: flex; align-items: baseline; gap: 12px; font-family: var(--mono); font-size: .82rem; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.uc-all :global(.r span) { color: var(--faint); flex: none; }
+.uc-all :global(.dots) { flex: 1; min-width: 20px; border-bottom: 1px dotted var(--line-2); transform: translateY(-4px); }
+.uc-all :global(.r b) { color: #fff; font-weight: 600; flex: none; }
 
 @media (max-width: 720px) {
   .uc-cats { grid-template-columns: 1fr; }
@@ -209,7 +211,7 @@ import Footer from '../../components/Footer.astro';
       const base = v * from.f;
       resultEl.textContent = fmt(base / to.f);
       allEl.innerHTML = units
-        .map((u) => `<div class="r"><span>${label(u)}</span><b>${fmt(base / u.f)}</b></div>`)
+        .map((u) => `<div class="r"><span>${label(u)}</span><i class="dots"></i><b>${fmt(base / u.f)}</b></div>`)
         .join('');
     }
 
