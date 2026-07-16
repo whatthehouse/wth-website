@@ -256,11 +256,34 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .head-split .section-head{margin:0;text-align:left;max-width:640px}
 .head-split .btn{flex:none;margin-bottom:6px}
 
-/* steps — minimal (prominent numbers only) */
+/* steps — connected timeline with a soft flowing pulse */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-.step{position:relative;padding:28px 28px 0 0;border-top:1px solid var(--line-2)}
-.step .s-num{width:58px;height:58px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-family:var(--mono);font-size:1.55rem;font-weight:500;line-height:1;color:var(--heading);margin-bottom:22px;transition:.25s}
-.step:hover .s-num{border-color:var(--green-bright);color:var(--green-bright)}
+.step{position:relative;padding:0 28px 0 0}
+.step .s-num{
+  position:relative;z-index:1;width:58px;height:58px;border-radius:50%;
+  border:1.5px solid var(--line-2);background:var(--ink);
+  display:grid;place-items:center;font-family:var(--mono);font-size:1.55rem;font-weight:500;
+  line-height:1;color:var(--heading);margin-bottom:22px;
+  transition:border-color .25s ease,color .25s ease,transform .25s ease
+}
+.step:hover .s-num{border-color:var(--green-bright);color:var(--green-bright);transform:translateY(-3px)}
+/* connector line between the circles */
+.step:not(:last-child)::after{
+  content:"";position:absolute;top:29px;left:66px;right:6px;height:1px;
+  background-image:
+    linear-gradient(90deg,transparent 0%,rgba(47,224,124,.85) 50%,transparent 100%),
+    linear-gradient(var(--line-2),var(--line-2));
+  background-size:55% 100%,100% 100%;
+  background-repeat:no-repeat,no-repeat;
+  background-position:-55% 0,0 0;
+  animation:stepFlow 4.5s ease-in-out infinite
+}
+@keyframes stepFlow{
+  0%{background-position:-55% 0,0 0}
+  100%{background-position:155% 0,0 0}
+}
+.step:nth-child(2)::after{animation-delay:.5s}
+.step:nth-child(3)::after{animation-delay:1s}
 .step h4{font-size:1.02rem;margin-bottom:.35em;color:var(--heading);letter-spacing:-.01em}
 .step p{color:var(--grey);font-size:.9rem;margin:0;max-width:26ch}
 
@@ -467,7 +490,8 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   .grid-3,.grid-4,.port-grid,.blog-grid,.price-grid{grid-template-columns:repeat(2,1fr)}
   .stats{grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .stats .s{padding:24px;border-left:0;background:var(--panel)}
-  .steps{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr);gap:34px 0}
+  .step::after{display:none}
   .foot-grid{grid-template-columns:1fr 1fr;gap:26px}
   .contact-grid{grid-template-columns:1fr;gap:28px}
   .head-split{flex-direction:column;align-items:flex-start;gap:14px}
@@ -505,5 +529,7 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 }
 @media(prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
+  .step::after,.hs-live i{animation:none}
+  .svc-card:hover .svc-bg{transform:none}
   *{scroll-behavior:auto}
 }
