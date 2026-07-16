@@ -278,30 +278,6 @@ import Footer from '../components/Footer.astro';
 
 <style>
 /* ── Calculator ── */
-.calc-wrap {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 32px;
-  align-items: start;
-}
-.calc-box {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 36px;
-  box-shadow: var(--shadow-sm);
-}
-.calc-title { font-size: 1.5rem; margin-bottom: .3em; }
-.calc-sub { color: var(--grey); margin: 0 0 28px; }
-.calc-step { margin-bottom: 24px; }
-.calc-label {
-  display: block;
-  font-weight: 600;
-  color: var(--navy);
-  font-size: .95rem;
-  margin-bottom: 10px;
-}
-
 /* type buttons */
 .type-btns { display: flex; gap: 12px; }
 .type-btn {
@@ -333,28 +309,6 @@ import Footer from '../components/Footer.astro';
 .type-btn.active svg { color: var(--green-bright); }
 
 /* area input */
-.area-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0 14px;
-  background: var(--panel-2);
-  transition: .15s;
-}
-.area-input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
-.area-input {
-  flex: 1;
-  border: 0;
-  outline: none;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  font-family: inherit;
-  color: #fff;
-  background: transparent;
-}
-.area-unit { color: var(--grey-light); font-size: .88rem; white-space: nowrap; }
 .area-quick { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; font-size: .85rem; color: var(--grey); }
 .quick-btn {
   padding: 5px 12px;
@@ -388,54 +342,7 @@ import Footer from '../components/Footer.astro';
 .area-radio small { color: var(--grey); font-size: .82rem; }
 
 /* result box */
-.calc-result {
-  margin-top: 28px;
-  background: linear-gradient(135deg, var(--panel-3), var(--panel-2));
-  border: 1px solid rgba(47,224,124,.25);
-  border-radius: var(--radius);
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.result-label { color: var(--grey); font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
-.result-price {
-  font-family: var(--mono);
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: #fff;
-  line-height: 1;
-  letter-spacing: -.02em;
-}
-.result-note { color: var(--green-bright); font-family: var(--mono); font-size: .78rem; margin-top: 6px; min-height: 1.2em; }
-.result-cta { white-space: nowrap; }
-
 /* notes side */
-.calc-notes {
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px;
-}
-.calc-notes h3 { font-size: 1.05rem; margin-bottom: 16px; }
-.note-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.note-list li { display: flex; gap: 10px; font-size: .9rem; color: var(--grey); align-items: flex-start; }
-.note-tiny {
-  display: block;
-  font-size: .78rem;
-  color: var(--grey-light);
-  margin-top: 3px;
-  font-style: italic;
-}
-.nc {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--green-soft); color: var(--green-bright);
-  display: grid; place-items: center; flex: none;
-  font-size: .72rem; font-weight: 700; margin-top: 1px;
-}
-
 /* price tables */
 .price-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .price-table-wrap {
