@@ -6,9 +6,10 @@ import Footer from '../components/Footer.astro';
 const services = [
   {
     id: "s1",
+    img: "/assets/img/services/service-handover.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>`,
-    title: { th: "ตรวจบ้าน / คอนโด ก่อนรับมอบ", en: "Home & Condo Pre-Handover Inspection" },
-    tagline: { th: "บริการหลัก — ตรวจก่อนรับมอบ ก่อนโอนกรรมสิทธิ์", en: "Core service — inspect before handover and before transfer" },
+    title: { th: "ตรวจรับบ้านและคอนโด", en: "Home & Condo Handover Inspection" },
+    tagline: { th: "รู้ทุกจุดที่ต้องแก้ก่อนเซ็นรับมอบและก่อนโอน", en: "Know every defect before you sign off and transfer" },
     desc: {
       th: "บริการตรวจสอบสภาพบ้านหรือคอนโดอย่างละเอียดก่อนที่คุณจะเซ็นรับมอบ เพื่อให้มั่นใจว่าทรัพย์สินที่คุณรับมอบนั้นอยู่ในสภาพที่ถูกต้องตามมาตรฐาน และปัญหาทุกจุดได้รับการแก้ไขก่อนที่จะสายเกินไป",
       en: "A thorough inspection of your home or condo before you sign the handover documents — ensuring the property meets standards and every defect is addressed before it becomes your problem."
@@ -21,9 +22,10 @@ const services = [
   },
   {
     id: "s2",
+    img: "/assets/img/services/service-supervision.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M4 20V8l8-5 8 5v12"/><path d="M9 20v-6h6v6"/></svg>`,
-    title: { th: "ควบคุมงานก่อสร้าง", en: "Construction Supervision" },
-    tagline: { th: "ตรวจคุณภาพและความคืบหน้าตามงวด ก่อนจ่ายเงิน", en: "Quality and progress checks at each milestone — before you pay" },
+    title: { th: "ควบคุมงานสร้างบ้าน", en: "Home Construction Supervision" },
+    tagline: { th: "ตรวจคุณภาพตามงวด เพื่อแก้ไขได้ก่อนงานถูกปิดทับ", en: "Phase-by-phase quality checks — fix issues before they're sealed over" },
     desc: {
       th: "หากคุณกำลังสร้างบ้านเองกับผู้รับเหมา บริการนี้จะช่วยให้คุณมั่นใจว่างานแต่ละงวดเสร็จตามมาตรฐานและแบบแปลนที่ตกลงไว้ ก่อนที่คุณจะจ่ายเงินค่างวดนั้น",
       en: "If you're building with a private contractor, this service ensures each phase is completed to standard and matches the agreed drawings — before you release payment."
@@ -36,9 +38,10 @@ const services = [
   },
   {
     id: "s3",
+    img: "/assets/img/services/service-planning.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>`,
-    title: { th: "ที่ปรึกษาก่อนสร้างบ้าน", en: "Pre-Construction Consulting" },
-    tagline: { th: "รีวิวแบบแปลน วัสดุ และ BOQ ก่อนเซ็นสัญญา", en: "Review plans, materials and BOQ before signing" },
+    title: { th: "วางแผนก่อนสร้างบ้าน", en: "Pre-Construction Planning" },
+    tagline: { th: "ตรวจแบบ วัสดุ และ BOQ ลดจุดพลาดก่อนเซ็นสัญญา", en: "Review plans, materials and BOQ — cut mistakes before you sign" },
     desc: {
       th: "ก่อนที่คุณจะเซ็นสัญญากับผู้รับเหมา เราช่วยตรวจสอบแบบแปลน สเปควัสดุ และ BOQ เพื่อให้แน่ใจว่าสิ่งที่คุณจ่ายไปนั้นคุ้มค่า และป้องกันปัญหาที่จะเกิดขึ้นในอนาคต",
       en: "Before you sign with a contractor, we review plans, material specs and the BOQ to make sure you're getting value for money and to prevent future problems."
@@ -51,9 +54,10 @@ const services = [
   },
   {
     id: "s4",
+    img: "/assets/img/services/service-renovation.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>`,
-    title: { th: "ที่ปรึกษางานต่อเติม / รีโนเวท", en: "Renovation & Extension Consulting" },
-    tagline: { th: "ประเมิน วางแผน และตรวจคุณภาพงานต่อเติม", en: "Assess, plan and QC your renovation or extension" },
+    title: { th: "ที่ปรึกษางานต่อเติม", en: "Renovation & Extension Advisory" },
+    tagline: { th: "ต่อเติมได้อย่างมั่นใจ ประเมินและคุมคุณภาพงานให้ถูกต้อง", en: "Extend with confidence — feasibility plus quality control" },
     desc: {
       th: "การต่อเติมหรือรีโนเวทบ้านที่ไม่ได้วางแผนดีพอ อาจส่งผลเสียต่อโครงสร้างเดิม เราช่วยประเมินความเป็นไปได้ วางแผนให้ถูกต้อง และตรวจสอบคุณภาพงานระหว่างดำเนินการ",
       en: "Poorly planned renovations can damage existing structure. We assess feasibility, help plan correctly, and check quality throughout the work."
@@ -66,8 +70,9 @@ const services = [
   },
   {
     id: "s5",
+    img: "/assets/img/services/service-diagnosis.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
-    title: { th: "ตรวจปัญหาบ้าน / วินิจฉัยข้อบกพร่อง", en: "Defect & Problem Diagnosis" },
+    title: { th: "ตรวจหาสาเหตุปัญหาบ้าน", en: "Home Problem Diagnosis" },
     tagline: { th: "หาสาเหตุที่แท้จริง ไม่ใช่แค่แก้อาการ", en: "Find the real cause — not just treat the symptoms" },
     desc: {
       th: "หากบ้านของคุณมีปัญหาที่แก้แล้วแก้อีก เช่น น้ำรั่ว น้ำซึม ผนังแตกร้าว พื้นทรุด หรือปัญหาไฟฟ้า เราจะช่วยหาสาเหตุที่แท้จริงและแนวทางการแก้ไขที่ถูกต้อง",
@@ -81,9 +86,10 @@ const services = [
   },
   {
     id: "s6",
+    img: "/assets/img/services/service-contractor.webp",
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
-    title: { th: "ตรวจรับงานผู้รับเหมา", en: "Contractor Work Inspection" },
-    tagline: { th: "คนกลางตรวจคุณภาพงาน ก่อนคุณจ่ายเงิน", en: "Independent QC before you release payment" },
+    title: { th: "ตรวจคุณภาพงานผู้รับเหมา", en: "Contractor Work Quality Check" },
+    tagline: { th: "ตรวจให้ได้มาตรฐานก่อนจ่ายงวดสุดท้าย ในฐานะคนกลางที่เป็นธรรม", en: "Verify quality before the final payment — as a fair third party" },
     desc: {
       th: "เมื่อผู้รับเหมาแจ้งว่างานแล้วเสร็จ คุณควรให้ผู้เชี่ยวชาญอิสระตรวจก่อนจ่ายเงิน ไม่ว่าจะเป็นงานก่อสร้างใหม่ งานรีโนเวท งานซ่อมแซม หรืองานต่อเติม",
       en: "When a contractor says the job is done, have an independent expert verify it before you pay — whether it's new construction, renovation, repairs or an extension."
@@ -118,17 +124,19 @@ const services = [
       <div class="container">
         <div class="grid grid-3">
           {services.map((s) => (
-            <a class="card svc-overview-card" href={`#${s.id}`}>
-              <div class="svc-ic" set:html={s.icon} />
-              <h3>
-                <span class="lang-th">{s.title.th}</span>
-                <span class="lang-en">{s.title.en}</span>
-              </h3>
-              <p>
-                <span class="lang-th">{s.tagline.th}</span>
-                <span class="lang-en block">{s.tagline.en}</span>
-              </p>
-              <span class="more"><span class="lang-th">ดูรายละเอียด</span><span class="lang-en">See details</span> ↓</span>
+            <a class="card svc-card svc-overview-card" href={`#${s.id}`}>
+              <img class="svc-bg" src={s.img} alt="" loading="lazy" onerror="this.remove()" />
+              <div class="svc-body">
+                <h3>
+                  <span class="lang-th">{s.title.th}</span>
+                  <span class="lang-en">{s.title.en}</span>
+                </h3>
+                <p>
+                  <span class="lang-th">{s.tagline.th}</span>
+                  <span class="lang-en block">{s.tagline.en}</span>
+                </p>
+                <span class="more"><span class="lang-th">ดูรายละเอียด</span><span class="lang-en">See details</span> <span class="arw">↓</span></span>
+              </div>
             </a>
           ))}
         </div>
@@ -227,14 +235,14 @@ const services = [
 </BaseLayout>
 
 <style>
-/* overview cards */
-.svc-overview-card { text-decoration: none; }
-.svc-overview-card h3 { font-size: 1rem; margin: 0 0 .3em; }
-.svc-overview-card p { font-size: .88rem; color: var(--grey); margin: 0; }
+/* overview cards (photo) */
+.svc-overview-card { text-decoration: none; min-height: 250px; }
+.svc-overview-card h3 { font-size: 1.05rem; margin: 0 0 .35em; }
+.svc-overview-card p { font-size: .88rem; margin: 0 0 12px; }
 
 /* detail blocks */
 .svc-block {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 36px;
@@ -249,16 +257,17 @@ const services = [
 .svc-block .head .svc-ic { margin-bottom: 0; flex: none; }
 .svc-num {
   display: block;
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--green-dark);
-  letter-spacing: .1em;
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--green-bright);
+  letter-spacing: .16em;
   text-transform: uppercase;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 .svc-block h2 { font-size: 1.35rem; margin: 0; }
 .tagline {
-  color: var(--green-dark);
+  color: var(--green-bright);
   font-weight: 600;
   font-size: .95rem;
   margin: 0 0 14px;
@@ -310,7 +319,8 @@ const services = [
 
 /* highlight box */
 .svc-highlight-box {
-  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  background: linear-gradient(135deg, var(--panel-3), var(--panel-2));
+  border: 1px solid rgba(47,224,124,.2);
   border-radius: var(--radius-sm);
   padding: 22px;
   color: #fff;
@@ -318,13 +328,13 @@ const services = [
 .sh-icon {
   width: 42px; height: 42px;
   border-radius: 10px;
-  background: rgba(127, 227, 154, .2);
-  color: #7fe39a;
+  background: var(--green-soft);
+  color: var(--green-bright);
   display: grid; place-items: center;
   margin-bottom: 12px;
 }
 .svc-highlight-box p {
-  color: #d0dde8;
+  color: var(--body);
   font-size: .9rem;
   line-height: 1.6;
   margin: 0;

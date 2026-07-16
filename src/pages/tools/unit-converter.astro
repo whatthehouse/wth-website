@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+<BaseLayout
+  title="ตัวแปลงหน่วย | ไร่ งาน ตารางวา ตร.ม. | WHAT THE HOUSE"
+  description="แปลงหน่วยพื้นที่ ไร่ งาน ตารางวา ตารางเมตร ตารางฟุต รวมถึงความยาวและปริมาตร ใช้ฟรีโดยทีมตรวจบ้าน WHAT THE HOUSE | Unit converter for Thai property"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">ตัวแปลงหน่วย</span><span class="lang-en">Unit Converter</span></p>
+        <span class="eyebrow"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Free Tool</span></span>
+        <h1><span class="lang-th">ตัวแปลงหน่วย<br>ไร่ · งาน · วา · ตร.ม.</span><span class="lang-en">Unit converter<br>rai · ngan · wah · sq.m</span></h1>
+        <p><span class="lang-th">แปลงหน่วยพื้นที่แบบไทย ความยาว และปริมาตร ได้ในที่เดียว สะดวกเวลาดูโฉนดหรือเทียบขนาดบ้าน</span><span class="lang-en block">Convert Thai land units, lengths and volumes in one place — handy when reading title deeds or comparing property sizes.</span></p>
+      </div>
+    </section>
+
+    <!-- CONVERTER -->
+    <section class="section">
+      <div class="container">
+        <div class="calc-wrap">
+          <div class="calc-box">
+            <h2 class="calc-title"><span class="lang-th">แปลงหน่วย</span><span class="lang-en">Convert</span></h2>
+            <p class="calc-sub"><span class="lang-th">เลือกประเภท ใส่ตัวเลข แล้วดูผลลัพธ์ทันที</span><span class="lang-en block">Pick a category, type a number, get the result instantly.</span></p>
+
+            <!-- category -->
+            <div class="calc-step">
+              <label class="calc-label"><span class="lang-th">ประเภทหน่วย</span><span class="lang-en">Category</span></label>
+              <div class="uc-cats">
+                <button type="button" class="uc-cat active" data-cat="area"><span class="lang-th">พื้นที่</span><span class="lang-en">Area</span></button>
+                <button type="button" class="uc-cat" data-cat="length"><span class="lang-th">ความยาว</span><span class="lang-en">Length</span></button>
+                <button type="button" class="uc-cat" data-cat="volume"><span class="lang-th">ปริมาตร</span><span class="lang-en">Volume</span></button>
+              </div>
+            </div>
+
+            <!-- from / to -->
+            <div class="calc-step">
+              <div class="uc-row">
+                <div class="uc-side">
+                  <label class="calc-label"><span class="lang-th">จาก</span><span class="lang-en">From</span></label>
+                  <div class="area-input-wrap"><input type="number" id="ucValue" class="area-input" step="any" value="1" /></div>
+                  <select id="ucFrom" class="uc-select"></select>
+                </div>
+
+                <button type="button" class="uc-swap" id="ucSwap" aria-label="สลับหน่วย" title="สลับหน่วย">
+                  <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16H3m0 0l3-3m-3 3l3 3M17 8h4m0 0l-3-3m3 3l-3 3"/><path d="M7 16h14M17 8H3"/></svg>
+                </button>
+
+                <div class="uc-side">
+                  <label class="calc-label"><span class="lang-th">เป็น</span><span class="lang-en">To</span></label>
+                  <div class="area-input-wrap uc-out"><output id="ucResult" class="area-input">—</output></div>
+                  <select id="ucTo" class="uc-select"></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- all units at once -->
+            <div class="calc-result uc-all-wrap">
+              <div style="width:100%">
+                <div class="result-label"><span class="lang-th">เทียบทุกหน่วย</span><span class="lang-en">All units</span></div>
+                <div class="uc-all" id="ucAll"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- notes -->
+          <aside class="calc-notes">
+            <h3><span class="lang-th">หน่วยที่ดินไทย</span><span class="lang-en">Thai land units</span></h3>
+            <ul class="note-list">
+              <li><span class="nc">=</span><span><b>1 ตารางวา</b> = 4 ตร.ม.</span></li>
+              <li><span class="nc">=</span><span><b>1 งาน</b> = 100 ตร.วา = 400 ตร.ม.</span></li>
+              <li><span class="nc">=</span><span><b>1 ไร่</b> = 4 งาน = 400 ตร.วา = 1,600 ตร.ม.</span></li>
+              <li><span class="nc">=</span><span><b>1 วา</b> = 2 เมตร</span></li>
+            </ul>
+            <div class="btu-tip"><span class="lang-th">กำลังดูบ้านหรือที่ดินอยู่? ให้เราตรวจก่อนตัดสินใจ</span><span class="lang-en block">Looking at a property? Let us inspect it before you decide.</span> <a href="/contact"><span class="lang-th">จองคิวตรวจบ้าน →</span><span class="lang-en">Book an inspection →</span></a></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">พร้อมจองคิวตรวจบ้านแล้วหรือยัง?</span><span class="lang-en">Ready to book your inspection?</span></h2>
+          <p><span class="lang-th">ติดต่อเราวันนี้ รับใบเสนอราคาภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us today — get a quote within 24 hours.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-outline btn-lg" href="/tools"><span class="lang-th">ดูเครื่องมืออื่น</span><span class="lang-en">More Tools</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.uc-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.uc-cat {
+  padding: 12px; border: 2px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel-2); cursor: pointer; font-family: inherit; font-size: .92rem;
+  font-weight: 500; color: var(--grey); transition: .2s;
+}
+.uc-cat:hover { border-color: var(--green); color: var(--green-bright); }
+.uc-cat.active { border-color: var(--green); background: var(--green-soft); color: var(--green-bright); font-weight: 600; }
+
+.uc-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: end; }
+.uc-side { display: flex; flex-direction: column; }
+.uc-side .area-input-wrap { margin-bottom: 10px; }
+.uc-out { background: var(--panel-3); }
+.uc-out output { display: block; width: 100%; padding: 14px 0; font-size: 1.1rem; color: var(--green-bright); font-family: var(--mono); font-weight: 600; }
+.uc-select {
+  padding: 11px 12px; border: 1px solid var(--line-2); border-radius: 9px;
+  background: var(--panel-2); color: #fff; font-family: inherit; font-size: .92rem; cursor: pointer;
+}
+.uc-select:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+.uc-swap {
+  width: 42px; height: 42px; flex: none; border-radius: 50%; margin-bottom: 52px;
+  border: 1px solid var(--line-2); background: var(--panel-2); color: var(--green-bright);
+  display: grid; place-items: center; cursor: pointer; transition: .2s;
+}
+.uc-swap:hover { border-color: var(--green); transform: rotate(180deg); }
+
+.uc-all-wrap { display: block; }
+/* rows are injected by JS, so they carry no scope attribute — use :global() */
+.uc-all { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 40px; margin-top: 12px; }
+.uc-all :global(.r) { display: flex; align-items: baseline; gap: 12px; font-family: var(--mono); font-size: .82rem; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.uc-all :global(.r span) { color: var(--faint); flex: none; }
+.uc-all :global(.dots) { flex: 1; min-width: 20px; border-bottom: 1px dotted var(--line-2); transform: translateY(-4px); }
+.uc-all :global(.r b) { color: #fff; font-weight: 600; flex: none; }
+
+@media (max-width: 720px) {
+  .uc-cats { grid-template-columns: 1fr; }
+  .uc-row { grid-template-columns: 1fr; }
+  .uc-swap { margin: 0 auto; transform: rotate(90deg); }
+  .uc-swap:hover { transform: rotate(270deg); }
+  .uc-all { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+  (function () {
+    type Unit = { id: string; th: string; en: string; f: number };
+    const UNITS: Record<string, Unit[]> = {
+      // f = how many base units (area: sq.m | length: m | volume: m³)
+      area: [
+        { id: 'sqm',  th: 'ตารางเมตร (ตร.ม.)', en: 'Square metre (m²)', f: 1 },
+        { id: 'wah2', th: 'ตารางวา',            en: 'Square wah',        f: 4 },
+        { id: 'ngan', th: 'งาน',                en: 'Ngan',              f: 400 },
+        { id: 'rai',  th: 'ไร่',                 en: 'Rai',               f: 1600 },
+        { id: 'sqft', th: 'ตารางฟุต (ตร.ฟุต)',  en: 'Square foot (ft²)', f: 0.09290304 },
+      ],
+      length: [
+        { id: 'm',    th: 'เมตร',        en: 'Metre (m)',      f: 1 },
+        { id: 'cm',   th: 'เซนติเมตร',   en: 'Centimetre (cm)', f: 0.01 },
+        { id: 'mm',   th: 'มิลลิเมตร',   en: 'Millimetre (mm)', f: 0.001 },
+        { id: 'wah',  th: 'วา',          en: 'Wah',            f: 2 },
+        { id: 'inch', th: 'นิ้ว',         en: 'Inch',           f: 0.0254 },
+        { id: 'ft',   th: 'ฟุต',          en: 'Foot',           f: 0.3048 },
+      ],
+      volume: [
+        { id: 'm3',   th: 'ลูกบาศก์เมตร (ลบ.ม.)', en: 'Cubic metre (m³)', f: 1 },
+        { id: 'l',    th: 'ลิตร',                  en: 'Litre',            f: 0.001 },
+        { id: 'ft3',  th: 'ลูกบาศก์ฟุต',           en: 'Cubic foot (ft³)', f: 0.028316846592 },
+        { id: 'gal',  th: 'แกลลอน (US)',           en: 'Gallon (US)',      f: 0.003785411784 },
+      ],
+    };
+
+    const valueEl  = document.getElementById('ucValue') as HTMLInputElement;
+    const fromEl   = document.getElementById('ucFrom') as HTMLSelectElement;
+    const toEl     = document.getElementById('ucTo') as HTMLSelectElement;
+    const resultEl = document.getElementById('ucResult') as HTMLElement;
+    const allEl    = document.getElementById('ucAll') as HTMLElement;
+    const catBtns  = document.querySelectorAll('.uc-cat');
+    const swapBtn  = document.getElementById('ucSwap') as HTMLButtonElement;
+
+    let cat = 'area';
+    const isEn = () => document.body.classList.contains('en');
+    const label = (u: Unit) => (isEn() ? u.en : u.th);
+
+    function fmt(n: number) {
+      if (!isFinite(n)) return '—';
+      if (n !== 0 && Math.abs(n) < 0.001) return n.toExponential(3);
+      const d = Math.abs(n) >= 100 ? 2 : Math.abs(n) >= 1 ? 3 : 5;
+      return parseFloat(n.toFixed(d)).toLocaleString(undefined, { maximumFractionDigits: d });
+    }
+
+    function fillSelects() {
+      const units = UNITS[cat];
+      [fromEl, toEl].forEach((sel, i) => {
+        const prev = sel.value;
+        sel.innerHTML = units.map((u) => `<option value="${u.id}">${label(u)}</option>`).join('');
+        const keep = units.some((u) => u.id === prev);
+        sel.value = keep ? prev : units[i === 0 ? 0 : 1].id;
+      });
+    }
+
+    function convert() {
+      const units = UNITS[cat];
+      const from = units.find((u) => u.id === fromEl.value)!;
+      const to   = units.find((u) => u.id === toEl.value)!;
+      const v = parseFloat(valueEl.value);
+      if (isNaN(v)) { resultEl.textContent = '—'; allEl.innerHTML = ''; return; }
+      const base = v * from.f;
+      resultEl.textContent = fmt(base / to.f);
+      allEl.innerHTML = units
+        .map((u) => `<div class="r"><span>${label(u)}</span><i class="dots"></i><b>${fmt(base / u.f)}</b></div>`)
+        .join('');
+    }
+
+    catBtns.forEach((b) => b.addEventListener('click', () => {
+      catBtns.forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      cat = (b as HTMLElement).dataset.cat!;
+      fillSelects();
+      convert();
+    }));
+    swapBtn.addEventListener('click', () => {
+      const a = fromEl.value; fromEl.value = toEl.value; toEl.value = a;
+      convert();
+    });
+    valueEl.addEventListener('input', convert);
+    fromEl.addEventListener('change', convert);
+    toEl.addEventListener('change', convert);
+    document.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('[data-lang-btn]')) setTimeout(() => { fillSelects(); convert(); }, 0);
+    });
+
+    fillSelects();
+    convert();
+  })();
+</script>

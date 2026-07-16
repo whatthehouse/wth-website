@@ -134,8 +134,8 @@ import Footer from '../components/Footer.astro';
               <li>
                 <span class="nc">✓</span>
                 <span>
-                  <span class="lang-th">ส่งรายงานภายใน <b>48 ชั่วโมง</b> หลังการตรวจ</span>
-                  <span class="lang-en block">Report delivered within <b>48 hours</b> of inspection</span>
+                  <span class="lang-th">ส่งรายงานภายใน <b>24 ชั่วโมง</b> หลังการตรวจ</span>
+                  <span class="lang-en block">Report delivered within <b>24 hours</b> of inspection</span>
                   <small class="note-tiny"><span class="lang-th">*ระยะเวลาอาจเปลี่ยนแปลงได้ตามขนาดโครงการ</span><span class="lang-en">*Timeline may vary depending on project size</span></small>
                 </span>
               </li>
@@ -241,8 +241,8 @@ import Footer from '../components/Footer.astro';
             <div>
               <h4><span class="lang-th">รายงาน PDF ไทย-อังกฤษ</span><span class="lang-en">Thai–English PDF report</span></h4>
               <p>
-                <span class="lang-th">พร้อมรูปภาพและคำแนะนำการแก้ไข ส่งภายใน <b>48 ชั่วโมง</b> หลังการตรวจ</span>
-                <span class="lang-en block">With photos and repair recommendations, delivered within <b>48 hours</b> of inspection.</span>
+                <span class="lang-th">พร้อมรูปภาพและคำแนะนำการแก้ไข ส่งภายใน <b>24 ชั่วโมง</b> หลังการตรวจ</span>
+                <span class="lang-en block">With photos and repair recommendations, delivered within <b>24 hours</b> of inspection.</span>
                 <small class="note-tiny"><span class="lang-th">*ระยะเวลาอาจเปลี่ยนแปลงได้ตามขนาดโครงการ</span><span class="lang-en">*Timeline may vary depending on project size</span></small>
               </p>
             </div>
@@ -278,30 +278,6 @@ import Footer from '../components/Footer.astro';
 
 <style>
 /* ── Calculator ── */
-.calc-wrap {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 32px;
-  align-items: start;
-}
-.calc-box {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 36px;
-  box-shadow: var(--shadow-sm);
-}
-.calc-title { font-size: 1.5rem; margin-bottom: .3em; }
-.calc-sub { color: var(--grey); margin: 0 0 28px; }
-.calc-step { margin-bottom: 24px; }
-.calc-label {
-  display: block;
-  font-weight: 600;
-  color: var(--navy);
-  font-size: .95rem;
-  margin-bottom: 10px;
-}
-
 /* type buttons */
 .type-btns { display: flex; gap: 12px; }
 .type-btn {
@@ -322,52 +298,30 @@ import Footer from '../components/Footer.astro';
   transition: .2s;
 }
 .type-btn svg { color: var(--grey); transition: .2s; }
-.type-btn:hover { border-color: var(--green); color: var(--green-dark); }
-.type-btn:hover svg { color: var(--green-dark); }
+.type-btn:hover { border-color: var(--green); color: var(--green-bright); }
+.type-btn:hover svg { color: var(--green-bright); }
 .type-btn.active {
   border-color: var(--green);
   background: var(--green-soft);
-  color: var(--green-dark);
+  color: var(--green-bright);
   font-weight: 600;
 }
-.type-btn.active svg { color: var(--green-dark); }
+.type-btn.active svg { color: var(--green-bright); }
 
 /* area input */
-.area-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0 14px;
-  background: #fff;
-  transition: .15s;
-}
-.area-input-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
-.area-input {
-  flex: 1;
-  border: 0;
-  outline: none;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  font-family: inherit;
-  color: var(--ink);
-  background: transparent;
-}
-.area-unit { color: var(--grey-light); font-size: .88rem; white-space: nowrap; }
 .area-quick { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; font-size: .85rem; color: var(--grey); }
 .quick-btn {
   padding: 5px 12px;
   border: 1px solid var(--line);
   border-radius: 50px;
-  background: #fff;
+  background: var(--panel-2);
   cursor: pointer;
   font-size: .82rem;
   font-family: inherit;
-  color: var(--navy);
+  color: var(--body);
   transition: .15s;
 }
-.quick-btn:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-soft); }
+.quick-btn:hover { border-color: var(--green); color: var(--green-bright); background: var(--green-soft); }
 
 /* location radios */
 .area-btns { display: flex; flex-direction: column; gap: 10px; }
@@ -379,7 +333,7 @@ import Footer from '../components/Footer.astro';
   padding: 12px 14px;
   border: 2px solid var(--line);
   border-radius: var(--radius-sm);
-  background: #fff;
+  background: var(--panel-2);
   transition: .15s;
   font-size: .93rem;
 }
@@ -388,55 +342,11 @@ import Footer from '../components/Footer.astro';
 .area-radio small { color: var(--grey); font-size: .82rem; }
 
 /* result box */
-.calc-result {
-  margin-top: 28px;
-  background: linear-gradient(135deg, var(--navy), var(--navy-2));
-  border-radius: var(--radius);
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.result-label { color: #aebccb; font-size: .85rem; margin-bottom: 4px; }
-.result-price {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-}
-.result-note { color: #7fe39a; font-size: .82rem; margin-top: 4px; min-height: 1.2em; }
-.result-cta { white-space: nowrap; }
-
 /* notes side */
-.calc-notes {
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px;
-}
-.calc-notes h3 { font-size: 1.05rem; margin-bottom: 16px; }
-.note-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.note-list li { display: flex; gap: 10px; font-size: .9rem; color: var(--grey); align-items: flex-start; }
-.note-tiny {
-  display: block;
-  font-size: .78rem;
-  color: var(--grey-light);
-  margin-top: 3px;
-  font-style: italic;
-}
-.nc {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--green-soft); color: var(--green-dark);
-  display: grid; place-items: center; flex: none;
-  font-size: .72rem; font-weight: 700; margin-top: 1px;
-}
-
 /* price tables */
 .price-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .price-table-wrap {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -445,11 +355,12 @@ import Footer from '../components/Footer.astro';
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--navy);
+  background: var(--panel-3);
+  border-bottom: 1px solid var(--line);
   color: #fff;
   padding: 16px 22px;
 }
-.pt-header svg { color: #7fe39a; }
+.pt-header svg { color: var(--green-bright); }
 .pt-header h3 { margin: 0; font-size: 1rem; color: #fff; }
 .price-tbl { width: 100%; border-collapse: collapse; }
 .price-tbl th {
@@ -467,11 +378,11 @@ import Footer from '../components/Footer.astro';
   padding: 13px 22px;
   border-bottom: 1px solid var(--line);
   font-size: .95rem;
-  color: var(--ink);
+  color: var(--body);
 }
 .price-tbl tr:last-child td { border-bottom: 0; }
-.price-tbl tr:hover td { background: var(--bg-soft); }
-.price-cell { font-weight: 700; color: var(--green-dark); font-size: 1.05rem; }
+.price-tbl tr:hover td { background: var(--panel-2); }
+.price-cell { font-family: var(--mono); font-weight: 600; color: var(--green-bright); font-size: 1.05rem; }
 .pt-foot {
   text-align: center;
   margin-top: 18px;
@@ -545,7 +456,7 @@ import Footer from '../components/Footer.astro';
         resultPrice.textContent = row.price.toLocaleString() + ' ฿' + travelNote;
         resultNote.textContent = isEn()
           ? 'Includes 2 rounds + Thai–English PDF report within 48 hrs'
-          : 'รวม 2 รอบตรวจ + รายงาน PDF ไทย-อังกฤษ ภายใน 48 ชั่วโมง';
+          : 'รวม 2 รอบตรวจ + รายงาน PDF ไทย-อังกฤษ ภายใน 24 ชั่วโมง';
       }
     }
 

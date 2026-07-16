@@ -26,6 +26,39 @@ function formatDateEn(date: Date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+const services = [
+  {
+    href: "/services#s1", img: "/assets/img/services/service-handover.webp",
+    title: { th: "ตรวจรับบ้านและคอนโด", en: "Home & Condo Handover Inspection" },
+    desc: { th: "รู้ทุกจุดที่ต้องแก้ก่อนเซ็นรับมอบ ตรวจครบทุกระบบพร้อมรายงานภาพถ่ายที่ใช้เจรจากับโครงการได้จริง", en: "Know every defect before you sign — every system checked, with a photo report you can negotiate with." },
+  },
+  {
+    href: "/services#s2", img: "/assets/img/services/service-supervision.webp",
+    title: { th: "ควบคุมงานสร้างบ้าน", en: "Home Construction Supervision" },
+    desc: { th: "ติดตามความคืบหน้าและตรวจคุณภาพตามงวด เพื่อให้แก้ไขได้ก่อนงานถูกปิดทับ", en: "Track progress and quality each phase — so issues get fixed before they're sealed over." },
+  },
+  {
+    href: "/services#s3", img: "/assets/img/services/service-planning.webp",
+    title: { th: "วางแผนก่อนสร้างบ้าน", en: "Pre-Construction Planning" },
+    desc: { th: "ตรวจแบบ ฟังก์ชัน วัสดุ และ BOQ ช่วยลดจุดพลาดก่อนเซ็นสัญญาและเริ่มก่อสร้าง", en: "Review plans, function, materials and BOQ — cutting costly mistakes before you sign and build." },
+  },
+  {
+    href: "/services#s4", img: "/assets/img/services/service-renovation.webp",
+    title: { th: "ที่ปรึกษางานต่อเติม", en: "Renovation & Extension Advisory" },
+    desc: { th: "ต่อเติมได้อย่างมั่นใจ ประเมินความเป็นไปได้และคุมคุณภาพงาน ให้ตรงตามมาตรฐานที่ควรจะเป็น", en: "Extend with confidence — feasibility checks plus quality control throughout the work." },
+  },
+  {
+    href: "/services#s5", img: "/assets/img/services/service-diagnosis.webp",
+    title: { th: "ตรวจหาสาเหตุปัญหาบ้าน", en: "Home Problem Diagnosis" },
+    desc: { th: "ตรวจหาสาเหตุน้ำรั่ว น้ำซึม ผนังแตกร้าว และปัญหาระบบ พร้อมแนวทางแก้ไขที่ทำได้จริง", en: "Find the real cause of leaks, cracks and system faults — with a clear, workable fix plan." },
+  },
+  {
+    href: "/services#s6", img: "/assets/img/services/service-contractor.webp",
+    title: { th: "ตรวจคุณภาพงานผู้รับเหมา", en: "Contractor Work Quality Check" },
+    desc: { th: "ตรวจคุณภาพงานให้ได้มาตรฐานก่อนจ่ายเงินงวดสุดท้าย ในฐานะคนกลางที่เป็นธรรม", en: "Verify the work meets standard before the final payment — as a fair, independent third party." },
+  },
+];
+
 const homeFaqs = [
   { q: { th: "การตรวจบ้านคืออะไร?", en: "What is a home inspection?" },
     a: { th: "การตรวจสอบสภาพทางกายภาพของบ้านหรือคอนโดอย่างละเอียดโดยผู้เชี่ยวชาญ ครอบคลุมโครงสร้าง ระบบไฟฟ้า ประปา หลังคา และระบบอื่น ๆ เพื่อให้คุณทราบสภาพจริงก่อนรับมอบ", en: "A thorough physical assessment of a property by a qualified professional — structure, electrical, plumbing, roofing and all major systems — so you know the true condition before accepting." } },
@@ -34,111 +67,71 @@ const homeFaqs = [
   { q: { th: "ราคาเริ่มต้นเท่าไหร่?", en: "What's the starting price?" },
     a: { th: "คอนโดเริ่มต้น 3,000 บาท บ้านเดี่ยว/ทาวน์เฮ้าส์เริ่มต้น 5,000 บาท รวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว", en: "Condos from 3,000 THB; houses/townhouses from 5,000 THB — including 2 rounds and the bilingual PDF report." } },
   { q: { th: "ได้รับรายงานเมื่อไหร่?", en: "When will I receive the report?" },
-    a: { th: "ส่งรายงานภายใน 48 ชั่วโมงหลังการตรวจ พร้อมรูปภาพทุกจุดที่พบปัญหาและแนวทางแก้ไข", en: "Within 48 hours of the inspection, with photos of every issue and recommended fixes." } },
+    a: { th: "ส่งรายงานภายใน 24 ชั่วโมงหลังการตรวจ พร้อมรูปภาพทุกจุดที่พบปัญหาและแนวทางแก้ไข", en: "Within 24 hours of the inspection, with photos of every issue and recommended fixes." } },
   { q: { th: "ให้บริการนอกเชียงใหม่ได้ไหม?", en: "Do you serve areas outside Chiang Mai?" },
     a: { th: "ได้ครับ เราให้บริการเชียงใหม่ ลำพูน ลำปาง และเชียงราย พื้นที่นอกเชียงใหม่มีค่าเดินทางเพิ่มตามระยะทาง", en: "Yes — Chiang Mai, Lamphun, Lampang and Chiang Rai. A travel surcharge applies outside Chiang Mai." } },
 ];
 ---
 <BaseLayout
   title="ตรวจบ้านเชียงใหม่ ตรวจคอนโด | WHAT THE HOUSE – Home Inspection Chiang Mai"
-  description="WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง เชียงราย ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ ประสบการณ์ 800+ หลัง | Home Inspection Chiang Mai"
+  description="WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง เชียงราย ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ ประสบการณ์ 1,000+ หลัง | Home Inspection Chiang Mai"
 >
   <Header />
   <main>
 
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <span class="eyebrow">
-            <span class="lang-th">บริษัทตรวจบ้านที่ลูกค้าบอกต่อ ในเชียงใหม่และภาคเหนือ</span>
-            <span class="lang-en">Northern Thailand's trusted home inspection team</span>
-          </span>
+    <!-- ============ HERO (full-bleed) ============ -->
+    <section class="hero hero-bleed">
+      <img class="hero-bg" src="/assets/img/uploads/hero-inspector.webp"
+           alt="ช่างตรวจบ้าน WHAT THE HOUSE ถือแท็บเล็ตพร้อมอุปกรณ์ตรวจหน้าบ้าน — WHAT THE HOUSE inspector with tablet and equipment in front of a home"
+           fetchpriority="high" onerror="this.src='/assets/img/uploads/hero-inspector.jpg'" />
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-content">
           <h1>
-            <span class="lang-th">ตรวจบ้านและคอนโด<br>ก่อนรับมอบ อย่างมั่นใจ</span>
-            <span class="lang-en block">Inspect your home &amp; condo<br>before you accept it</span>
+            <span class="lang-th">ตรวจบ้านอย่างละเอียด<br>ก่อนรับมอบ <span class="accent">อย่างมั่นใจ</span></span>
+            <span class="lang-en block">Inspect your home in detail<br>before you accept it, <span class="accent">with confidence</span></span>
           </h1>
           <p class="lead">
-            <span class="lang-th">ตรวจละเอียดทุกระบบ พร้อมรายงานภาพถ่ายและคำอธิบายโดยวิศวกรมืออาชีพ ช่วยให้คุณรับมอบบ้านได้อย่างมั่นใจ</span>
-            <span class="lang-en block">Every system inspected in detail, with a clear photo report by professional engineers — so you can accept your new home with confidence.</span>
+            <span class="lang-th">ตรวจครบทุกระบบโดยผู้เชี่ยวชาญ พร้อมรายงานภาพถ่ายและคำแนะนำที่เข้าใจง่าย เพื่อให้คุณรู้ปัญหาก่อนเข้าอยู่</span>
+            <span class="lang-en block">Every system inspected by experts, with a clear photo report and plain-language advice — so you know the problems before you move in.</span>
           </p>
-          <ul class="hero-benefits">
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจโครงสร้าง ระบบไฟฟ้า และระบบประปา</span>
-                <span class="lang-en block">Structure, electrical &amp; plumbing systems</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจหลังคา ห้องใต้หลังคา และพื้นที่ซ่อนเร้น</span>
-                <span class="lang-en block">Roof, attic &amp; hidden areas</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ใช้อุปกรณ์ตรวจเฉพาะทาง เช่น กล้องความร้อน เครื่องวัดความชื้น</span>
-                <span class="lang-en block">Specialized equipment — thermal camera, moisture meter</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">รายงานพร้อมภาพถ่ายภายใน 48 ชั่วโมง</span>
-                <span class="lang-en block">Photo report within 48 hours</span>
-              </span>
-            </li>
-            <li>
-              <span class="ic">✓</span>
-              <span>
-                <span class="lang-th">ตรวจซ้ำก่อนรับมอบ</span>
-                <span class="lang-en block">Re-inspection before handover</span>
-              </span>
-            </li>
-          </ul>
           <div class="hero-cta">
             <a class="btn btn-primary btn-lg" href="/contact">
-              <span class="lang-th">จองตรวจบ้าน</span>
+              <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <span class="lang-th">จองคิวตรวจบ้าน</span>
               <span class="lang-en">Book an Inspection</span>
             </a>
-            <a class="btn btn-outline btn-lg" href="/services">
-              <span class="lang-th">ดูตัวอย่างรายงาน</span>
-              <span class="lang-en">View Sample Report</span>
+            <a class="btn btn-glass btn-lg" href="/pricing">
+              <span class="lang-th">ดูบริการและราคา</span>
+              <span class="lang-en">Services &amp; Pricing</span>
             </a>
           </div>
           <div class="hero-trust">
-            <div class="t"><b>800+</b><span class="lang-th">หลังที่ตรวจแล้ว</span><span class="lang-en">homes inspected</span></div>
-            <div class="t"><b>10+</b><span class="lang-th">ปีประสบการณ์</span><span class="lang-en">years experience</span></div>
-            <div class="t"><b>48</b><span class="lang-th">ชม. ได้รายงาน</span><span class="lang-en">hours to report</span></div>
-            <div class="t"><b>TH/EN</b><span class="lang-th">รายงาน 2 ภาษา</span><span class="lang-en">bilingual report</span></div>
+            <div class="t">
+              <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg></span>
+              <div><b>1000+</b><span class="lang-th">หลังที่ตรวจแล้ว</span><span class="lang-en">homes inspected</span></div>
+            </div>
+            <div class="t">
+              <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+              <div><b>10+ ปี</b><span class="lang-th">ประสบการณ์</span><span class="lang-en">years experience</span></div>
+            </div>
+            <div class="t">
+              <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div><b>24 ชม.</b><span class="lang-th">ส่งรายงาน</span><span class="lang-en">to report</span></div>
+            </div>
+            <div class="t">
+              <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></span>
+              <div><b><span class="lang-th">ไทย - อังกฤษ</span><span class="lang-en">TH - EN</span></b><span class="lang-th">รายงาน 2 ภาษา</span><span class="lang-en">bilingual report</span></div>
+            </div>
           </div>
         </div>
-
-        <div class="hero-visual">
-          <img src="/assets/img/uploads/s__31154264_0.jpg"
-               alt="ทีม WHAT THE HOUSE กำลังทดสอบน้ำรั่วซึมที่หน้าต่างบ้าน — WHAT THE HOUSE inspector performing a window water-leak test"
-               fetchpriority="high" />
-          <span class="badge">
-            <span class="lang-th">ตรวจ 2 รอบ</span>
-            <span class="lang-en">2 inspection rounds</span>
-          </span>
-          <div class="hero-check-card">
-            <b class="hc-title">
-              <span class="lang-th">จุดตรวจหลัก</span>
-              <span class="lang-en">Key checkpoints</span>
-            </b>
-            <ul>
-              <li><span class="ic">✓</span><span class="lang-th">โครงสร้าง</span><span class="lang-en">Structure</span></li>
-              <li><span class="ic">✓</span><span class="lang-th">หลังคา</span><span class="lang-en">Roof</span></li>
-              <li><span class="ic">✓</span><span class="lang-th">ไฟฟ้า</span><span class="lang-en">Electrical</span></li>
-              <li><span class="ic">✓</span><span class="lang-th">ประปา</span><span class="lang-en">Plumbing</span></li>
-              <li><span class="ic">✓</span><span class="lang-th">ความชื้น</span><span class="lang-en">Moisture</span></li>
-              <li><span class="ic">✓</span><span class="lang-th">กล้องความร้อน</span><span class="lang-en">Thermal camera</span></li>
-            </ul>
-          </div>
+      </div>
+      <div class="hero-strip">
+        <div class="container hero-strip-in">
+          <span class="hs-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span class="lang-th">ตรวจละเอียดทุกจุด</span><span class="lang-en">Detailed inspection</span></span>
+          <span class="hs-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2l6 6"/><path d="M3 21l9-9m0 0l3-3a4 4 0 1 0-5-5l-3 3m5 5L7 17"/></svg><span class="lang-th">เครื่องมือมาตรฐาน</span><span class="lang-en">Standard equipment</span></span>
+          <span class="hs-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="lang-th">รายงานเข้าใจง่าย</span><span class="lang-en">Clear report</span></span>
+          <span class="hs-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="lang-th">แนะนำการแก้ไข</span><span class="lang-en">Fix recommendations</span></span>
         </div>
       </div>
     </section>
@@ -148,65 +141,20 @@ const homeFaqs = [
       <div class="container">
         <div class="section-head">
           <span class="eyebrow"><span class="lang-th">บริการของเรา</span><span class="lang-en">Our Services</span></span>
-          <h2 class="section-title"><span class="lang-th">เราไม่ได้มีแค่ตรวจบ้าน</span><span class="lang-en">More than just home inspection</span></h2>
-          <p><span class="lang-th">บริการครบ ตั้งแต่ก่อนสร้าง ระหว่างก่อสร้าง ไปจนถึงตรวจรับมอบและแก้ปัญหาบ้าน</span><span class="lang-en block">From planning and construction supervision to final hand-over inspection and defect diagnosis.</span></p>
+          <h2 class="section-title"><span class="lang-th">ดูแลบ้านของคุณ<br>ตั้งแต่ก่อนสร้างจนถึงหลังเข้าอยู่</span><span class="lang-en">Caring for your home — from blueprint to move-in</span></h2>
+          <p><span class="lang-th">ไม่ว่าคุณกำลังสร้าง กำลังจะรับมอบ หรือมีปัญหาบ้านอยู่แล้ว เรามีบริการที่ช่วยให้คุณตัดสินใจได้อย่างมั่นใจในทุกขั้นตอน</span><span class="lang-en block">Whether you're building, about to accept a home, or facing a problem — we help you decide with confidence at every stage.</span></p>
         </div>
         <div class="grid grid-3">
-
-          <a class="card" href="/services#s1">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
-            </div>
-            <h3><span class="lang-th">ตรวจบ้าน / คอนโดก่อนรับมอบ</span><span class="lang-en">Home &amp; Condo Inspection</span></h3>
-            <p><span class="lang-th">บริการหลักของแบรนด์ ตรวจก่อนรับมอบและก่อนโอน ครบทุกระบบ</span><span class="lang-en block">Our core service — full pre-handover inspection of every system.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> →</span>
-          </a>
-
-          <a class="card" href="/services#s2">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M4 20V8l8-5 8 5v12"/><path d="M9 20v-6h6v6"/></svg>
-            </div>
-            <h3><span class="lang-th">ควบคุมงานก่อสร้าง</span><span class="lang-en">Construction Supervision</span></h3>
-            <p><span class="lang-th">ตรวจความคืบหน้าและคุณภาพงานตามงวด ก่อนจ่ายเงินผู้รับเหมา</span><span class="lang-en block">Monitor progress and quality each phase, before paying the contractor.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> →</span>
-          </a>
-
-          <a class="card" href="/services#s3">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>
-            </div>
-            <h3><span class="lang-th">ที่ปรึกษาก่อนสร้างบ้าน</span><span class="lang-en">Pre-Construction Consulting</span></h3>
-            <p><span class="lang-th">รีวิวแบบแปลน ฟังก์ชัน วัสดุ และ BOQ ก่อนเซ็นสัญญาผู้รับเหมา</span><span class="lang-en block">Review plans, materials and BOQ before signing with a contractor.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> →</span>
-          </a>
-
-          <a class="card" href="/services#s4">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>
-            </div>
-            <h3><span class="lang-th">ที่ปรึกษางานต่อเติม</span><span class="lang-en">Renovation &amp; Extension</span></h3>
-            <p><span class="lang-th">ประเมินความเป็นไปได้ ควบคุมและตรวจคุณภาพงานต่อเติม</span><span class="lang-en block">Feasibility checks plus supervision and QC for extension work.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> →</span>
-          </a>
-
-          <a class="card" href="/services#s5">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-            </div>
-            <h3><span class="lang-th">ตรวจปัญหาบ้าน</span><span class="lang-en">Defect &amp; Problem Diagnosis</span></h3>
-            <p><span class="lang-th">หาสาเหตุน้ำรั่ว น้ำซึม ผนังแตกร้าว พื้นทรุด ไฟฟ้า พร้อมแนวทางแก้ไข</span><span class="lang-en block">Find the cause of leaks, cracks, settling and electrical issues.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> →</span>
-          </a>
-
-          <a class="card" href="/services#s6">
-            <div class="svc-ic">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            </div>
-            <h3><span class="lang-th">ตรวจรับงานผู้รับเหมา</span><span class="lang-en">Contractor Work Inspection</span></h3>
-            <p><span class="lang-th">คนกลางตรวจคุณภาพงานก่อสร้าง รีโนเวท ต่อเติม ซ่อมแซม ก่อนจ่ายเงิน</span><span class="lang-en block">Independent QC for build, renovation and repair work before payment.</span></p>
-            <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> →</span>
-          </a>
-
+          {services.map((s) => (
+            <a class="card svc-card" href={s.href}>
+              <img class="svc-bg" src={s.img} alt="" loading="lazy" onerror="this.remove()" />
+              <div class="svc-body">
+                <h3><span class="lang-th">{s.title.th}</span><span class="lang-en">{s.title.en}</span></h3>
+                <p><span class="lang-th">{s.desc.th}</span><span class="lang-en block">{s.desc.en}</span></p>
+                <span class="more"><span class="lang-th">ดูเพิ่มเติม</span><span class="lang-en">Learn more</span> <span class="arw">→</span></span>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -215,7 +163,7 @@ const homeFaqs = [
     <section class="section tight navy">
       <div class="container">
         <div class="stats">
-          <div class="s"><b data-count="800" data-suffix="+">800+</b><span class="lang-th">บ้าน/คอนโดที่ตรวจแล้ว</span><span class="lang-en">homes &amp; condos inspected</span></div>
+          <div class="s"><b data-count="1000" data-suffix="+">1000+</b><span class="lang-th">บ้าน/คอนโดที่ตรวจแล้ว</span><span class="lang-en">homes &amp; condos inspected</span></div>
           <div class="s"><b data-count="10" data-suffix="+">10+</b><span class="lang-th">ปีงานตรวจและก่อสร้าง</span><span class="lang-en">years in inspection &amp; construction</span></div>
           <div class="s"><b data-count="4">4</b><span class="lang-th">จังหวัดที่ให้บริการ</span><span class="lang-en">provinces served</span></div>
           <div class="s"><b data-count="100" data-suffix="%">100%</b><span class="lang-th">เป็นกลาง ไม่เข้าข้างผู้รับเหมา</span><span class="lang-en">independent &amp; unbiased</span></div>
@@ -236,25 +184,72 @@ const homeFaqs = [
             <span class="big">TRUST</span>
             <h3><span class="lang-th">ลูกค้าไว้วางใจ บอกต่อ</span><span class="lang-en">Trusted &amp; recommended</span></h3>
             <p>
-              <span class="lang-th">ประสบการณ์กว่า 10 ปี ตรวจบ้านและคอนโดมาแล้วกว่า 800 หลังในเชียงใหม่และภาคเหนือ เราเป็นกลาง 100% ดูแลผลประโยชน์ของเจ้าของบ้าน ไม่เข้าข้างผู้รับเหมาหรือโครงการใด รายงานของเราใช้เป็นเอกสารเจรจากับโครงการได้จริง</span>
-              <span class="lang-en block">Over 10 years and 800+ properties inspected across Chiang Mai and Northern Thailand. 100% independent — we protect the homeowner's interests, never the developer's. Our reports hold up in real negotiations.</span>
+              <span class="lang-th">ประสบการณ์กว่า 10 ปี ตรวจบ้านและคอนโดมาแล้วกว่า 1,000 หลังในเชียงใหม่และภาคเหนือ เราเป็นกลาง 100% ดูแลผลประโยชน์ของเจ้าของบ้าน ไม่เข้าข้างผู้รับเหมาหรือโครงการใด รายงานของเราใช้เป็นเอกสารเจรจากับโครงการได้จริง</span>
+              <span class="lang-en block">Over 10 years and 1,000+ properties inspected across Chiang Mai and Northern Thailand. 100% independent — we protect the homeowner's interests, never the developer's. Our reports hold up in real negotiations.</span>
             </p>
           </div>
           <div class="pillar">
             <span class="big">TECH</span>
             <h3><span class="lang-th">อุปกรณ์ตรวจเฉพาะทาง</span><span class="lang-en">Professional equipment</span></h3>
             <p>
-              <span class="lang-th">เราใช้อุปกรณ์ตรวจที่ทันสมัยครบทุกงาน กล้องความร้อนตรวจการรั่วซึมที่ตาเปล่ามองไม่เห็น เครื่องวัดความชื้น เครื่องทดสอบระบบไฟฟ้า และการทดสอบจำลองฝนสำหรับหลังคาและหน้าต่าง เพื่อให้ไม่มีปัญหาใดหลุดรอดไปได้</span>
-              <span class="lang-en block">Modern tools on every job — thermal camera for invisible leaks, moisture meter, electrical testers, and rain-simulation testing for roofs and windows. Nothing slips through.</span>
+              <span class="lang-th">เราใช้อุปกรณ์ตรวจที่ทันสมัยครบทุกงาน กล้องความร้อนตรวจการรั่วซึมที่ตาเปล่ามองไม่เห็น เครื่องวัดความชื้น และเครื่องทดสอบระบบไฟฟ้า เพื่อให้ไม่มีปัญหาใดหลุดรอดไปได้</span>
+              <span class="lang-en block">Modern tools on every job — thermal camera for invisible leaks, moisture meter and electrical testers. Nothing slips through.</span>
             </p>
           </div>
           <div class="pillar">
             <span class="big">TEAM</span>
             <h3><span class="lang-th">ทีมมืออาชีพตัวจริง</span><span class="lang-en">A real professional team</span></h3>
             <p>
-              <span class="lang-th">ทีมช่างและวิศวกรของเราตรวจบ้านเป็น "อาชีพหลัก ไม่ใช่งานเสริม" ทำงานเป็นระบบ อธิบายปัญหาให้เข้าใจง่ายโดยไม่ใช้ศัพท์เทคนิคเกินจำเป็น พร้อมรายงาน PDF 2 ภาษา ไทย–อังกฤษ ภายใน 48 ชั่วโมง</span>
-              <span class="lang-en block">Inspection is our full-time profession, not a side job. Systematic work, plain-language explanations, and a bilingual Thai–English PDF report within 48 hours.</span>
+              <span class="lang-th">ทีมช่างและวิศวกรของเราตรวจบ้านเป็น "อาชีพหลัก ไม่ใช่งานเสริม" ทำงานเป็นระบบ อธิบายปัญหาให้เข้าใจง่ายโดยไม่ใช้ศัพท์เทคนิคเกินจำเป็น พร้อมรายงาน PDF 2 ภาษา ไทย–อังกฤษ ภายใน 24 ชั่วโมง</span>
+              <span class="lang-en block">Inspection is our full-time profession, not a side job. Systematic work, plain-language explanations, and a bilingual Thai–English PDF report within 24 hours.</span>
             </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EQUIPMENT (spec-sheet) ============ -->
+    <section class="section" id="equipment">
+      <div class="container">
+        <div class="head-split">
+          <div class="section-head">
+            <span class="eyebrow"><span class="lang-th">อุปกรณ์ของเรา</span><span class="lang-en">Instrumentation</span></span>
+            <h2 class="section-title"><span class="lang-th">อุปกรณ์ระดับวิศวกรรม<br>ในทุกการตรวจ</span><span class="lang-en">Engineering-grade tools on every job</span></h2>
+          </div>
+          <p class="eq-lead"><span class="lang-th">เราค้นหาปัญหาที่ตาเปล่ามองไม่เห็น ด้วยเครื่องมือเฉพาะทางที่ทีมพกครบทุกครั้ง</span><span class="lang-en block">We find what the eye can't — with specialized instruments every team carries.</span></p>
+        </div>
+        <div class="eq-grid">
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="16" height="12" rx="2"/><circle cx="10" cy="12" r="3"/><path d="M18 9l4-2v10l-4-2"/></svg></div><img src="/assets/img/equipment/thermal-camera.webp" alt="กล้องถ่ายภาพความร้อน" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">01</span><h3><span class="lang-th">กล้องถ่ายภาพความร้อน</span><span class="lang-en">Thermal Camera</span></h3><span class="eq-en">IR · leak &amp; heat</span></div>
+          </div>
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2s6 7 6 12a6 6 0 0 1-12 0c0-5 6-12 6-12z"/></svg></div><img src="/assets/img/equipment/moisture-meter.webp" alt="เครื่องวัดความชื้น" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">02</span><h3><span class="lang-th">เครื่องวัดความชื้น</span><span class="lang-en">Moisture Meter</span></h3><span class="eq-en">Hidden damp · walls</span></div>
+          </div>
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/></svg></div><img src="/assets/img/equipment/laser-level.webp" alt="เลเซอร์วัดระดับ" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">03</span><h3><span class="lang-th">เลเซอร์วัดระดับ</span><span class="lang-en">Laser Level</span></h3><span class="eq-en">Floor &amp; wall alignment</span></div>
+          </div>
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5L19 19M19 5l-2.5 2.5M7.5 16.5L5 19"/></svg></div><img src="/assets/img/equipment/roof-drone.webp" alt="โดรนตรวจหลังคา" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">04</span><h3><span class="lang-th">โดรนตรวจหลังคา</span><span class="lang-en">Roof Drone</span></h3><span class="eq-en">Aerial roof survey</span></div>
+          </div>
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div><img src="/assets/img/equipment/socket-tester.webp" alt="เครื่องทดสอบเต้ารับ" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">05</span><h3><span class="lang-th">เครื่องทดสอบเต้ารับ</span><span class="lang-en">Socket Tester</span></h3><span class="eq-en">Wiring &amp; ground check</span></div>
+          </div>
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><img src="/assets/img/equipment/endoscope.webp" alt="กล้องงูตรวจท่อ" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">06</span><h3><span class="lang-th">กล้องงูตรวจท่อ</span><span class="lang-en">Endoscope Camera</span></h3><span class="eq-en">Pipes &amp; cavities</span></div>
+          </div>
+          <div class="eq">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a9 9 0 0 0-9 9h4l-2 3M12 3a9 9 0 0 1 9 9h-4l2 3"/><circle cx="12" cy="12" r="1.5"/><path d="M12 12l3-3"/></svg></div><img src="/assets/img/equipment/multi-meter.webp" alt="มัลติมิเตอร์" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">07</span><h3><span class="lang-th">มัลติมิเตอร์</span><span class="lang-en">Multimeter</span></h3><span class="eq-en">Voltage &amp; continuity</span></div>
+          </div>
+          <div class="eq eq-more">
+            <div class="eq-img"><div class="eq-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></div><img src="/assets/img/equipment/etc.webp" alt="อุปกรณ์อื่น ๆ" loading="lazy" onerror="this.remove()" /></div>
+            <div class="eq-body"><span class="eq-no">+</span><h3><span class="lang-th">และอีกมาก</span><span class="lang-en">And more</span></h3><span class="eq-en">Every team, fully equipped</span></div>
           </div>
         </div>
       </div>
@@ -299,23 +294,19 @@ const homeFaqs = [
         </div>
         <div class="steps">
           <div class="step">
-            <div class="n">1</div>
-            <h4><span class="lang-th">ติดต่อ &amp; จองคิว</span><span class="lang-en">Contact &amp; book</span></h4>
+            <span class="s-num">1</span>            <h4><span class="lang-th">ติดต่อ &amp; จองคิว</span><span class="lang-en">Contact &amp; book</span></h4>
             <p><span class="lang-th">แจ้งประเภททรัพย์ ขนาดพื้นที่ และวันที่ต้องการตรวจ</span><span class="lang-en block">Tell us the property type, size and preferred date.</span></p>
           </div>
           <div class="step">
-            <div class="n">2</div>
-            <h4><span class="lang-th">ลงตรวจหน้างาน</span><span class="lang-en">On-site inspection</span></h4>
+            <span class="s-num">2</span>            <h4><span class="lang-th">ลงตรวจหน้างาน</span><span class="lang-en">On-site inspection</span></h4>
             <p><span class="lang-th">ทีมเข้าตรวจละเอียดทุกระบบ พร้อมถ่ายรูปทุกจุด</span><span class="lang-en block">Our team inspects every system and photographs each issue.</span></p>
           </div>
           <div class="step">
-            <div class="n">3</div>
-            <h4><span class="lang-th">รับรายงาน PDF</span><span class="lang-en">Receive PDF report</span></h4>
-            <p><span class="lang-th">สรุปปัญหาและแนวทางแก้ไข ไทย–อังกฤษ ภายใน 48 ชั่วโมง</span><span class="lang-en block">A bilingual report with fixes within 48 hours.</span></p>
+            <span class="s-num">3</span>            <h4><span class="lang-th">รับรายงาน PDF</span><span class="lang-en">Receive PDF report</span></h4>
+            <p><span class="lang-th">สรุปปัญหาและแนวทางแก้ไข ไทย–อังกฤษ ภายใน 24 ชั่วโมง</span><span class="lang-en block">A bilingual report with fixes within 24 hours.</span></p>
           </div>
           <div class="step">
-            <div class="n">4</div>
-            <h4><span class="lang-th">ตรวจรอบแก้ไข</span><span class="lang-en">Re-inspection</span></h4>
+            <span class="s-num">4</span>            <h4><span class="lang-th">ตรวจรอบแก้ไข</span><span class="lang-en">Re-inspection</span></h4>
             <p><span class="lang-th">กลับมาตรวจซ้ำหลังผู้รับเหมาแก้ไข ก่อนคุณเซ็นรับมอบ</span><span class="lang-en block">We re-check after repairs, before you accept the home.</span></p>
           </div>
         </div>

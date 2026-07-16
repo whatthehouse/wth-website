@@ -2,90 +2,97 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import settings from '../data/settings.json';
+
+const gallery = [
+  { img: "/assets/img/about/about-roof.webp",       fallback: "/assets/img/blog/roof-leak.webp",           th: "ตรวจหลังคา",          en: "Roof inspection" },
+  { img: "/assets/img/about/about-thermal.webp",    fallback: "/assets/img/equipment/thermal-camera.webp", th: "กล้องความร้อน",        en: "Thermal imaging" },
+  { img: "/assets/img/about/about-electrical.webp", fallback: "/assets/img/blog/electrical-system.webp",   th: "ตรวจระบบไฟฟ้า",        en: "Electrical checks" },
+  { img: "/assets/img/about/about-leak-test.webp",  fallback: "/assets/img/uploads/s__31154264_0.jpg",     th: "ทดสอบรอยรั่วซึม",      en: "Leak testing" },
+  { img: "/assets/img/about/about-plumbing.webp",   fallback: "/assets/img/blog/plumbing-system.webp",     th: "ตรวจระบบประปา",        en: "Plumbing checks" },
+  { img: "/assets/img/about/about-client.webp",     fallback: "/assets/img/uploads/hero-inspector.webp",   th: "อธิบายรายงานกับลูกค้า", en: "Report walk-through" },
+];
 ---
 <BaseLayout
   title="เกี่ยวกับเรา | WHAT THE HOUSE – Home Inspection Chiang Mai"
-  description="WHAT THE HOUSE ทีมตรวจบ้านมืออาชีพเชียงใหม่ ประสบการณ์ 10+ ปี ตรวจแล้วกว่า 800 หลัง เป็นกลาง โปร่งใส เชื่อถือได้"
+  description="WHAT THE HOUSE ทีมตรวจบ้านมืออาชีพเชียงใหม่ ประสบการณ์ 10+ ปี ตรวจแล้วกว่า 1,000 หลัง เป็นกลาง โปร่งใส เชื่อถือได้"
 >
   <Header />
   <main>
 
-    <!-- ============ PAGE HERO ============ -->
-    <section class="page-hero">
+    <!-- ============ HERO (full-bleed) ============ -->
+    <section class="hero hero-bleed about-hero">
+      <img class="hero-bg" src="/assets/img/about/about-hero.webp"
+           alt="ช่างตรวจบ้าน WHAT THE HOUSE ใช้กล้องถ่ายภาพความร้อนตรวจภายในบ้าน"
+           fetchpriority="high" onerror="this.onerror=null;this.src='/assets/img/blog/thermal-camera-inspection.webp'" />
+      <div class="hero-overlay"></div>
       <div class="container">
-        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">เกี่ยวกับเรา</span><span class="lang-en">About</span></p>
-        <span class="eyebrow"><span class="lang-th">เกี่ยวกับเรา</span><span class="lang-en">About Us</span></span>
-        <h1><span class="lang-th">ทำไมเราถึงชื่อ<br>WHAT THE HOUSE</span><span class="lang-en">Why we're called<br>WHAT THE HOUSE</span></h1>
-        <p><span class="lang-th">เพราะเราเชื่อว่าทุกคนควรรู้ว่า "บ้านของตัวเองมีปัญหาอะไร" ก่อนที่จะสายเกินไป</span><span class="lang-en block">Because we believe everyone deserves to know exactly what's wrong with their home — before it's too late.</span></p>
+        <div class="hero-content">
+          <span class="eyebrow"><span class="lang-th">เกี่ยวกับเรา</span><span class="lang-en">About Us</span></span>
+          <h1>
+            <span class="lang-th">ผู้เชี่ยวชาญด้าน<br><span class="accent">การตรวจบ้าน</span></span>
+            <span class="lang-en block">Home inspection<br><span class="accent">specialists</span></span>
+          </h1>
+          <p class="about-hero-sub"><span class="lang-th">ที่เข้าใจทั้งงานก่อสร้างและมุมของเจ้าของบ้าน</span><span class="lang-en block">who understand both construction and the homeowner's side</span></p>
+          <p class="lead"><span class="lang-th">จากประสบการณ์ด้านวิศวกรรมและงานก่อสร้างกว่า 10 ปี สู่การตรวจบ้านและคอนโดมากกว่า 1,000 หลัง</span><span class="lang-en block">From over 10 years in engineering and construction to more than 1,000 home and condo inspections.</span></p>
+          <div class="hero-cta">
+            <a class="btn btn-primary btn-lg" href="/contact">
+              <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span>
+            </a>
+            <a class="btn btn-glass btn-lg" href="/services"><span class="lang-th">ดูบริการของเรา</span><span class="lang-en">Our Services</span> →</a>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ============ BRAND STORY ============ -->
+    <!-- ============ TRUST STAT BAR ============ -->
+    <section class="about-statbar">
+      <div class="container">
+        <div class="hero-trust">
+          <div class="t">
+            <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg></span>
+            <div><b>1,000+</b><span class="lang-th">หลังที่ตรวจแล้ว</span><span class="lang-en">homes inspected</span></div>
+          </div>
+          <div class="t">
+            <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <div><b>10+ ปี</b><span class="lang-th">ประสบการณ์</span><span class="lang-en">years experience</span></div>
+          </div>
+          <div class="t">
+            <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <div><b>4 จังหวัด</b><span class="lang-th">พื้นที่ให้บริการ</span><span class="lang-en">service areas</span></div>
+          </div>
+          <div class="t">
+            <span class="t-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
+            <div><b>TH / EN</b><span class="lang-th">รายงานสองภาษา</span><span class="lang-en">bilingual reports</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OUR STORY ============ -->
     <section class="section">
       <div class="container">
-        <div class="about-grid">
-          <div>
-            <span class="eyebrow"><span class="lang-th">จุดเริ่มต้น</span><span class="lang-en">Our Story</span></span>
-            <h2 class="section-title"><span class="lang-th">เกิดจากประสบการณ์จริง</span><span class="lang-en">Born from real experience</span></h2>
-            <p><span class="lang-th">WHAT THE HOUSE เกิดขึ้นจากความเชื่อที่ว่าการซื้อบ้านหรือคอนโดคือการลงทุนครั้งใหญ่ที่สุดในชีวิตของหลายคน แต่ผู้ซื้อส่วนใหญ่กลับไม่รู้ว่าทรัพย์สินที่ตัวเองจะรับมอบนั้นมีปัญหาหรือไม่</span><span class="lang-en block">WHAT THE HOUSE was founded on the belief that buying a home or condo is one of the biggest investments in a person's life — yet most buyers have no idea whether the property they're about to accept actually has problems.</span></p>
-            <p><span class="lang-th">ทีมงานของเรามีพื้นฐานจากงานวิศวกรรมและก่อสร้าง สั่งสมประสบการณ์มากกว่า 10 ปี ผ่านการตรวจบ้านและคอนโดมาแล้วกว่า 800 หลังทั่วภาคเหนือ เราพบว่าบ้านที่ "ดูดี" จากภายนอก มักซ่อนปัญหาไว้มากกว่าที่เจ้าของรู้</span><span class="lang-en block">Our team comes from an engineering and construction background, with over 10 years of accumulated experience and more than 800 inspections across Northern Thailand. We've found time and again that homes that "look fine" often hide more problems than the owner realizes.</span></p>
-            <p><span class="lang-th">เราจึงตั้ง WHAT THE HOUSE ขึ้นเพื่อเป็นเสียงของผู้ซื้อ ให้ข้อมูลที่ตรงไปตรงมา เป็นกลาง และเชื่อถือได้ เพื่อให้คุณตัดสินใจได้อย่างมั่นใจ</span><span class="lang-en block">So we built WHAT THE HOUSE to be the buyer's voice — providing honest, unbiased, trustworthy information so you can make decisions with confidence.</span></p>
-
-            <ul class="value-list">
-              <li>
-                <span class="ic">✓</span>
-                <span><span class="lang-th"><b>เป็นกลาง 100%</b> — ไม่มีความสัมพันธ์กับโครงการหรือผู้รับเหมาใด</span><span class="lang-en block"><b>100% independent</b> — no ties to any developer or contractor</span></span>
-              </li>
-              <li>
-                <span class="ic">✓</span>
-                <span><span class="lang-th"><b>โปร่งใสทุกขั้นตอน</b> — รายงานชัดเจน อ่านเข้าใจง่าย ไม่ปิดบัง</span><span class="lang-en block"><b>Fully transparent</b> — clear reports that are easy to understand, nothing hidden</span></span>
-              </li>
-              <li>
-                <span class="ic">✓</span>
-                <span><span class="lang-th"><b>มืออาชีพ</b> — ทีมงานมีความรู้ด้านวิศวกรรมและก่อสร้างจริง</span><span class="lang-en block"><b>Truly professional</b> — team with real engineering and construction knowledge</span></span>
-              </li>
-            </ul>
+        <div class="story-grid-wrap">
+          <div class="story-copy">
+            <span class="eyebrow"><span class="lang-th">เรื่องราวของเรา</span><span class="lang-en">Our Story</span></span>
+            <h2 class="section-title"><span class="lang-th">เกิดจากประสบการณ์จริง<br>เพื่อให้เจ้าของบ้าน<span class="accent">มั่นใจในทุกการตัดสินใจ</span></span><span class="lang-en block">Born from real experience — so homeowners can <span class="accent">decide with confidence</span></span></h2>
+            <p><span class="lang-th">WHAT THE HOUSE ก่อตั้งจากประสบการณ์ด้านวิศวกรรม งานก่อสร้าง และการตรวจบ้านจริง เราเข้าใจทั้งวิธีการก่อสร้าง ลำดับงาน จุดเสี่ยงของแต่ละระบบ รวมถึงผลกระทบที่ปัญหาเหล่านั้นอาจมีต่อเจ้าของบ้านในระยะยาว</span><span class="lang-en block">WHAT THE HOUSE was built on real experience in engineering, construction and home inspection. We understand how homes are built, the sequence of work, the weak points of each system — and the long-term impact those problems can have on an owner.</span></p>
+            <p><span class="lang-th">เราจึงไม่ได้เพียงระบุว่า "พบข้อบกพร่องตรงไหน" แต่ให้ความสำคัญกับการอธิบายสาเหตุ ระดับความสำคัญ และแนวทางแก้ไข เพื่อให้เจ้าของบ้านใช้ข้อมูลประกอบการตัดสินใจได้อย่างมั่นใจ</span><span class="lang-en block">So we don't just point out "where the defect is." We explain the cause, the severity, and the way to fix it — giving homeowners the information to decide with confidence.</span></p>
           </div>
 
-          <!-- Story image -->
-          <div class="about-img-wrap">
-            {settings.aboutImage ? (
-              <img class="about-img" src={settings.aboutImage} alt="WHAT THE HOUSE" width="600" height="450" />
-            ) : (
-              <div class="about-img-placeholder">
-                <svg viewBox="0 0 80 80" width="64" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 50L40 20l30 30"/><path d="M20 45v20h40V45"/><path d="M32 65V50h16v15"/><rect x="34" y="28" width="12" height="10" rx="1"/></svg>
-                <span><span class="lang-th">รูปทีมงาน / หน้างาน</span><span class="lang-en">Team / on-site photo</span></span>
-              </div>
-            )}
-            <div class="about-badge-wrap">
-              <div class="about-badge">
-                <b>800+</b>
-                <span><span class="lang-th">หลังที่ตรวจแล้ว</span><span class="lang-en">inspections done</span></span>
-              </div>
-              <div class="about-badge">
-                <b>10+</b>
-                <span><span class="lang-th">ปีประสบการณ์</span><span class="lang-en">years experience</span></span>
-              </div>
-            </div>
+          <div class="story-grid">
+            {gallery.map((g) => (
+              <figure class="story-shot">
+                <img src={g.img} alt={g.th} loading="lazy" onerror={`this.onerror=null;this.src='${g.fallback}'`} />
+                <figcaption><span class="lang-th">{g.th}</span><span class="lang-en">{g.en}</span></figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ STATS ============ -->
-    <section class="section tight navy">
-      <div class="container">
-        <div class="stats">
-          <div class="s"><b>800+</b><span class="lang-th">หลังที่ตรวจแล้ว</span><span class="lang-en">homes inspected</span></div>
-          <div class="s"><b>10+</b><span class="lang-th">ปีประสบการณ์</span><span class="lang-en">years experience</span></div>
-          <div class="s"><b>4</b><span class="lang-th">จังหวัดให้บริการ</span><span class="lang-en">provinces served</span></div>
-          <div class="s"><b>100%</b><span class="lang-th">เป็นกลาง เชื่อถือได้</span><span class="lang-en">independent & trusted</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ VALUES ============ -->
+    <!-- ============ PHILOSOPHY / PRINCIPLES (kept) ============ -->
     <section class="section soft">
       <div class="container">
         <div class="section-head">
@@ -98,7 +105,7 @@ import settings from '../data/settings.json';
             <div class="vc-icon">
               <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
             </div>
-            <h4><span class="lang-th">ซื่อสัตย์และเป็นกลาง</span><span class="lang-en">Honest & Unbiased</span></h4>
+            <h4><span class="lang-th">ซื่อสัตย์และเป็นกลาง</span><span class="lang-en">Honest &amp; Unbiased</span></h4>
             <p><span class="lang-th">เราไม่มีผลประโยชน์ทับซ้อนกับโครงการหรือผู้รับเหมาใด บอกความจริงตามที่พบ ไม่บิดเบือน ไม่ปิดบัง</span><span class="lang-en block">We have no conflicts of interest with any developer or contractor. We report what we find — nothing more, nothing less.</span></p>
           </div>
 
@@ -106,7 +113,7 @@ import settings from '../data/settings.json';
             <div class="vc-icon">
               <svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
             </div>
-            <h4><span class="lang-th">ละเอียดและครอบคลุม</span><span class="lang-en">Thorough & Comprehensive</span></h4>
+            <h4><span class="lang-th">ละเอียดและครอบคลุม</span><span class="lang-en">Thorough &amp; Comprehensive</span></h4>
             <p><span class="lang-th">ตรวจทุกจุด ทุกระบบ ไม่ข้ามขั้นตอน ใช้อุปกรณ์เฉพาะทางเพื่อตรวจพบปัญหาที่สายตาอาจมองไม่เห็น</span><span class="lang-en block">We inspect every point and every system — no shortcuts. Specialized tools catch what the naked eye can miss.</span></p>
           </div>
 
@@ -147,7 +154,7 @@ import settings from '../data/settings.json';
     </section>
 
     <!-- ============ CTA ============ -->
-    <section class="section soft">
+    <section class="section">
       <div class="container">
         <div class="cta-band">
           <h2><span class="lang-th">ไว้วางใจให้เราตรวจบ้านของคุณ</span><span class="lang-en">Trust us with your home inspection</span></h2>
@@ -165,67 +172,41 @@ import settings from '../data/settings.json';
 </BaseLayout>
 
 <style>
-/* about image placeholder */
-.about-img-wrap { position: relative; }
-.about-img-placeholder {
-  width: 100%;
-  aspect-ratio: 4/3;
-  background: linear-gradient(135deg, var(--green-soft), #dfeee4);
-  border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: var(--green-dark);
-  font-size: .88rem;
-  border: 1px solid #cfe9d6;
-}
-.about-img-placeholder svg { opacity: .5; }
-.about-img {
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-}
-.about-badge-wrap {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-}
-.about-badge {
-  flex: 1;
-  background: var(--navy);
-  color: #fff;
-  border-radius: var(--radius-sm);
-  padding: 16px;
-  text-align: center;
-}
-.about-badge b { display: block; font-size: 1.8rem; color: var(--green); line-height: 1; font-weight: 700; }
-.about-badge span { font-size: .8rem; color: #aebccb; margin-top: 2px; display: block; }
+/* about hero (shorter than homepage) */
+.about-hero > .container { min-height: 62vh; padding-bottom: 64px; }
+.about-hero-sub { font-size: clamp(1.15rem, 2.4vw, 1.5rem); color: #fff; font-weight: 600; letter-spacing: -.01em; margin: 0 0 18px; max-width: 26ch; }
+.about-hero .lead { margin: 0 0 30px; }
 
-/* value cards */
-.value-card {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 26px;
-  transition: .2s;
+/* trust stat bar */
+.about-statbar { background: var(--ink-2); border-bottom: 1px solid var(--line); padding: 26px 0; }
+.about-statbar .hero-trust { justify-content: space-between; gap: 22px 30px; }
+
+/* our story */
+.story-grid-wrap { display: grid; grid-template-columns: 1fr 1.05fr; gap: 52px; align-items: center; }
+.story-copy .section-title { margin-bottom: .6em; }
+.story-copy p { color: var(--grey); margin: 0 0 16px; line-height: 1.8; }
+.story-copy p:last-child { margin-bottom: 0; }
+.story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.story-shot { position: relative; margin: 0; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4/3; }
+.story-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.story-shot:hover img { transform: scale(1.06); }
+.story-shot figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px;
+  font-size: .78rem; font-weight: 500; color: #fff; text-align: center;
+  background: linear-gradient(180deg, transparent, rgba(10,11,12,.85));
 }
-.value-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
-.vc-icon {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  background: var(--green-soft);
-  color: var(--green-dark);
-  display: grid; place-items: center;
-  margin-bottom: 14px;
+@media (max-width: 900px) {
+  .story-grid-wrap { grid-template-columns: 1fr; gap: 34px; }
+  .about-statbar .hero-trust { justify-content: flex-start; }
 }
+@media (max-width: 520px) {
+  .story-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* value cards (kept) */
+.value-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; transition: .2s; }
+.value-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); border-color: var(--line-2); }
+.vc-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--green-soft); color: var(--green-bright); border: 1px solid rgba(47,224,124,.18); display: grid; place-items: center; margin-bottom: 14px; }
 .value-card h4 { font-size: 1rem; margin-bottom: .3em; }
 .value-card p { color: var(--grey); font-size: .9rem; margin: 0; line-height: 1.65; }
-
-@media (max-width: 720px) {
-  .about-badge-wrap { flex-direction: row; }
-}
 </style>

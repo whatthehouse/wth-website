@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+<BaseLayout
+  title="คำนวณ BTU แอร์ | เลือกขนาดแอร์ให้เหมาะกับห้อง | WHAT THE HOUSE"
+  description="เครื่องคำนวณขนาด BTU ของเครื่องปรับอากาศ ให้เหมาะกับขนาดและประเภทห้อง คำนวณง่าย ๆ เลือกขนาดแอร์ที่ใช่ | BTU air-conditioner calculator"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">คำนวณ BTU แอร์</span><span class="lang-en">BTU Calculator</span></p>
+        <span class="eyebrow"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Free Tool</span></span>
+        <h1><span class="lang-th">คำนวณขนาดแอร์ (BTU)<br>ให้เหมาะกับห้องของคุณ</span><span class="lang-en">Find the right air-conditioner size (BTU)</span></h1>
+        <p><span class="lang-th">แอร์เล็กไปเย็นไม่ทั่ว กินไฟ · แอร์ใหญ่ไปเปลืองงบและตัดต่อบ่อย เลือกให้พอดีตั้งแต่แรก</span><span class="lang-en block">Too small and it never cools; too big and it wastes money. Get the right size from the start.</span></p>
+      </div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section class="section">
+      <div class="container">
+        <div class="calc-wrap">
+          <div class="calc-box">
+            <h2 class="calc-title"><span class="lang-th">คำนวณ BTU</span><span class="lang-en">BTU Calculator</span></h2>
+            <p class="calc-sub"><span class="lang-th">กรอกขนาดห้องและลักษณะการใช้งาน แล้วรับคำแนะนำทันที</span><span class="lang-en block">Enter your room size and usage to get an instant recommendation.</span></p>
+
+            <!-- room size -->
+            <div class="calc-step">
+              <label class="calc-label"><span class="lang-th">ขนาดห้อง (กว้าง × ยาว)</span><span class="lang-en">Room size (width × length)</span></label>
+              <div class="btu-dims">
+                <div class="area-input-wrap"><input type="number" id="btuW" class="area-input" min="1" step="0.1" placeholder="กว้าง" value="4" /><span class="area-unit">ม.</span></div>
+                <span class="btu-x">×</span>
+                <div class="area-input-wrap"><input type="number" id="btuL" class="area-input" min="1" step="0.1" placeholder="ยาว" value="5" /><span class="area-unit">ม.</span></div>
+              </div>
+              <p class="btu-area-line"><span class="lang-th">พื้นที่</span><span class="lang-en">Area</span>: <b id="btuArea">20</b> <span class="lang-th">ตร.ม.</span><span class="lang-en">sq.m.</span></p>
+            </div>
+
+            <!-- room type -->
+            <div class="calc-step">
+              <label class="calc-label"><span class="lang-th">ลักษณะห้อง</span><span class="lang-en">Room type</span></label>
+              <div class="btu-types">
+                <button type="button" class="btu-type active" data-factor="700">
+                  <b><span class="lang-th">ห้องนอน</span><span class="lang-en">Bedroom</span></b>
+                  <small><span class="lang-th">แดดน้อย ความร้อนต่ำ</span><span class="lang-en">low heat</span></small>
+                </button>
+                <button type="button" class="btu-type" data-factor="800">
+                  <b><span class="lang-th">ห้องนั่งเล่น</span><span class="lang-en">Living room</span></b>
+                  <small><span class="lang-th">ใช้งานทั่วไป</span><span class="lang-en">normal use</span></small>
+                </button>
+                <button type="button" class="btu-type" data-factor="950">
+                  <b><span class="lang-th">โดนแดด / ครัว</span><span class="lang-en">Sunny / kitchen</span></b>
+                  <small><span class="lang-th">ความร้อนสูง</span><span class="lang-en">high heat</span></small>
+                </button>
+              </div>
+            </div>
+
+            <!-- result -->
+            <div class="calc-result">
+              <div>
+                <div class="result-label"><span class="lang-th">ขนาดแอร์ที่แนะนำ</span><span class="lang-en">Recommended size</span></div>
+                <div class="result-price" id="btuResult">18,000 BTU</div>
+                <div class="result-note" id="btuNote">ต้องการ ~14,000 BTU</div>
+              </div>
+              <a class="btn btn-primary" href="/contact"><span class="lang-th">ปรึกษาทีมช่าง</span><span class="lang-en">Ask our team</span></a>
+            </div>
+          </div>
+
+          <!-- notes -->
+          <aside class="calc-notes">
+            <h3><span class="lang-th">เกร็ดน่ารู้</span><span class="lang-en">Good to know</span></h3>
+            <ul class="note-list">
+              <li><span class="nc">1</span><span><span class="lang-th">แอร์ที่ BTU พอดีจะเย็นเร็ว ประหยัดไฟ และคอมเพรสเซอร์อายุยาวขึ้น</span><span class="lang-en block">A correctly-sized unit cools faster, saves power and lasts longer.</span></span></li>
+              <li><span class="nc">2</span><span><span class="lang-th">ห้องเพดานสูง โดนแดดทั้งวัน หรือมีคนอยู่หลายคน ควรเผื่อ BTU เพิ่ม</span><span class="lang-en block">High ceilings, all-day sun or many occupants need extra BTU.</span></span></li>
+              <li><span class="nc">3</span><span><span class="lang-th">ค่านี้เป็นการประเมินเบื้องต้น หน้างานจริงควรให้ช่างประเมินอีกครั้ง</span><span class="lang-en block">This is an estimate — have a technician confirm on site.</span></span></li>
+            </ul>
+            <div class="btu-tip"><span class="lang-th">อยากมั่นใจเรื่องระบบไฟและแอร์ก่อนรับมอบบ้าน?</span><span class="lang-en block">Want your electrical &amp; A/C checked before handover?</span> <a href="/services"><span class="lang-th">ดูบริการตรวจบ้าน →</span><span class="lang-en">See inspection services →</span></a></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">พร้อมจองคิวตรวจบ้านแล้วหรือยัง?</span><span class="lang-en">Ready to book your inspection?</span></h2>
+          <p><span class="lang-th">ติดต่อเราวันนี้ รับใบเสนอราคาภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us today — get a quote within 24 hours.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-outline btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.btu-dims { display: flex; align-items: center; gap: 12px; }
+.btu-dims .area-input-wrap { flex: 1; }
+.btu-x { font-family: var(--mono); color: var(--faint); font-size: 1.2rem; }
+.btu-area-line { margin: 12px 0 0; color: var(--grey); font-size: .9rem; }
+.btu-area-line b { font-family: var(--mono); color: var(--green-bright); font-size: 1.05rem; }
+.btu-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.btu-type {
+  display: flex; flex-direction: column; gap: 4px; text-align: left;
+  padding: 16px; border: 2px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel-2); cursor: pointer; font-family: inherit; transition: .2s;
+}
+.btu-type b { color: var(--heading); font-size: .95rem; }
+.btu-type small { color: var(--grey); font-size: .78rem; }
+.btu-type:hover { border-color: var(--green); }
+.btu-type.active { border-color: var(--green); background: var(--green-soft); }
+.btu-tip { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .88rem; color: var(--grey); }
+.btu-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
+@media (max-width: 720px) { .btu-types { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  (function () {
+    const w = document.getElementById('btuW') as HTMLInputElement;
+    const l = document.getElementById('btuL') as HTMLInputElement;
+    const areaOut = document.getElementById('btuArea') as HTMLElement;
+    const resultOut = document.getElementById('btuResult') as HTMLElement;
+    const noteOut = document.getElementById('btuNote') as HTMLElement;
+    const typeBtns = document.querySelectorAll('.btu-type');
+    const SIZES = [9000, 12000, 15000, 18000, 21000, 24000, 30000, 36000, 42000, 48000, 60000];
+    let factor = 700;
+
+    function isEn() { return document.body.classList.contains('en'); }
+
+    function recommend(btu: number) {
+      for (const s of SIZES) { if (s >= btu) return s; }
+      return SIZES[SIZES.length - 1];
+    }
+
+    function update() {
+      const wv = parseFloat(w.value) || 0;
+      const lv = parseFloat(l.value) || 0;
+      const area = wv * lv;
+      areaOut.textContent = area ? String(Math.round(area * 10) / 10) : '0';
+      if (!area) {
+        resultOut.textContent = '—';
+        noteOut.textContent = '';
+        return;
+      }
+      const needed = area * factor;
+      const size = recommend(needed);
+      resultOut.textContent = size.toLocaleString() + ' BTU';
+      noteOut.textContent = (isEn() ? 'Needs ~' : 'ต้องการ ~') + (Math.round(needed / 500) * 500).toLocaleString() + ' BTU';
+    }
+
+    typeBtns.forEach((b) => b.addEventListener('click', () => {
+      typeBtns.forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      factor = Number((b as HTMLElement).dataset.factor);
+      update();
+    }));
+    w.addEventListener('input', update);
+    l.addEventListener('input', update);
+    document.addEventListener('click', function (e) {
+      if ((e.target as HTMLElement).closest('[data-lang-btn]')) setTimeout(update, 0);
+    });
+    update();
+  })();
+</script>

@@ -6,7 +6,7 @@ const isActive = (href: string) =>
 <header class="site-header">
   <div class="container nav">
     <a class="brand" href="/">
-      <img src="/assets/img/logo.jpg" class="logo" alt="What The House" />
+      <img src="/assets/img/logo-mark.png" class="logo" alt="What The House" width="52" height="54" />
       <span class="brand-text">
         <b>WHAT THE HOUSE</b>
         <span>HOME INSPECTIONS</span>
@@ -25,6 +25,9 @@ const isActive = (href: string) =>
       </a></li>
       <li><a href="/pricing" class={isActive('/pricing') ? 'active' : ''}>
         <span class="lang-th">ค่าบริการ</span><span class="lang-en">Pricing</span>
+      </a></li>
+      <li><a href="/tools" class={isActive('/tools') ? 'active' : ''}>
+        <span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span>
       </a></li>
       <li><a href="/portfolio" class={isActive('/portfolio') ? 'active' : ''}>
         <span class="lang-th">ผลงาน</span><span class="lang-en">Portfolio</span>
