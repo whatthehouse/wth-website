@@ -119,7 +119,7 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line);
 }
-.nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:18px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:14px}
 .brand{display:flex;align-items:center;gap:11px;font-weight:700;color:var(--heading)}
 .brand .logo{height:52px;width:auto;flex:none;object-fit:contain}
 .brand .brand-text{display:flex;flex-direction:column;line-height:1.05}
@@ -127,7 +127,7 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .brand .brand-text span{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;color:var(--faint);font-weight:500;text-transform:uppercase;margin-top:2px;white-space:nowrap}
 .nav-links{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
 .nav-links a{
-  padding:9px 12px;border-radius:8px;font-weight:500;font-size:.86rem;color:var(--grey);
+  padding:8px 9px;border-radius:8px;font-weight:500;font-size:.83rem;color:var(--grey);
   white-space:nowrap;transition:.15s;
 }
 .nav-links a:hover,.nav-links a.active{color:var(--green-bright);background:rgba(255,255,255,.04)}
@@ -464,7 +464,8 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   .eq-lead{align-self:flex-start;max-width:none}
   .hero-frame{aspect-ratio:4/3}
 }
-@media(max-width:720px){
+/* collapse the horizontal nav to a burger before the 8 items run out of room */
+@media(max-width:1100px){
   .nav-links,.nav-cta{display:none}
   .nav-links.open{
     display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;
@@ -472,6 +473,8 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   }
   .nav-links.open a{padding:12px 10px}
   .burger{display:flex}
+}
+@media(max-width:720px){
   .section{padding:60px 0}
   .grid-3,.grid-4,.grid-2,.port-grid,.blog-grid,.price-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
