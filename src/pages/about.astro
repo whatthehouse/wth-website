@@ -4,12 +4,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 const gallery = [
-  { img: "/assets/img/about/about-roof.jpg",       fallback: "/assets/img/blog/roof-leak.webp",           th: "ตรวจหลังคา",          en: "Roof inspection" },
-  { img: "/assets/img/about/about-thermal.jpg",    fallback: "/assets/img/equipment/thermal-camera.webp", th: "กล้องความร้อน",        en: "Thermal imaging" },
-  { img: "/assets/img/about/about-electrical.jpg", fallback: "/assets/img/blog/electrical-system.webp",   th: "ตรวจระบบไฟฟ้า",        en: "Electrical checks" },
-  { img: "/assets/img/about/about-leak-test.jpg",  fallback: "/assets/img/uploads/s__31154264_0.jpg",     th: "ทดสอบรอยรั่วซึม",      en: "Leak testing" },
-  { img: "/assets/img/about/about-plumbing.jpg",   fallback: "/assets/img/blog/plumbing-system.webp",     th: "ตรวจระบบประปา",        en: "Plumbing checks" },
-  { img: "/assets/img/about/about-client.jpg",     fallback: "/assets/img/uploads/hero-inspector.webp",   th: "อธิบายรายงานกับลูกค้า", en: "Report walk-through" },
+  { img: "/assets/img/about/about-roof.webp",       fallback: "/assets/img/blog/roof-leak.webp",           th: "ตรวจหลังคา",          en: "Roof inspection" },
+  { img: "/assets/img/about/about-thermal.webp",    fallback: "/assets/img/equipment/thermal-camera.webp", th: "กล้องความร้อน",        en: "Thermal imaging" },
+  { img: "/assets/img/about/about-electrical.webp", fallback: "/assets/img/blog/electrical-system.webp",   th: "ตรวจระบบไฟฟ้า",        en: "Electrical checks" },
+  { img: "/assets/img/about/about-leak-test.webp",  fallback: "/assets/img/uploads/s__31154264_0.jpg",     th: "ทดสอบรอยรั่วซึม",      en: "Leak testing" },
+  { img: "/assets/img/about/about-plumbing.webp",   fallback: "/assets/img/blog/plumbing-system.webp",     th: "ตรวจระบบประปา",        en: "Plumbing checks" },
+  { img: "/assets/img/about/about-client.webp",     fallback: "/assets/img/uploads/hero-inspector.webp",   th: "อธิบายรายงานกับลูกค้า", en: "Report walk-through" },
 ];
 ---
 <BaseLayout
@@ -21,7 +21,7 @@ const gallery = [
 
     <!-- ============ HERO (full-bleed) ============ -->
     <section class="hero hero-bleed about-hero">
-      <img class="hero-bg" src="/assets/img/about/about-hero.jpg"
+      <img class="hero-bg" src="/assets/img/about/about-hero.webp"
            alt="ช่างตรวจบ้าน WHAT THE HOUSE ใช้กล้องถ่ายภาพความร้อนตรวจภายในบ้าน"
            fetchpriority="high" onerror="this.onerror=null;this.src='/assets/img/blog/thermal-camera-inspection.webp'" />
       <div class="hero-overlay"></div>
@@ -187,7 +187,7 @@ const gallery = [
 .story-copy p { color: var(--grey); margin: 0 0 16px; line-height: 1.8; }
 .story-copy p:last-child { margin-bottom: 0; }
 .story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.story-shot { position: relative; margin: 0; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 3/4; }
+.story-shot { position: relative; margin: 0; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4/3; }
 .story-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
 .story-shot:hover img { transform: scale(1.06); }
 .story-shot figcaption {

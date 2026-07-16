@@ -8,7 +8,7 @@ Until a file exists, the page falls back to a reused photo automatically.
 HERO BACKGROUND (wide, landscape ~1920x1080):
   about-hero.jpg          — ช่างกำลังตรวจบ้าน (เช่น ถือกล้องความร้อน) ใช้เป็นพื้นหลังหัวหน้า
 
-GALLERY — "เรื่องราวของเรา" (portrait 3:4 works best, ~900x1200):
+GALLERY — "เรื่องราวของเรา" (landscape 4:3 works best, ~1200x900):
   about-roof.jpg          — ตรวจหลังคา
   about-thermal.jpg       — กล้องความร้อน (ช่างกำลังใช้งาน)
   about-electrical.jpg    — ตรวจระบบไฟฟ้า / ตู้ไฟ
