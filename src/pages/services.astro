@@ -193,18 +193,20 @@ const services = [
                     <span class="lang-th">{s.highlight.th}</span>
                     <span class="lang-en block">{s.highlight.en}</span>
                   </p>
-                  <a href="/contact" class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center">
-                    <span class="lang-th">จองบริการนี้</span>
-                    <span class="lang-en">Book this service</span>
-                  </a>
                   {s.id === 's1' ? (
-                    <a href="/pricing" class="btn btn-ghost" style="margin-top:8px;width:100%;justify-content:center">
-                      <span class="lang-th">ดูราคา</span>
-                      <span class="lang-en">View pricing</span>
-                    </a>
+                    <Fragment>
+                      <a href="/contact" class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center">
+                        <span class="lang-th">จองบริการนี้</span>
+                        <span class="lang-en">Book this service</span>
+                      </a>
+                      <a href="/pricing" class="btn btn-ghost" style="margin-top:8px;width:100%;justify-content:center">
+                        <span class="lang-th">ดูราคา</span>
+                        <span class="lang-en">View pricing</span>
+                      </a>
+                    </Fragment>
                   ) : (
-                    <a href="/contact" class="btn btn-ghost" style="margin-top:8px;width:100%;justify-content:center">
-                      <span class="lang-th">ขอราคา</span>
+                    <a href="/contact" class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center">
+                      <span class="lang-th">ขอใบเสนอราคา</span>
                       <span class="lang-en">Get a Quote</span>
                     </a>
                   )}
