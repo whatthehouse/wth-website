@@ -53,7 +53,7 @@
 | **LINE Official** (lin.ee/NW1XLt1) | ช่องทางแชทหลักกับลูกค้า | ตามแผน LINE OA | ปุ่ม LINE และ QR บนเว็บใช้ไม่ได้ |
 | **Facebook Page** (What the House Official) | ช่องทางโซเชียล | ฟรี | ปุ่ม Facebook บนเว็บใช้ไม่ได้ |
 
-> **Google Analytics:** เตรียมโค้ดรองรับไว้แล้วแต่**ยังไม่เปิดใช้** — ถ้าต้องการ ให้สร้าง GA4 property แล้วเอา Measurement ID (G-XXXX) ไปใส่ในช่อง gaId ที่ /admin → ตั้งค่าเว็บไซต์
+> **Google Analytics:** เปิดใช้แล้ว (ก.ค. 2026) — GA4 property ในบัญชี Google ของธุรกิจ, Measurement ID เก็บในช่อง gaId ที่ /admin → ตั้งค่าเว็บไซต์ ดูสถิติที่ analytics.google.com (ล็อกอินด้วยอีเมลธุรกิจ)
 
 ---
 
