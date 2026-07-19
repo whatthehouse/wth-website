@@ -465,7 +465,9 @@ const serviceOptions = [
 
 /* ---------- main grid ---------- */
 .ct-main { padding-top: 54px; }
-.ct-grid { display: grid; grid-template-columns: 350px 1fr; gap: 24px; align-items: start; }
+.ct-grid { display: grid; grid-template-columns: 350px minmax(0, 1fr); gap: 24px; align-items: start; }
+/* grid items default to min-width:auto — without this a wide <select> forces the column past the phone screen */
+.ct-grid > *, .ct-fm-grid > * { min-width: 0; }
 .ct-panel {
   background: var(--panel); border: 1px solid var(--line);
   border-radius: var(--radius); padding: 26px;
@@ -550,7 +552,7 @@ const serviceOptions = [
 }
 .ct-form-card .field .req { color: #E5484D; font-style: normal; }
 .ct-form-card .form-row { gap: 16px; margin-bottom: 0; }
-.ct-form-card .ct-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+.ct-form-card .ct-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ct-form-card .field { margin-bottom: 18px; }
 .ct-form-card .field input,
 .ct-form-card .field select,

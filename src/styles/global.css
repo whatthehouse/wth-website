@@ -388,15 +388,17 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .contact-card b{color:var(--heading);font-size:.95rem}
 .contact-card span{color:var(--grey);font-size:.9rem}
 .form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
-.field{margin-bottom:16px}
+.field{margin-bottom:16px;min-width:0}
 .field label{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--label,var(--grey));margin-bottom:8px}
 .field input,.field select,.field textarea{
-  width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:9px;font-family:inherit;font-size:.95rem;color:#fff;background:var(--panel-2);transition:.15s;
+  /* 1rem = 16px minimum: smaller text makes iOS Safari auto-zoom when a field gets focus */
+  width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:9px;font-family:inherit;font-size:1rem;color:#fff;background:var(--panel-2);transition:.15s;
 }
 .field input::placeholder,.field textarea::placeholder{color:var(--faint)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--green);outline-offset:1px;border-color:transparent}
 .field textarea{min-height:110px;resize:vertical}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* minmax(0,…): lets tracks shrink below a <select>'s longest option so forms never overflow phones */
+.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .honey{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .form-note{font-size:.82rem;color:var(--faint);margin-top:4px}
 .map-embed{margin-top:22px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);aspect-ratio:16/8;background:var(--panel-2);display:grid;place-items:center;color:var(--faint);font-size:.9rem;text-align:center}
@@ -505,7 +507,9 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .eq.eq-more .eq-img{background:var(--ink-2)}
 
 /* ---------- shared calculator / tool layout (pricing + /tools pages) ---------- */
-.calc-wrap{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+.calc-wrap{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:32px;align-items:start}
+/* number inputs have a ~230px intrinsic width; without min-width:0 they stop the grid shrinking on phones */
+.calc-wrap>*{min-width:0}
 .calc-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:36px;box-shadow:var(--shadow-sm)}
 .calc-title{font-size:1.5rem;margin-bottom:.3em;color:var(--heading)}
 .calc-sub{color:var(--grey);margin:0 0 28px}
@@ -555,6 +559,7 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   .eq-grid{grid-template-columns:repeat(2,1fr)}
   .eq-lead{align-self:flex-start;max-width:none}
   .hero-frame{aspect-ratio:4/3}
+  .calc-wrap{grid-template-columns:1fr}
 }
 /* collapse the horizontal nav to a burger before the 8 items run out of room */
 @media(max-width:1100px){
