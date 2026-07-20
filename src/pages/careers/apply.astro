@@ -1,0 +1,517 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import settings from '../../data/settings.json';
+
+// ---------- screening wizard ----------
+// Every option carries pass: does choosing it keep the applicant eligible?
+// A question where all options pass is informational (recorded, never blocks).
+const YN = (thY: string, enY: string, thN: string, enN: string, passYes = true) => [
+  { v: "yes", th: thY, en: enY, pass: passYes },
+  { v: "no", th: thN, en: enN, pass: !passYes },
+];
+
+const roleDefs = [
+  {
+    id: "inspector",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
+    title: { th: "ผู้ตรวจบ้าน", en: "Home Inspector" },
+    sub: { th: "ร่วมทีมตรวจหน้างาน", en: "Join the inspection team" },
+  },
+  {
+    id: "engineer",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>`,
+    title: { th: "วิศวกร", en: "Engineer" },
+    sub: { th: "ร่วมตรวจ / รับรองงาน", en: "Co-inspect / certify" },
+  },
+  {
+    id: "contractor",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>`,
+    title: { th: "ช่าง / ผู้รับเหมา", en: "Trades / Contractor" },
+    sub: { th: "รับงานเฉพาะทาง", en: "Specialist work" },
+  },
+  {
+    id: "partner",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1M9 13h1M14 9h1M14 13h1M11 21v-4h2v4"/></svg>`,
+    title: { th: "บริษัท / พาร์ตเนอร์", en: "Company / Partner" },
+    sub: { th: "พาร์ตเนอร์บริการเกี่ยวกับบ้าน", en: "Home-service partner" },
+  },
+];
+
+const expOpts = (minLabelTh: string, minLabelEn: string, passFrom: number) => [
+  { v: "lt2", th: "น้อยกว่า 2 ปี", en: "Under 2 years", pass: passFrom <= 0 },
+  { v: "2-3", th: "2–3 ปี", en: "2–3 years", pass: passFrom <= 2 },
+  { v: "3-5", th: "3–5 ปี", en: "3–5 years", pass: passFrom <= 3 },
+  { v: "5-10", th: "5–10 ปี", en: "5–10 years", pass: true },
+  { v: "10+", th: "มากกว่า 10 ปี", en: "Over 10 years", pass: true },
+];
+
+const tradeOpts = [
+  { v: "extension", th: "ต่อเติม / โครงสร้าง", en: "Extensions / structural", pass: true },
+  { v: "roof", th: "หลังคา / กันซึม", en: "Roofing / waterproofing", pass: true },
+  { v: "electric", th: "ไฟฟ้า", en: "Electrical", pass: true },
+  { v: "plumbing", th: "ประปา / สุขาภิบาล", en: "Plumbing / sanitation", pass: true },
+  { v: "aircon", th: "แอร์ / ระบบปรับอากาศ", en: "Air-conditioning", pass: true },
+  { v: "builtin", th: "ผ้าม่าน / บิวต์อิน / ตกแต่ง", en: "Curtains / built-ins / décor", pass: true },
+  { v: "other", th: "บริการเกี่ยวกับบ้านอื่น ๆ", en: "Other home services", pass: true },
+];
+
+const questions: Record<string, any[]> = {
+  inspector: [
+    { q: { th: "มีประสบการณ์งานก่อสร้าง ควบคุมงาน ตรวจบ้าน หรือระบบอาคารกี่ปี?", en: "Years of experience in construction, supervision, inspection or building systems?" }, type: "radio", opts: expOpts("2 ปี", "2 years", 2) },
+    { q: { th: "อ่านแบบก่อสร้างและเข้าใจระบบพื้นฐานของบ้านได้หรือไม่?", en: "Can you read construction drawings and understand basic home systems?" }, type: "radio", opts: YN("ได้", "Yes", "ยังไม่ได้", "Not yet") },
+    { q: { th: "ใช้เครื่องมือตรวจพื้นฐาน และโทรศัพท์ / แท็บเล็ต / ระบบรายงานออนไลน์ได้หรือไม่?", en: "Can you use basic inspection tools and a phone / tablet / online reporting system?" }, type: "radio", opts: YN("ได้", "Yes", "ยังไม่ได้", "Not yet") },
+    { q: { th: "มีรถยนต์ หรือสามารถเดินทางไปตรวจหน้างานได้หรือไม่?", en: "Do you have a car, or can you travel to inspection sites?" }, type: "radio", opts: YN("ได้", "Yes", "ไม่สะดวก", "No") },
+    { q: { th: "ยินดีผ่านการอบรมและทดสอบมาตรฐานของ WHAT THE HOUSE หรือไม่?", en: "Willing to pass WHAT THE HOUSE training and standards testing?" }, type: "radio", opts: YN("ยินดี", "Yes", "ไม่สะดวก", "No") },
+    { q: { th: "มีผลประโยชน์ทับซ้อนกับโครงการหรือผู้รับเหมาหรือไม่? (เช่น รับงานให้โครงการที่จะตรวจ)", en: "Any conflict of interest with projects or contractors (e.g. working for a project we would inspect)?" }, type: "radio", opts: YN("ไม่มี", "None", "มี", "Yes", true) },
+    { q: { th: "เคยมีประวัติทิ้งงานหรือข้อพิพาทร้ายแรงหรือไม่?", en: "Any history of abandoning work or serious disputes?" }, type: "radio", opts: YN("ไม่เคย", "Never", "เคย", "Yes", true) },
+    { q: { th: "มีใบ กว. หรือใบรับรองวิชาชีพที่เกี่ยวข้องหรือไม่? (ไม่บังคับ — พิจารณาเป็นพิเศษ)", en: "Do you hold an engineering licence or related certification? (optional — special consideration)" }, type: "radio", opts: [ { v: "yes", th: "มี", en: "Yes", pass: true }, { v: "no", th: "ไม่มี", en: "No", pass: true } ] },
+  ],
+  engineer: [
+    { q: { th: "มีใบอนุญาตประกอบวิชาชีพวิศวกรรมควบคุม (กว.) ที่ยังไม่หมดอายุหรือไม่?", en: "Do you hold a valid (unexpired) professional engineering licence?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี / หมดอายุ", "No / expired") },
+    { q: { th: "สาขาของใบอนุญาต", en: "Licensed field" }, type: "select", opts: [
+      { v: "civil", th: "โยธา", en: "Civil", pass: true },
+      { v: "electrical", th: "ไฟฟ้า", en: "Electrical", pass: true },
+      { v: "mechanical", th: "เครื่องกล", en: "Mechanical", pass: true },
+      { v: "environment", th: "สิ่งแวดล้อม", en: "Environmental", pass: true },
+      { v: "other", th: "สาขาอื่น", en: "Other", pass: true },
+    ] },
+    { q: { th: "ระดับใบอนุญาต", en: "Licence level" }, type: "select", opts: [
+      { v: "associate", th: "ภาคีวิศวกร", en: "Associate Engineer", pass: true },
+      { v: "professional", th: "สามัญวิศวกร", en: "Professional Engineer", pass: true },
+      { v: "senior", th: "วุฒิวิศวกร", en: "Senior Professional Engineer", pass: true },
+    ] },
+    { q: { th: "ใบอนุญาตตรงกับสาขาและประเภทงานที่จะรับผิดชอบหรือไม่?", en: "Does your licence match the field and type of work you would take on?" }, type: "radio", opts: YN("ตรง", "Yes", "ไม่ตรง / ไม่แน่ใจ", "No / unsure") },
+    { q: { th: "ยินยอมให้บริษัทตรวจสอบสถานะใบอนุญาตหรือไม่?", en: "Do you consent to the company verifying your licence status?" }, type: "radio", opts: YN("ยินยอม", "Yes", "ไม่ยินยอม", "No") },
+    { q: { th: "มีประสบการณ์เกี่ยวกับอาคาร บ้านพักอาศัย หรืองานระบบที่เกี่ยวข้องหรือไม่?", en: "Experience with buildings, residential homes or related systems?" }, type: "radio", opts: YN("มี", "Yes", "ยังไม่มี", "Not yet") },
+    { q: { th: "สามารถรับงานในเชียงใหม่หรือจังหวัดใกล้เคียงได้หรือไม่?", en: "Can you take work in Chiang Mai or nearby provinces?" }, type: "radio", opts: YN("ได้", "Yes", "ไม่สะดวก", "No") },
+  ],
+  contractor: [
+    { q: { th: "งานที่เชี่ยวชาญเป็นพิเศษ", en: "Your specialist trade" }, type: "select", opts: tradeOpts },
+    { q: { th: "มีประสบการณ์เฉพาะทางด้านนี้กี่ปี?", en: "Years of specialist experience in this trade?" }, type: "radio", opts: expOpts("3 ปี", "3 years", 3) },
+    { q: { th: "มีผลงานจริงหรือบุคคลอ้างอิงที่ตรวจสอบได้หรือไม่?", en: "Do you have verifiable past work or references?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
+    { q: { th: "ออกใบเสนอราคาพร้อมขอบเขตงานชัดเจน และมีการรับประกันผลงานหรือไม่?", en: "Can you issue clear quotations with a defined scope, and warranty your work?" }, type: "radio", opts: YN("ได้ / มีรับประกัน", "Yes", "ไม่ได้ / ไม่มี", "No") },
+    { q: { th: "มีผู้รับผิดชอบหน้างานหรือไม่?", en: "Is a responsible person present on site?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
+    { q: { th: "งานของคุณจำเป็นต้องใช้ใบอนุญาตหรือไม่ และมีบุคลากรที่มีใบตรงตามประเภทงานหรือไม่?", en: "Does your work legally require a licence — and do you have licensed personnel matching the work type?" }, type: "radio", opts: [
+      { v: "has", th: "จำเป็น และมีบุคลากรที่มีใบ", en: "Required — and we have licensed personnel", pass: true },
+      { v: "na", th: "งานไม่จำเป็นต้องใช้ใบอนุญาต", en: "Licence not required for this work", pass: true },
+      { v: "none", th: "จำเป็น แต่ยังไม่มีบุคลากรที่มีใบ", en: "Required, but no licensed personnel yet", pass: false },
+    ] },
+    { q: { th: "ยอมรับมาตรฐานการบริการของ WHAT THE HOUSE หรือไม่?", en: "Do you accept WHAT THE HOUSE service standards?" }, type: "radio", opts: YN("ยอมรับ", "Yes", "ไม่ยอมรับ", "No") },
+    { q: { th: "เคยมีประวัติทิ้งงานหรือข้อพิพาทร้ายแรงหรือไม่?", en: "Any history of abandoning work or serious disputes?" }, type: "radio", opts: YN("ไม่เคย", "Never", "เคย", "Yes", true) },
+  ],
+  partner: [
+    { q: { th: "ประเภทบริการหลักของบริษัท / ทีม", en: "Your company / team's main service" }, type: "select", opts: tradeOpts },
+    { q: { th: "ดำเนินกิจการหรือมีประสบการณ์ทีมมากี่ปี?", en: "Years the business or team has been operating?" }, type: "radio", opts: expOpts("3 ปี", "3 years", 3) },
+    { q: { th: "มีผลงานจริงหรือลูกค้าอ้างอิงที่ตรวจสอบได้หรือไม่?", en: "Verifiable past work or client references?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
+    { q: { th: "ออกใบเสนอราคาพร้อมขอบเขตงานชัดเจน และมีการรับประกันผลงานหรือไม่?", en: "Clear quotations with defined scope, and warrantied work?" }, type: "radio", opts: YN("ได้ / มีรับประกัน", "Yes", "ไม่ได้ / ไม่มี", "No") },
+    { q: { th: "มีทีมงานและผู้รับผิดชอบหน้างานประจำหรือไม่?", en: "Do you have a standing team and a responsible person on site?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
+    { q: { th: "งานของบริษัทจำเป็นต้องใช้ใบอนุญาตหรือไม่ และมีบุคลากรที่มีใบตรงตามประเภทงานหรือไม่?", en: "Does the work legally require a licence — and do you have licensed personnel matching the work type?" }, type: "radio", opts: [
+      { v: "has", th: "จำเป็น และมีบุคลากรที่มีใบ", en: "Required — and we have licensed personnel", pass: true },
+      { v: "na", th: "งานไม่จำเป็นต้องใช้ใบอนุญาต", en: "Licence not required for this work", pass: true },
+      { v: "none", th: "จำเป็น แต่ยังไม่มีบุคลากรที่มีใบ", en: "Required, but no licensed personnel yet", pass: false },
+    ] },
+    { q: { th: "ยอมรับมาตรฐานการบริการของ WHAT THE HOUSE หรือไม่?", en: "Do you accept WHAT THE HOUSE service standards?" }, type: "radio", opts: YN("ยอมรับ", "Yes", "ไม่ยอมรับ", "No") },
+    { q: { th: "เคยมีประวัติทิ้งงานหรือข้อพิพาทร้ายแรงหรือไม่?", en: "Any history of abandoning work or serious disputes?" }, type: "radio", opts: YN("ไม่เคย", "Never", "เคย", "Yes", true) },
+  ],
+};
+---
+<BaseLayout
+  title="สมัครร่วมงาน | ประเมินคุณสมบัติและใบสมัคร | WHAT THE HOUSE"
+  description="สมัครร่วมงานกับ WHAT THE HOUSE ใน 2 ขั้นตอน — ประเมินคุณสมบัติเบื้องต้น แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน วิศวกร ช่าง ผู้รับเหมา และพาร์ตเนอร์บริการ | Apply to join WHAT THE HOUSE"
+>
+  <Header />
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/careers"><span class="lang-th">ร่วมงานกับเรา</span><span class="lang-en">Careers</span></a> / <span class="lang-th">สมัคร</span><span class="lang-en">Apply</span></p>
+        <span class="eyebrow"><span class="lang-th">สมัครร่วมงาน</span><span class="lang-en">Apply</span></span>
+        <h1><span class="lang-th">สมัครใน 2 ขั้นตอน</span><span class="lang-en">Apply in 2 steps</span></h1>
+        <p><span class="lang-th">ขั้นที่ 1 ประเมินคุณสมบัติเบื้องต้น (ไม่ถึง 2 นาที) — ผ่านแล้วจึงกรอกใบสมัครฉบับเต็มในขั้นที่ 2</span><span class="lang-en block">Step 1 is a quick pre-qualification (under 2 minutes) — pass it to unlock the full application in step 2.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATION WIZARD ============ -->
+    <section class="section" id="apply">
+      <div class="container">
+        <div class="wiz">
+          <!-- STEP 1 -->
+          <div class="wiz-card">
+            <div class="wiz-step-tag"><span class="lang-th">ขั้นที่ 1 — ประเมินคุณสมบัติเบื้องต้น</span><span class="lang-en">Step 1 — Pre-qualification</span></div>
+            <h3 class="wiz-title"><span class="lang-th">คุณต้องการร่วมงานในฐานะใด?</span><span class="lang-en">In what capacity would you like to join?</span></h3>
+
+            <div class="role-grid" id="roleGrid">
+              {roleDefs.map((r) => (
+                <button type="button" class="role-card" data-role={r.id}>
+                  <span class="role-ic" set:html={r.icon} />
+                  <b><span class="lang-th">{r.title.th}</span><span class="lang-en">{r.title.en}</span></b>
+                  <span class="role-sub"><span class="lang-th">{r.sub.th}</span><span class="lang-en">{r.sub.en}</span></span>
+                </button>
+              ))}
+            </div>
+
+            {Object.entries(questions).map(([roleId, qs]) => (
+              <div class="qz-block" data-role-questions={roleId} hidden>
+                {qs.map((q, qi) => (
+                  <div class="qz-q" data-qi={qi}>
+                    <p class="qz-label"><span class="qz-num">{qi + 1}</span><span class="lang-th">{q.q.th}</span><span class="lang-en block">{q.q.en}</span></p>
+                    {q.type === "radio" ? (
+                      <div class="qz-opts">
+                        {q.opts.map((o: any) => (
+                          <label class="qz-opt">
+                            <input type="radio" name={`q-${roleId}-${qi}`} value={o.v} data-pass={o.pass ? "1" : "0"} data-th={o.th} />
+                            <span><span class="lang-th">{o.th}</span><span class="lang-en">{o.en}</span></span>
+                          </label>
+                        ))}
+                      </div>
+                    ) : (
+                      <div class="field qz-select"><select name={`q-${roleId}-${qi}`}>
+                        <option value="" disabled selected>เลือกคำตอบ / Select</option>
+                        {q.opts.map((o: any) => (
+                          <option value={o.v} data-pass={o.pass ? "1" : "0"} data-th={o.th}>{o.th} / {o.en}</option>
+                        ))}
+                      </select></div>
+                    )}
+                  </div>
+                ))}
+                <p class="qz-missing" hidden><span class="lang-th">กรุณาตอบให้ครบทุกข้อก่อนตรวจสอบคุณสมบัติ</span><span class="lang-en block">Please answer every question before checking eligibility.</span></p>
+                <button type="button" class="btn btn-primary btn-lg qz-check" style="width:100%;justify-content:center">
+                  <span class="lang-th">ตรวจสอบคุณสมบัติ</span><span class="lang-en">Check my eligibility</span>
+                </button>
+              </div>
+            ))}
+
+            <!-- fail message -->
+            <div class="qz-fail" id="qzFail" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+              <div>
+                <b><span class="lang-th">ขอบคุณที่สนใจร่วมงานกับ WHAT THE HOUSE</span><span class="lang-en">Thank you for your interest in WHAT THE HOUSE</span></b>
+                <p><span class="lang-th">ขณะนี้คุณสมบัติบางส่วนอาจยังไม่ตรงกับรูปแบบงานที่เราเปิดรับ กรุณาติดตามโอกาสร่วมงานในตำแหน่งอื่นเพิ่มเติมในอนาคต</span><span class="lang-en block">Some of your qualifications may not yet match the roles we're currently recruiting. Please keep an eye out for future opportunities.</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="wiz-card" id="step2" hidden>
+            <div class="wiz-step-tag ok"><span class="lang-th">✓ ผ่านการประเมินเบื้องต้น — ขั้นที่ 2 ใบสมัครฉบับเต็ม</span><span class="lang-en">✓ Pre-qualified — Step 2: full application</span></div>
+            <h3 class="wiz-title"><span class="lang-th">กรอกใบสมัครฉบับเต็ม</span><span class="lang-en">Complete your application</span></h3>
+
+            <form
+              id="careerForm"
+              name="careers"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="company"
+              action="/careers/apply?success=1"
+            >
+              <input type="hidden" name="form-name" value="careers" />
+              <input type="hidden" name="role" id="fRole" />
+              <textarea name="screening_answers" id="fScreening" class="hide-field" tabindex="-1" aria-hidden="true"></textarea>
+              <div class="honey" aria-hidden="true">
+                <label>Company (leave blank): <input name="company" tabindex="-1" autocomplete="off" /></label>
+              </div>
+
+              <div class="form-row">
+                <div class="field">
+                  <label for="cname"><span class="lang-th">ชื่อ-นามสกุล</span><span class="lang-en">Full name</span> <i class="req">*</i></label>
+                  <input type="text" id="cname" name="name" required placeholder="กรอกชื่อ-นามสกุล" />
+                </div>
+                <div class="field">
+                  <label for="cphone"><span class="lang-th">เบอร์โทรศัพท์</span><span class="lang-en">Phone</span> <i class="req">*</i></label>
+                  <input type="tel" id="cphone" name="phone" required placeholder="กรอกเบอร์โทรศัพท์" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="field">
+                  <label for="cemail"><span class="lang-th">อีเมล</span><span class="lang-en">Email</span></label>
+                  <input type="email" id="cemail" name="email" placeholder="กรอกอีเมล" />
+                </div>
+                <div class="field">
+                  <label for="cline"><span class="lang-th">LINE ID</span><span class="lang-en">LINE ID</span></label>
+                  <input type="text" id="cline" name="line_id" placeholder="กรอก LINE ID" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="carea"><span class="lang-th">จังหวัดและพื้นที่ที่รับงานได้</span><span class="lang-en">Provinces / areas you can work in</span> <i class="req">*</i></label>
+                <input type="text" id="carea" name="service_area" required placeholder="เช่น เชียงใหม่ ลำพูน" />
+              </div>
+
+              <div class="field">
+                <label for="cexp"><span class="lang-th">การศึกษาและประสบการณ์โดยย่อ</span><span class="lang-en">Education and experience (brief)</span> <i class="req">*</i></label>
+                <textarea id="cexp" name="experience" required placeholder="เล่าประวัติการศึกษา ประสบการณ์ทำงาน และงานที่เคยรับผิดชอบ"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="field">
+                  <label for="cport"><span class="lang-th">ลิงก์ผลงาน / Portfolio (ถ้ามี)</span><span class="lang-en">Portfolio link (if any)</span></label>
+                  <input type="url" id="cport" name="portfolio" placeholder="เช่น Google Drive, Facebook Page" />
+                </div>
+                <div class="field">
+                  <label for="cref"><span class="lang-th">บุคคลอ้างอิง (ถ้ามี)</span><span class="lang-en">References (if any)</span></label>
+                  <input type="text" id="cref" name="references" placeholder="ชื่อและเบอร์ติดต่อ" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ccert"><span class="lang-th">ใบอนุญาตหรือใบรับรองที่มี (ถ้ามี)</span><span class="lang-en">Licences or certifications (if any)</span></label>
+                <input type="text" id="ccert" name="certificates" placeholder="เช่น ใบรับรองการอบรม, ใบอนุญาตเฉพาะทาง" />
+              </div>
+
+              <!-- engineer-only licence details -->
+              <div class="eng-fields" id="engFields" hidden>
+                <p class="eng-title"><span class="lang-th">ข้อมูลใบอนุญาต กว.</span><span class="lang-en">Engineering licence details</span></p>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="ckwNo"><span class="lang-th">เลขที่ใบอนุญาต</span><span class="lang-en">Licence number</span> <i class="req">*</i></label>
+                    <input type="text" id="ckwNo" name="license_no" placeholder="เลขที่ใบ กว." />
+                  </div>
+                  <div class="field">
+                    <label for="ckwExpire"><span class="lang-th">วันหมดอายุ</span><span class="lang-en">Expiry date</span> <i class="req">*</i></label>
+                    <input type="date" id="ckwExpire" name="license_expiry" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="ckwField"><span class="lang-th">สาขา</span><span class="lang-en">Field</span> <i class="req">*</i></label>
+                    <input type="text" id="ckwField" name="license_field" placeholder="เช่น โยธา ไฟฟ้า เครื่องกล" />
+                  </div>
+                  <div class="field">
+                    <label for="ckwLevel"><span class="lang-th">ระดับ</span><span class="lang-en">Level</span> <i class="req">*</i></label>
+                    <input type="text" id="ckwLevel" name="license_level" placeholder="ภาคี / สามัญ / วุฒิ" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="cavail"><span class="lang-th">วันหรือช่วงเวลาที่สะดวกเริ่มงาน / รับงาน</span><span class="lang-en">When can you start / take work?</span></label>
+                <input type="text" id="cavail" name="availability" placeholder="เช่น เริ่มได้ทันที, รับงานเสาร์-อาทิตย์" />
+              </div>
+
+              <div class="ct-submit-row">
+                <p class="ct-privacy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                  <span>
+                    <span class="lang-th">ข้อมูลของคุณใช้เพื่อการพิจารณาร่วมงานเท่านั้น<br>ไม่มีการเปิดเผยให้บุคคลภายนอก</span>
+                    <span class="lang-en block">Your details are used only for recruitment and never shared externally.</span>
+                  </span>
+                </p>
+                <button type="submit" class="btn btn-primary btn-lg ct-submit">
+                  <span class="lang-th">ส่งใบสมัคร</span><span class="lang-en">Submit application</span>
+                  <svg viewBox="0 0 24 24" width="17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/></svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- success message (after Netlify redirect) -->
+          <div class="wiz-card qz-ok" id="formOk" hidden>
+            <svg viewBox="0 0 24 24" width="30" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.01l-3-3"/></svg>
+            <div>
+              <b><span class="lang-th">ส่งใบสมัครเรียบร้อยแล้ว!</span><span class="lang-en">Application submitted!</span></b>
+              <p><span class="lang-th">ขอบคุณที่สนใจร่วมงานกับเรา ทีมงานจะติดต่อกลับหากคุณสมบัติตรงกับที่เราเปิดรับ</span><span class="lang-en block">Thank you for applying — we'll be in touch if your profile matches what we're looking for.</span></p>
+            </div>
+          </div>
+        </div>
+
+        <p class="apply-back"><a href="/careers">← <span class="lang-th">กลับไปดูรายละเอียดตำแหน่งและคุณสมบัติ</span><span class="lang-en">Back to roles & qualifications</span></a></p>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">มีคำถามก่อนสมัคร?</span><span class="lang-en">Questions before applying?</span></h2>
+          <p><span class="lang-th">ทักมาสอบถามรายละเอียดงาน เงื่อนไข หรือรูปแบบการร่วมงานได้เลย</span><span class="lang-en block">Ask us about the roles, terms, or how partnering works.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href={settings.lineUrl} target="_blank" rel="noopener"><span class="lang-th">ทักทาง LINE</span><span class="lang-en">Chat on LINE</span></a>
+            <a class="btn btn-ghost btn-lg" href={`mailto:${settings.email}?subject=สอบถามการร่วมงาน WHAT THE HOUSE`}><span class="lang-th">ส่งอีเมล</span><span class="lang-en">Email us</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+/* ---------- wizard ---------- */
+.wiz { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.wiz-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; }
+.wiz-step-tag { font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+.wiz-step-tag.ok { color: var(--green-bright); }
+.wiz-title { font-size: 1.25rem; margin: 0 0 20px; }
+
+.role-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
+.role-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
+  background: var(--panel-2); border: 2px solid var(--line); border-radius: var(--radius-sm);
+  padding: 16px; cursor: pointer; font-family: inherit; color: inherit; transition: .18s;
+}
+.role-card:hover { border-color: var(--green); }
+.role-card.active { border-color: var(--green); background: var(--green-soft); }
+.role-ic { width: 38px; height: 38px; border-radius: 10px; background: var(--green-soft); color: var(--green-bright); display: grid; place-items: center; margin-bottom: 6px; }
+.role-ic :global(svg) { width: 19px; height: 19px; }
+.role-card b { color: var(--heading); font-size: .92rem; line-height: 1.3; }
+.role-sub { color: var(--grey); font-size: .76rem; }
+
+.qz-block { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 22px; display: flex; flex-direction: column; gap: 18px; }
+.qz-label { margin: 0 0 10px; font-size: .93rem; color: var(--heading); font-weight: 600; line-height: 1.55; }
+.qz-num { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green-soft); color: var(--green-bright); font-family: var(--mono); font-size: .7rem; font-weight: 700; margin-right: 9px; }
+.qz-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.qz-opt {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  border: 1.5px solid var(--line-2); border-radius: 50px; padding: 8px 15px;
+  background: var(--panel-2); font-size: .88rem; color: var(--body); transition: .15s;
+}
+.qz-opt:hover { border-color: var(--green); }
+.qz-opt input { accent-color: var(--green); margin: 0; }
+.qz-opt:has(input:checked) { border-color: var(--green); background: var(--green-soft); color: var(--heading); }
+.qz-q.unanswered .qz-label { color: #E5484D; }
+.qz-select { max-width: 420px; margin-bottom: 0; }
+.qz-missing { margin: 0; color: #E5484D; font-size: .86rem; }
+
+.qz-fail {
+  margin-top: 20px; display: flex; gap: 14px; align-items: flex-start;
+  background: rgba(229, 72, 77, .08); border: 1px solid rgba(229, 72, 77, .35);
+  border-radius: var(--radius-sm); padding: 18px 20px; color: var(--body);
+}
+.qz-fail svg { width: 26px; height: 26px; flex: none; color: #E5484D; margin-top: 2px; }
+.qz-fail b { display: block; color: var(--heading); margin-bottom: 4px; }
+.qz-fail p { margin: 0; font-size: .9rem; color: var(--grey); line-height: 1.65; }
+
+.qz-ok { display: flex; gap: 14px; align-items: flex-start; border-color: rgba(47, 224, 124, .35); }
+.qz-ok svg { flex: none; color: var(--green-bright); margin-top: 2px; }
+.qz-ok b { display: block; color: var(--heading); font-size: 1.05rem; margin-bottom: 4px; }
+.qz-ok p { margin: 0; color: var(--grey); font-size: .92rem; }
+
+/* form bits shared with contact page conventions */
+.hide-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+#careerForm .field label { font-family: var(--font); font-size: .86rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); margin-bottom: 7px; }
+#careerForm .field .req { color: #E5484D; font-style: normal; }
+#careerForm .field { margin-bottom: 18px; }
+#careerForm .form-row { gap: 16px; }
+#careerForm .field textarea { min-height: 110px; }
+.eng-fields { border: 1px solid rgba(47,224,124,.25); border-radius: var(--radius-sm); background: var(--green-soft); padding: 18px 18px 2px; margin-bottom: 18px; }
+.eng-title { margin: 0 0 14px; font-weight: 700; color: var(--heading); font-size: .92rem; }
+.ct-submit-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 4px; flex-wrap: wrap; }
+.ct-privacy { display: flex; gap: 9px; align-items: flex-start; color: var(--faint); font-size: .78rem; line-height: 1.55; margin: 0; flex: 1; min-width: 200px; }
+.ct-privacy svg { width: 17px; height: 17px; flex: none; margin-top: 1px; color: var(--grey); }
+.ct-submit { min-width: 220px; justify-content: center; }
+
+.apply-back { text-align: center; margin: 26px 0 0; font-size: .92rem; }
+.apply-back a { color: var(--grey); }
+.apply-back a:hover { color: var(--green-bright); }
+
+@media (max-width: 900px) { .role-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .wiz-card { padding: 22px 18px; }
+  .ct-submit { width: 100%; min-width: 0; }
+}
+</style>
+
+<script>
+  (function () {
+    const roleGrid = document.getElementById('roleGrid');
+    if (!roleGrid) return;
+    const roleCards = Array.from(roleGrid.querySelectorAll('.role-card')) as HTMLElement[];
+    const blocks = Array.from(document.querySelectorAll('.qz-block')) as HTMLElement[];
+    const failBox = document.getElementById('qzFail') as HTMLElement;
+    const step2 = document.getElementById('step2') as HTMLElement;
+    const engFields = document.getElementById('engFields') as HTMLElement;
+    const fRole = document.getElementById('fRole') as HTMLInputElement;
+    const fScreening = document.getElementById('fScreening') as HTMLTextAreaElement;
+    const form = document.getElementById('careerForm') as HTMLFormElement;
+
+    const roleNames: Record<string, string> = {
+      inspector: 'ผู้ตรวจบ้าน (Home Inspector)',
+      engineer: 'วิศวกร (Engineer)',
+      contractor: 'ช่าง/ผู้รับเหมา (Contractor)',
+      partner: 'บริษัท/พาร์ตเนอร์ (Company/Partner)',
+    };
+
+    let activeRole = '';
+
+    // engineer licence fields are required only when applying as an engineer
+    function setEngineerMode(on: boolean) {
+      engFields.hidden = !on;
+      engFields.querySelectorAll('input').forEach((i) => { (i as HTMLInputElement).required = on; });
+    }
+
+    roleCards.forEach((card) => card.addEventListener('click', () => {
+      activeRole = card.dataset.role || '';
+      roleCards.forEach((c) => c.classList.toggle('active', c === card));
+      blocks.forEach((b) => { b.hidden = b.dataset.roleQuestions !== activeRole; });
+      failBox.hidden = true;
+      step2.hidden = true;
+      setEngineerMode(activeRole === 'engineer');
+    }));
+
+    document.querySelectorAll('.qz-check').forEach((btn) => btn.addEventListener('click', () => {
+      const block = (btn as HTMLElement).closest('.qz-block') as HTMLElement;
+      const qEls = Array.from(block.querySelectorAll('.qz-q')) as HTMLElement[];
+      const missingMsg = block.querySelector('.qz-missing') as HTMLElement;
+      let allAnswered = true;
+      let allPass = true;
+      const summary: string[] = [];
+
+      qEls.forEach((qEl) => {
+        qEl.classList.remove('unanswered');
+        const radio = qEl.querySelector('input[type=radio]:checked') as HTMLInputElement | null;
+        const select = qEl.querySelector('select') as HTMLSelectElement | null;
+        let pass: string | undefined;
+        let answerTh = '';
+
+        if (select) {
+          const opt = select.selectedOptions[0];
+          if (!opt || !opt.value) { allAnswered = false; qEl.classList.add('unanswered'); return; }
+          pass = opt.dataset.pass;
+          answerTh = opt.dataset.th || opt.textContent || '';
+        } else if (radio) {
+          pass = radio.dataset.pass;
+          answerTh = radio.dataset.th || '';
+        } else {
+          allAnswered = false; qEl.classList.add('unanswered'); return;
+        }
+
+        if (pass !== '1') allPass = false;
+        const label = qEl.querySelector('.qz-label .lang-th');
+        summary.push((label ? label.textContent : '') + ' => ' + answerTh);
+      });
+
+      if (!allAnswered) { missingMsg.hidden = false; failBox.hidden = true; step2.hidden = true; return; }
+      missingMsg.hidden = true;
+
+      if (allPass) {
+        failBox.hidden = true;
+        fRole.value = roleNames[activeRole] || activeRole;
+        fScreening.value = summary.join('\n');
+        step2.hidden = false;
+        step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        step2.hidden = true;
+        failBox.hidden = false;
+        failBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }));
+
+    // success message after Netlify redirect
+    if (window.location.search.includes('success=1')) {
+      const ok = document.getElementById('formOk');
+      if (ok) ok.hidden = false;
+      document.getElementById('apply')?.scrollIntoView();
+    }
+
+    // honeypot guard
+    if (form) form.addEventListener('submit', (e) => {
+      const hp = form.querySelector('input[name="company"]') as HTMLInputElement;
+      if (hp && hp.value) e.preventDefault();
+    });
+  })();
+</script>
