@@ -25,6 +25,12 @@ const roleDefs = [
     title: { th: "วิศวกร", en: "Engineer" },
     sub: { th: "ร่วมตรวจ / รับรองงาน", en: "Co-inspect / certify" },
   },
+  {
+    id: "architect",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="4" r="1.6"/><path d="M12 5.6V9"/><path d="M11 9L5 20"/><path d="M13 9l6 11"/><path d="M8.2 15.5h7.6"/></svg>`,
+    title: { th: "สถาปนิก", en: "Architect" },
+    sub: { th: "ตรวจงานสถาปัตย์ / ระหว่างก่อสร้าง", en: "Architectural-phase inspection" },
+  },
 ];
 
 const expOpts = (minLabelTh: string, minLabelEn: string, passFrom: number) => [
@@ -65,11 +71,31 @@ const questions: Record<string, any[]> = {
     { q: { th: "มีประสบการณ์เกี่ยวกับอาคาร บ้านพักอาศัย หรืองานระบบที่เกี่ยวข้องหรือไม่?", en: "Experience with buildings, residential homes or related systems?" }, type: "radio", opts: YN("มี", "Yes", "ยังไม่มี", "Not yet") },
     { q: { th: "สามารถรับงานในเชียงใหม่หรือจังหวัดใกล้เคียงได้หรือไม่?", en: "Can you take work in Chiang Mai or nearby provinces?" }, type: "radio", opts: YN("ได้", "Yes", "ไม่สะดวก", "No") },
   ],
+  architect: [
+    { q: { th: "มีใบอนุญาตประกอบวิชาชีพสถาปัตยกรรมควบคุมที่ยังไม่หมดอายุหรือไม่?", en: "Do you hold a valid (unexpired) professional architect licence?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี / หมดอายุ", "No / expired") },
+    { q: { th: "สาขาของใบอนุญาต", en: "Licensed field" }, type: "select", opts: [
+      { v: "arch", th: "สถาปัตยกรรมหลัก", en: "Architecture", pass: true },
+      { v: "interior", th: "สถาปัตยกรรมภายในและมัณฑนศิลป์", en: "Interior architecture", pass: true },
+      { v: "landscape", th: "ภูมิสถาปัตยกรรม", en: "Landscape architecture", pass: true },
+      { v: "urban", th: "สถาปัตยกรรมผังเมือง", en: "Urban architecture", pass: true },
+      { v: "other", th: "สาขาอื่น", en: "Other", pass: true },
+    ] },
+    { q: { th: "ระดับใบอนุญาต", en: "Licence level" }, type: "select", opts: [
+      { v: "associate", th: "ภาคีสถาปนิก", en: "Associate Architect", pass: true },
+      { v: "professional", th: "สามัญสถาปนิก", en: "Professional Architect", pass: true },
+      { v: "senior", th: "วุฒิสถาปนิก", en: "Senior Architect", pass: true },
+    ] },
+    { q: { th: "ใบอนุญาตตรงกับสาขาและประเภทงานที่จะรับผิดชอบหรือไม่?", en: "Does your licence match the field and type of work you would take on?" }, type: "radio", opts: YN("ตรง", "Yes", "ไม่ตรง / ไม่แน่ใจ", "No / unsure") },
+    { q: { th: "ยินยอมให้บริษัทตรวจสอบสถานะใบอนุญาตหรือไม่?", en: "Do you consent to the company verifying your licence status?" }, type: "radio", opts: YN("ยินยอม", "Yes", "ไม่ยินยอม", "No") },
+    { q: { th: "อ่านแบบสถาปัตยกรรมและเข้าใจรายละเอียดงานก่อสร้างได้ดีหรือไม่?", en: "Can you read architectural drawings and understand construction detailing well?" }, type: "radio", opts: YN("ได้", "Yes", "ยังไม่ได้", "Not yet") },
+    { q: { th: "มีประสบการณ์งานออกแบบหรือควบคุมงานสถาปัตยกรรม บ้านพักอาศัย หรืออาคารหรือไม่?", en: "Experience in architectural design or supervision of homes or buildings?" }, type: "radio", opts: YN("มี", "Yes", "ยังไม่มี", "Not yet") },
+    { q: { th: "สามารถรับงานในเชียงใหม่หรือจังหวัดใกล้เคียงได้หรือไม่?", en: "Can you take work in Chiang Mai or nearby provinces?" }, type: "radio", opts: YN("ได้", "Yes", "ไม่สะดวก", "No") },
+  ],
 };
 ---
 <BaseLayout
   title="สมัครร่วมงาน | ประเมินคุณสมบัติและใบสมัคร | WHAT THE HOUSE"
-  description="สมัครร่วมงานกับ WHAT THE HOUSE ใน 2 ขั้นตอน — ประเมินคุณสมบัติเบื้องต้น แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน และวิศวกร | Apply to join WHAT THE HOUSE"
+  description="สมัครร่วมงานกับ WHAT THE HOUSE ใน 2 ขั้นตอน — ประเมินคุณสมบัติเบื้องต้น แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน วิศวกร และสถาปนิก | Apply to join WHAT THE HOUSE"
 >
   <Header />
   <main>
@@ -214,11 +240,11 @@ const questions: Record<string, any[]> = {
 
               <!-- engineer-only licence details -->
               <div class="eng-fields" id="engFields" hidden>
-                <p class="eng-title"><span class="lang-th">ข้อมูลใบอนุญาต กว.</span><span class="lang-en">Engineering licence details</span></p>
+                <p class="eng-title"><span class="lang-th">ข้อมูลใบอนุญาตประกอบวิชาชีพ (วิศวกร / สถาปนิก)</span><span class="lang-en">Professional licence details (engineer / architect)</span></p>
                 <div class="form-row">
                   <div class="field">
                     <label for="ckwNo"><span class="lang-th">เลขที่ใบอนุญาต</span><span class="lang-en">Licence number</span> <i class="req">*</i></label>
-                    <input type="text" id="ckwNo" name="license_no" placeholder="เลขที่ใบ กว." />
+                    <input type="text" id="ckwNo" name="license_no" placeholder="เลขที่ใบอนุญาต" />
                   </div>
                   <div class="field">
                     <label for="ckwExpire"><span class="lang-th">วันหมดอายุ</span><span class="lang-en">Expiry date</span> <i class="req">*</i></label>
@@ -298,7 +324,7 @@ const questions: Record<string, any[]> = {
 .wiz-step-tag.ok { color: var(--green-bright); }
 .wiz-title { font-size: 1.25rem; margin: 0 0 20px; }
 
-.role-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
+.role-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
 .role-card {
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
   background: var(--panel-2); border: 2px solid var(--line); border-radius: var(--radius-sm);
@@ -382,12 +408,14 @@ const questions: Record<string, any[]> = {
     const roleNames: Record<string, string> = {
       inspector: 'ผู้ตรวจบ้าน (Home Inspector)',
       engineer: 'วิศวกร (Engineer)',
+      architect: 'สถาปนิก (Architect)',
     };
 
     let activeRole = '';
 
-    // engineer licence fields are required only when applying as an engineer
-    function setEngineerMode(on: boolean) {
+    // licence detail fields are required only for the licensed professions
+    const licenceRoles = ['engineer', 'architect'];
+    function setLicenceMode(on: boolean) {
       engFields.hidden = !on;
       engFields.querySelectorAll('input').forEach((i) => { (i as HTMLInputElement).required = on; });
     }
@@ -398,7 +426,7 @@ const questions: Record<string, any[]> = {
       blocks.forEach((b) => { b.hidden = b.dataset.roleQuestions !== activeRole; });
       failBox.hidden = true;
       step2.hidden = true;
-      setEngineerMode(activeRole === 'engineer');
+      setLicenceMode(licenceRoles.includes(activeRole));
     }));
 
     document.querySelectorAll('.qz-check').forEach((btn) => btn.addEventListener('click', () => {
