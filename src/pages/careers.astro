@@ -75,37 +75,11 @@ const groups = [
     },
     note: { th: "กลุ่มนี้ต้องมีใบ กว. เพราะเป็นบทบาทที่เกี่ยวข้องกับความรับผิดชอบทางวิชาชีพโดยตรง", en: "This group must hold an engineering licence — the role carries direct professional responsibility." },
   },
-  {
-    no: "03",
-    title: { th: "ช่าง ผู้รับเหมา หรือพาร์ตเนอร์บริการ", en: "Tradespeople, Contractors & Service Partners" },
-    role: { th: "เช่น งานต่อเติม หลังคา กันซึม ไฟฟ้า ประปา แอร์ ผ้าม่าน บิวต์อิน หรือบริการเกี่ยวกับบ้าน", en: "e.g. extensions, roofing, waterproofing, electrical, plumbing, air-con, curtains, built-ins and other home services." },
-    reqs: {
-      th: [
-        "มีประสบการณ์เฉพาะทางอย่างน้อย 3 ปี",
-        "มีผลงานจริงหรือบุคคลอ้างอิงที่ตรวจสอบได้",
-        "ออกใบเสนอราคาและรายละเอียดขอบเขตงานได้ชัดเจน",
-        "มีการรับประกันผลงาน",
-        "มีผู้รับผิดชอบหน้างาน",
-        "ยอมรับมาตรฐานการบริการของ WHAT THE HOUSE",
-        "งานที่จำเป็นต้องใช้ใบอนุญาต ต้องมีบุคลากรที่มีใบอนุญาตตรงตามประเภทงาน",
-      ],
-      en: [
-        "At least 3 years of specialist experience",
-        "Verifiable past work or references",
-        "Able to issue clear quotations with a defined scope of work",
-        "Work is covered by a warranty",
-        "A responsible person is present on site",
-        "Accept WHAT THE HOUSE service standards",
-        "Where the work legally requires a licence, licensed personnel must match the work type",
-      ],
-    },
-    note: { th: "กลุ่มนี้ไม่ใช้ใบ กว. เป็นเกณฑ์เหมารวม — พิจารณาจากความเชี่ยวชาญ ผลงาน และความน่าเชื่อถือเป็นหลัก", en: "No blanket licence requirement here — we assess expertise, past work and credibility." },
-  },
 ];
 ---
 <BaseLayout
-  title="ร่วมงานกับเรา | ผู้ตรวจบ้าน วิศวกร ช่าง พาร์ตเนอร์ | WHAT THE HOUSE"
-  description="ร่วมทีม WHAT THE HOUSE — เปิดรับผู้ตรวจบ้าน วิศวกรมีใบ กว. ช่าง ผู้รับเหมา และพาร์ตเนอร์บริการ ดูคุณสมบัติแต่ละกลุ่มและสมัครออนไลน์ | Careers at WHAT THE HOUSE Chiang Mai"
+  title="ร่วมงานกับเรา | ผู้ตรวจบ้าน และวิศวกร | WHAT THE HOUSE"
+  description="ร่วมทีม WHAT THE HOUSE — เปิดรับผู้ตรวจบ้าน และวิศวกรมีใบ กว. ดูคุณสมบัติแต่ละกลุ่มและสมัครออนไลน์ | Careers at WHAT THE HOUSE Chiang Mai"
 >
   <Header />
   <main>
@@ -116,7 +90,7 @@ const groups = [
         <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ร่วมงานกับเรา</span><span class="lang-en">Careers</span></p>
         <span class="eyebrow"><span class="lang-th">ร่วมงานกับเรา</span><span class="lang-en">Careers</span></span>
         <h1><span class="lang-th">มาสร้างมาตรฐาน<br>การตรวจบ้านไปด้วยกัน</span><span class="lang-en">Build the standard of home inspection with us</span></h1>
-        <p><span class="lang-th">เราเปิดรับทั้งผู้ตรวจบ้าน วิศวกร ช่าง ผู้รับเหมา และพาร์ตเนอร์บริการ — ดูคุณสมบัติของแต่ละกลุ่มด้านล่าง แล้วสมัครออนไลน์ได้เลย</span><span class="lang-en block">We welcome inspectors, engineers, tradespeople, contractors and service partners — check each group's qualifications below, then apply online.</span></p>
+        <p><span class="lang-th">เราเปิดรับทั้งผู้ตรวจบ้านและวิศวกร — ดูคุณสมบัติของแต่ละกลุ่มด้านล่าง แล้วสมัครออนไลน์ได้เลย</span><span class="lang-en block">We welcome home inspectors and engineers — check each group's qualifications below, then apply online.</span></p>
         <div class="btns" style="justify-content:center;margin-top:26px">
           <a class="btn btn-primary btn-lg" href="/careers/apply"><span class="lang-th">สมัครร่วมงาน</span><span class="lang-en">Apply now</span></a>
         </div>
@@ -157,12 +131,12 @@ const groups = [
       </div>
     </section>
 
-    <!-- ============ 3 RECRUITMENT GROUPS ============ -->
+    <!-- ============ RECRUITMENT GROUPS ============ -->
     <section class="section">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow"><span class="lang-th">กลุ่มที่เปิดรับ</span><span class="lang-en">Who we're looking for</span></span>
-          <h2 class="section-title"><span class="lang-th">เปิดรับร่วมงาน 3 กลุ่มหลัก</span><span class="lang-en">3 main groups we recruit</span></h2>
+          <h2 class="section-title"><span class="lang-th">เปิดรับร่วมงาน 2 กลุ่มหลัก</span><span class="lang-en">2 main groups we recruit</span></h2>
         </div>
         <div class="job-list">
           {groups.map((g) => (

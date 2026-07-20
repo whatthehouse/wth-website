@@ -25,18 +25,6 @@ const roleDefs = [
     title: { th: "วิศวกร", en: "Engineer" },
     sub: { th: "ร่วมตรวจ / รับรองงาน", en: "Co-inspect / certify" },
   },
-  {
-    id: "contractor",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2l6 6"/><path d="M3 17l11-11 4 4L7 21H3z"/></svg>`,
-    title: { th: "ช่าง / ผู้รับเหมา", en: "Trades / Contractor" },
-    sub: { th: "รับงานเฉพาะทาง", en: "Specialist work" },
-  },
-  {
-    id: "partner",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1M9 13h1M14 9h1M14 13h1M11 21v-4h2v4"/></svg>`,
-    title: { th: "บริษัท / พาร์ตเนอร์", en: "Company / Partner" },
-    sub: { th: "พาร์ตเนอร์บริการเกี่ยวกับบ้าน", en: "Home-service partner" },
-  },
 ];
 
 const expOpts = (minLabelTh: string, minLabelEn: string, passFrom: number) => [
@@ -45,16 +33,6 @@ const expOpts = (minLabelTh: string, minLabelEn: string, passFrom: number) => [
   { v: "3-5", th: "3–5 ปี", en: "3–5 years", pass: passFrom <= 3 },
   { v: "5-10", th: "5–10 ปี", en: "5–10 years", pass: true },
   { v: "10+", th: "มากกว่า 10 ปี", en: "Over 10 years", pass: true },
-];
-
-const tradeOpts = [
-  { v: "extension", th: "ต่อเติม / โครงสร้าง", en: "Extensions / structural", pass: true },
-  { v: "roof", th: "หลังคา / กันซึม", en: "Roofing / waterproofing", pass: true },
-  { v: "electric", th: "ไฟฟ้า", en: "Electrical", pass: true },
-  { v: "plumbing", th: "ประปา / สุขาภิบาล", en: "Plumbing / sanitation", pass: true },
-  { v: "aircon", th: "แอร์ / ระบบปรับอากาศ", en: "Air-conditioning", pass: true },
-  { v: "builtin", th: "ผ้าม่าน / บิวต์อิน / ตกแต่ง", en: "Curtains / built-ins / décor", pass: true },
-  { v: "other", th: "บริการเกี่ยวกับบ้านอื่น ๆ", en: "Other home services", pass: true },
 ];
 
 const questions: Record<string, any[]> = {
@@ -87,39 +65,11 @@ const questions: Record<string, any[]> = {
     { q: { th: "มีประสบการณ์เกี่ยวกับอาคาร บ้านพักอาศัย หรืองานระบบที่เกี่ยวข้องหรือไม่?", en: "Experience with buildings, residential homes or related systems?" }, type: "radio", opts: YN("มี", "Yes", "ยังไม่มี", "Not yet") },
     { q: { th: "สามารถรับงานในเชียงใหม่หรือจังหวัดใกล้เคียงได้หรือไม่?", en: "Can you take work in Chiang Mai or nearby provinces?" }, type: "radio", opts: YN("ได้", "Yes", "ไม่สะดวก", "No") },
   ],
-  contractor: [
-    { q: { th: "งานที่เชี่ยวชาญเป็นพิเศษ", en: "Your specialist trade" }, type: "select", opts: tradeOpts },
-    { q: { th: "มีประสบการณ์เฉพาะทางด้านนี้กี่ปี?", en: "Years of specialist experience in this trade?" }, type: "radio", opts: expOpts("3 ปี", "3 years", 3) },
-    { q: { th: "มีผลงานจริงหรือบุคคลอ้างอิงที่ตรวจสอบได้หรือไม่?", en: "Do you have verifiable past work or references?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
-    { q: { th: "ออกใบเสนอราคาพร้อมขอบเขตงานชัดเจน และมีการรับประกันผลงานหรือไม่?", en: "Can you issue clear quotations with a defined scope, and warranty your work?" }, type: "radio", opts: YN("ได้ / มีรับประกัน", "Yes", "ไม่ได้ / ไม่มี", "No") },
-    { q: { th: "มีผู้รับผิดชอบหน้างานหรือไม่?", en: "Is a responsible person present on site?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
-    { q: { th: "งานของคุณจำเป็นต้องใช้ใบอนุญาตหรือไม่ และมีบุคลากรที่มีใบตรงตามประเภทงานหรือไม่?", en: "Does your work legally require a licence — and do you have licensed personnel matching the work type?" }, type: "radio", opts: [
-      { v: "has", th: "จำเป็น และมีบุคลากรที่มีใบ", en: "Required — and we have licensed personnel", pass: true },
-      { v: "na", th: "งานไม่จำเป็นต้องใช้ใบอนุญาต", en: "Licence not required for this work", pass: true },
-      { v: "none", th: "จำเป็น แต่ยังไม่มีบุคลากรที่มีใบ", en: "Required, but no licensed personnel yet", pass: false },
-    ] },
-    { q: { th: "ยอมรับมาตรฐานการบริการของ WHAT THE HOUSE หรือไม่?", en: "Do you accept WHAT THE HOUSE service standards?" }, type: "radio", opts: YN("ยอมรับ", "Yes", "ไม่ยอมรับ", "No") },
-    { q: { th: "เคยมีประวัติทิ้งงานหรือข้อพิพาทร้ายแรงหรือไม่?", en: "Any history of abandoning work or serious disputes?" }, type: "radio", opts: YN("ไม่เคย", "Never", "เคย", "Yes", true) },
-  ],
-  partner: [
-    { q: { th: "ประเภทบริการหลักของบริษัท / ทีม", en: "Your company / team's main service" }, type: "select", opts: tradeOpts },
-    { q: { th: "ดำเนินกิจการหรือมีประสบการณ์ทีมมากี่ปี?", en: "Years the business or team has been operating?" }, type: "radio", opts: expOpts("3 ปี", "3 years", 3) },
-    { q: { th: "มีผลงานจริงหรือลูกค้าอ้างอิงที่ตรวจสอบได้หรือไม่?", en: "Verifiable past work or client references?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
-    { q: { th: "ออกใบเสนอราคาพร้อมขอบเขตงานชัดเจน และมีการรับประกันผลงานหรือไม่?", en: "Clear quotations with defined scope, and warrantied work?" }, type: "radio", opts: YN("ได้ / มีรับประกัน", "Yes", "ไม่ได้ / ไม่มี", "No") },
-    { q: { th: "มีทีมงานและผู้รับผิดชอบหน้างานประจำหรือไม่?", en: "Do you have a standing team and a responsible person on site?" }, type: "radio", opts: YN("มี", "Yes", "ไม่มี", "No") },
-    { q: { th: "งานของบริษัทจำเป็นต้องใช้ใบอนุญาตหรือไม่ และมีบุคลากรที่มีใบตรงตามประเภทงานหรือไม่?", en: "Does the work legally require a licence — and do you have licensed personnel matching the work type?" }, type: "radio", opts: [
-      { v: "has", th: "จำเป็น และมีบุคลากรที่มีใบ", en: "Required — and we have licensed personnel", pass: true },
-      { v: "na", th: "งานไม่จำเป็นต้องใช้ใบอนุญาต", en: "Licence not required for this work", pass: true },
-      { v: "none", th: "จำเป็น แต่ยังไม่มีบุคลากรที่มีใบ", en: "Required, but no licensed personnel yet", pass: false },
-    ] },
-    { q: { th: "ยอมรับมาตรฐานการบริการของ WHAT THE HOUSE หรือไม่?", en: "Do you accept WHAT THE HOUSE service standards?" }, type: "radio", opts: YN("ยอมรับ", "Yes", "ไม่ยอมรับ", "No") },
-    { q: { th: "เคยมีประวัติทิ้งงานหรือข้อพิพาทร้ายแรงหรือไม่?", en: "Any history of abandoning work or serious disputes?" }, type: "radio", opts: YN("ไม่เคย", "Never", "เคย", "Yes", true) },
-  ],
 };
 ---
 <BaseLayout
   title="สมัครร่วมงาน | ประเมินคุณสมบัติและใบสมัคร | WHAT THE HOUSE"
-  description="สมัครร่วมงานกับ WHAT THE HOUSE ใน 2 ขั้นตอน — ประเมินคุณสมบัติเบื้องต้น แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน วิศวกร ช่าง ผู้รับเหมา และพาร์ตเนอร์บริการ | Apply to join WHAT THE HOUSE"
+  description="สมัครร่วมงานกับ WHAT THE HOUSE ใน 2 ขั้นตอน — ประเมินคุณสมบัติเบื้องต้น แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน และวิศวกร | Apply to join WHAT THE HOUSE"
 >
   <Header />
   <main>
@@ -327,7 +277,7 @@ const questions: Record<string, any[]> = {
       <div class="container">
         <div class="cta-band">
           <h2><span class="lang-th">มีคำถามก่อนสมัคร?</span><span class="lang-en">Questions before applying?</span></h2>
-          <p><span class="lang-th">ทักมาสอบถามรายละเอียดงาน เงื่อนไข หรือรูปแบบการร่วมงานได้เลย</span><span class="lang-en block">Ask us about the roles, terms, or how partnering works.</span></p>
+          <p><span class="lang-th">ทักมาสอบถามรายละเอียดงานและเงื่อนไขการร่วมงานได้เลย</span><span class="lang-en block">Ask us about the roles and terms.</span></p>
           <div class="btns">
             <a class="btn btn-primary btn-lg" href={settings.lineUrl} target="_blank" rel="noopener"><span class="lang-th">ทักทาง LINE</span><span class="lang-en">Chat on LINE</span></a>
             <a class="btn btn-ghost btn-lg" href={`mailto:${settings.email}?subject=สอบถามการร่วมงาน WHAT THE HOUSE`}><span class="lang-th">ส่งอีเมล</span><span class="lang-en">Email us</span></a>
@@ -348,7 +298,7 @@ const questions: Record<string, any[]> = {
 .wiz-step-tag.ok { color: var(--green-bright); }
 .wiz-title { font-size: 1.25rem; margin: 0 0 20px; }
 
-.role-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
+.role-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
 .role-card {
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
   background: var(--panel-2); border: 2px solid var(--line); border-radius: var(--radius-sm);
@@ -432,8 +382,6 @@ const questions: Record<string, any[]> = {
     const roleNames: Record<string, string> = {
       inspector: 'ผู้ตรวจบ้าน (Home Inspector)',
       engineer: 'วิศวกร (Engineer)',
-      contractor: 'ช่าง/ผู้รับเหมา (Contractor)',
-      partner: 'บริษัท/พาร์ตเนอร์ (Company/Partner)',
     };
 
     let activeRole = '';
