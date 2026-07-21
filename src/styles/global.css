@@ -119,15 +119,18 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line);
 }
+/* header bar runs a touch wider than the 1180 body so 10 Thai nav items get
+   breathing room and the brand can't collide with the first link */
+.site-header>.container{max-width:1240px}
 .nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:14px}
 .brand{display:flex;align-items:center;gap:11px;font-weight:700;color:var(--heading)}
 .brand .logo{height:52px;width:auto;flex:none;object-fit:contain}
 .brand .brand-text{display:flex;flex-direction:column;line-height:1.05}
 .brand .brand-text b{font-size:1rem;letter-spacing:-.01em;white-space:nowrap}
 .brand .brand-text span{font-family:var(--mono);font-size:.56rem;letter-spacing:.22em;color:var(--faint);font-weight:500;text-transform:uppercase;margin-top:2px;white-space:nowrap}
-.nav-links{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
+.nav-links{display:flex;align-items:center;gap:1px;list-style:none;margin:0;padding:0}
 .nav-links a{
-  padding:8px 9px;border-radius:8px;font-weight:500;font-size:.83rem;color:var(--grey);
+  padding:8px 7px;border-radius:8px;font-weight:500;font-size:.8rem;color:var(--grey);
   white-space:nowrap;transition:.15s;
 }
 .nav-links a:hover,.nav-links a.active{color:var(--green-bright);background:rgba(255,255,255,.04)}
@@ -565,8 +568,9 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   .calc-wrap{grid-template-columns:1fr}
 }
 /* collapse the horizontal nav to a burger before the 10 items run out of room
-   (raised from 1100 to 1180 when the Careers item was added — Thai labels are wide) */
-@media(max-width:1180px){
+   (raised 1100 -> 1180 -> 1220 as items were added — Thai labels are wide and
+   the brand text was overlapping the first link) */
+@media(max-width:1200px){
   .nav-links,.nav-cta{display:none}
   .nav-links.open{
     display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;
