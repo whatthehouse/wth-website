@@ -4,22 +4,22 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import settings from '../data/settings.json';
 
-// ---------- team levels ----------
-const levels = [
+// ---------- team roles: the right expertise for each job ----------
+const roles = [
   {
-    tag: "LV.1",
-    title: { th: "Inspector", en: "Inspector" },
-    desc: { th: "ผู้ตรวจบ้านร่วมทีม ไม่จำเป็นต้องมีใบ กว. แต่ต้องผ่านการอบรมและทดสอบมาตรฐานของบริษัท", en: "Team inspector — no engineering licence required, but must pass our training and standards test." },
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
+    title: { th: "ผู้ตรวจบ้าน", en: "Home Inspector" },
+    desc: { th: "ตรวจงานหน้างานอย่างละเอียดครบทุกจุดตามมาตรฐานของบริษัท ผ่านการอบรมและทดสอบก่อนลงพื้นที่จริง", en: "Thorough, standardised on-site inspection — trained and tested before real fieldwork." },
   },
   {
-    tag: "LV.2",
-    title: { th: "Senior Inspector", en: "Senior Inspector" },
-    desc: { th: "ผู้ตรวจที่มีประสบการณ์สูง หรือมีใบประกอบวิชาชีพ/ใบรับรองที่เกี่ยวข้อง", en: "Experienced inspector, or one holding a relevant professional licence or certification." },
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="4" r="1.6"/><path d="M12 5.6V9"/><path d="M11 9L5 20"/><path d="M13 9l6 11"/><path d="M8.2 15.5h7.6"/></svg>`,
+    title: { th: "สถาปนิก", en: "Architect" },
+    desc: { th: "ดูแลงานสถาปัตยกรรมและงานตกแต่ง ถนัดเป็นพิเศษกับการตรวจช่วงงานสถาปัตย์ระหว่างก่อสร้างและความสอดคล้องกับแบบ", en: "Architectural and finishing work — especially strong on in-construction architectural checks and conformance to the design." },
   },
   {
-    tag: "LV.3",
-    title: { th: "Professional Engineer", en: "Professional Engineer" },
-    desc: { th: "วิศวกรมีใบ กว. รับผิดชอบงานวิเคราะห์ทางวิศวกรรมและการรับรองเฉพาะทาง", en: "Licensed engineer responsible for engineering analysis and formal certification work." },
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>`,
+    title: { th: "วิศวกร", en: "Engineer" },
+    desc: { th: "รับผิดชอบงานที่ต้องใช้การวิเคราะห์เชิงวิศวกรรมและการรับรองเฉพาะทางในขอบเขตที่กฎหมายกำหนด", en: "Work needing engineering analysis and formal certification within the scope defined by law." },
   },
 ];
 
@@ -55,28 +55,6 @@ const groups = [
   },
   {
     no: "02",
-    title: { th: "วิศวกรร่วมตรวจหรือรับรองงาน", en: "Co-inspecting / Certifying Engineer" },
-    role: { th: "งานที่ต้องใช้การวิเคราะห์ทางวิศวกรรม การให้ความเห็นเฉพาะทาง หรือการลงนามรับรองในขอบเขตที่กฎหมายกำหนด", en: "Work requiring engineering analysis, specialist opinions, or formal sign-off within the scope defined by law." },
-    reqs: {
-      th: [
-        "มีใบอนุญาตประกอบวิชาชีพวิศวกรรมควบคุม (กว.) ที่ยังไม่หมดอายุ",
-        "ใบอนุญาตตรงกับสาขาและประเภทงานที่รับผิดชอบ",
-        "แสดงเลขที่ใบอนุญาต ระดับ สาขา และวันหมดอายุได้",
-        "ยินยอมให้บริษัทตรวจสอบสถานะใบอนุญาต",
-        "มีประสบการณ์เกี่ยวกับอาคาร บ้านพักอาศัย หรืองานระบบที่เกี่ยวข้อง",
-      ],
-      en: [
-        "Hold a valid (unexpired) professional engineering licence",
-        "Licence matches the field and type of work you will be responsible for",
-        "Able to provide licence number, level, field and expiry date",
-        "Consent to the company verifying your licence status",
-        "Experience with buildings, residential homes or related systems",
-      ],
-    },
-    note: { th: "กลุ่มนี้ต้องมีใบ กว. เพราะเป็นบทบาทที่เกี่ยวข้องกับความรับผิดชอบทางวิชาชีพโดยตรง", en: "This group must hold an engineering licence — the role carries direct professional responsibility." },
-  },
-  {
-    no: "03",
     title: { th: "สถาปนิกร่วมตรวจงานสถาปัตยกรรม", en: "Co-inspecting Architect" },
     role: { th: "ตรวจงานสถาปัตยกรรมและงานตกแต่ง โดยเฉพาะช่วงงานสถาปัตย์ระหว่างก่อสร้าง ฟังก์ชันการใช้งาน และความสอดคล้องกับแบบ", en: "Inspect architectural and finishing work — especially the architectural phase during construction, functional use, and conformance to the design." },
     reqs: {
@@ -98,6 +76,28 @@ const groups = [
       ],
     },
     note: { th: "กลุ่มนี้ต้องมีใบอนุญาตวิชาชีพสถาปนิก — เหมาะกับงานตรวจช่วงสถาปัตยกรรมและระหว่างก่อสร้าง ซึ่งสถาปนิกมีความเข้าใจเป็นพิเศษ", en: "This group must hold an architect licence — a strong fit for architectural-phase and in-construction inspection, where architects bring particular insight." },
+  },
+  {
+    no: "03",
+    title: { th: "วิศวกรร่วมตรวจหรือรับรองงาน", en: "Co-inspecting / Certifying Engineer" },
+    role: { th: "งานที่ต้องใช้การวิเคราะห์ทางวิศวกรรม การให้ความเห็นเฉพาะทาง หรือการลงนามรับรองในขอบเขตที่กฎหมายกำหนด", en: "Work requiring engineering analysis, specialist opinions, or formal sign-off within the scope defined by law." },
+    reqs: {
+      th: [
+        "มีใบอนุญาตประกอบวิชาชีพวิศวกรรมควบคุม (กว.) ที่ยังไม่หมดอายุ",
+        "ใบอนุญาตตรงกับสาขาและประเภทงานที่รับผิดชอบ",
+        "แสดงเลขที่ใบอนุญาต ระดับ สาขา และวันหมดอายุได้",
+        "ยินยอมให้บริษัทตรวจสอบสถานะใบอนุญาต",
+        "มีประสบการณ์เกี่ยวกับอาคาร บ้านพักอาศัย หรืองานระบบที่เกี่ยวข้อง",
+      ],
+      en: [
+        "Hold a valid (unexpired) professional engineering licence",
+        "Licence matches the field and type of work you will be responsible for",
+        "Able to provide licence number, level, field and expiry date",
+        "Consent to the company verifying your licence status",
+        "Experience with buildings, residential homes or related systems",
+      ],
+    },
+    note: { th: "กลุ่มนี้ต้องมีใบ กว. เพราะเป็นบทบาทที่เกี่ยวข้องกับความรับผิดชอบทางวิชาชีพโดยตรง", en: "This group must hold an engineering licence — the role carries direct professional responsibility." },
   },
 ];
 ---
@@ -136,19 +136,20 @@ const groups = [
       </div>
     </section>
 
-    <!-- ============ TEAM LEVELS ============ -->
+    <!-- ============ TEAM ROLES (right expertise for the job) ============ -->
     <section class="section soft">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">โครงสร้างทีม</span><span class="lang-en">Team structure</span></span>
-          <h2 class="section-title"><span class="lang-th">ทีมของเราแบ่งเป็น 3 ระดับ</span><span class="lang-en">Our team has 3 levels</span></h2>
+          <span class="eyebrow"><span class="lang-th">ทีมของเรา</span><span class="lang-en">Our team</span></span>
+          <h2 class="section-title"><span class="lang-th">เลือกคนให้เหมาะกับงาน</span><span class="lang-en">The right expertise for every job</span></h2>
+          <p class="section-sub"><span class="lang-th">แต่ละงานมีผู้เชี่ยวชาญที่เหมาะกับมันดูแล — ตั้งแต่ผู้ตรวจบ้าน สถาปนิก ไปจนถึงวิศวกร</span><span class="lang-en block">Every job is handled by the specialist best suited to it — from inspectors and architects to engineers.</span></p>
         </div>
         <div class="lv-grid">
-          {levels.map((l) => (
+          {roles.map((r) => (
             <div class="lv-card">
-              <span class="lv-tag">{l.tag}</span>
-              <h3>{l.title.th}</h3>
-              <p><span class="lang-th">{l.desc.th}</span><span class="lang-en block">{l.desc.en}</span></p>
+              <span class="lv-ic" set:html={r.icon} />
+              <h3><span class="lang-th">{r.title.th}</span><span class="lang-en">{r.title.en}</span></h3>
+              <p><span class="lang-th">{r.desc.th}</span><span class="lang-en block">{r.desc.en}</span></p>
             </div>
           ))}
         </div>
@@ -200,10 +201,12 @@ const groups = [
 </BaseLayout>
 
 <style>
-/* ---------- team levels ---------- */
+/* ---------- team roles ---------- */
+.section-sub { color: var(--grey); font-size: 1rem; margin: .6em auto 0; max-width: 620px; }
 .lv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .lv-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; position: relative; }
-.lv-tag { font-family: var(--mono); font-size: .66rem; letter-spacing: .16em; color: var(--green-bright); border: 1px solid rgba(47,224,124,.3); border-radius: 50px; padding: 4px 12px; display: inline-block; margin-bottom: 14px; }
+.lv-ic { width: 44px; height: 44px; border-radius: 12px; background: var(--green-soft); border: 1px solid rgba(47,224,124,.18); color: var(--green-bright); display: grid; place-items: center; margin-bottom: 16px; }
+.lv-ic :global(svg) { width: 22px; height: 22px; }
 .lv-card h3 { font-size: 1.15rem; margin: 0 0 8px; }
 .lv-card p { margin: 0; color: var(--grey); font-size: .9rem; line-height: 1.7; }
 
