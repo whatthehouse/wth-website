@@ -95,7 +95,7 @@ const questions: Record<string, any[]> = {
 ---
 <BaseLayout
   title="สมัครร่วมงาน | ประเมินคุณสมบัติและใบสมัคร | WHAT THE HOUSE"
-  description="สมัครร่วมงานกับ WHAT THE HOUSE ใน 2 ขั้นตอน — ประเมินคุณสมบัติเบื้องต้น แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน วิศวกร และสถาปนิก | Apply to join WHAT THE HOUSE"
+  description="สมัครร่วมงานกับ WHAT THE HOUSE — ประเมินคุณสมบัติเบื้องต้นให้ตรงตำแหน่ง แล้วกรอกใบสมัครฉบับเต็ม เปิดรับผู้ตรวจบ้าน สถาปนิก และวิศวกร | Apply to join WHAT THE HOUSE"
 >
   <Header />
   <main>
@@ -105,8 +105,8 @@ const questions: Record<string, any[]> = {
       <div class="container">
         <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/careers"><span class="lang-th">ร่วมงานกับเรา</span><span class="lang-en">Careers</span></a> / <span class="lang-th">สมัคร</span><span class="lang-en">Apply</span></p>
         <span class="eyebrow"><span class="lang-th">สมัครร่วมงาน</span><span class="lang-en">Apply</span></span>
-        <h1><span class="lang-th">สมัครใน 2 ขั้นตอน</span><span class="lang-en">Apply in 2 steps</span></h1>
-        <p><span class="lang-th">ขั้นที่ 1 ประเมินคุณสมบัติเบื้องต้น (ไม่ถึง 2 นาที) — ผ่านแล้วจึงกรอกใบสมัครฉบับเต็มในขั้นที่ 2</span><span class="lang-en block">Step 1 is a quick pre-qualification (under 2 minutes) — pass it to unlock the full application in step 2.</span></p>
+        <h1><span class="lang-th">สมัครร่วมงานกับเรา</span><span class="lang-en">Apply to join our team</span></h1>
+        <p><span class="lang-th">เราคัดเลือกจากคุณสมบัติจริงและความตั้งใจ กรุณาสละเวลากรอกข้อมูลตามความเป็นจริง — เริ่มจากประเมินคุณสมบัติเบื้องต้นเพื่อดูว่าตรงกับที่เราเปิดรับหรือไม่ จากนั้นจึงกรอกใบสมัครฉบับเต็ม</span><span class="lang-en block">We select on genuine qualifications and commitment. Please take the time to answer honestly — start with an eligibility check to see whether you match what we're recruiting for, then complete the full application.</span></p>
       </div>
     </section>
 
@@ -118,6 +118,7 @@ const questions: Record<string, any[]> = {
           <div class="wiz-card">
             <div class="wiz-step-tag"><span class="lang-th">ขั้นที่ 1 — ประเมินคุณสมบัติเบื้องต้น</span><span class="lang-en">Step 1 — Pre-qualification</span></div>
             <h3 class="wiz-title"><span class="lang-th">คุณต้องการร่วมงานในฐานะใด?</span><span class="lang-en">In what capacity would you like to join?</span></h3>
+            <p class="wiz-hint"><span class="lang-th">เลือกตำแหน่งที่ต้องการสมัครก่อน แล้วระบบจะแสดงคำถามคัดกรองที่ตรงกับตำแหน่งนั้น</span><span class="lang-en block">Choose the position you're applying for first — the screening questions for that position will then appear.</span></p>
 
             <div class="role-grid" id="roleGrid">
               {roleDefs.map((r) => (
@@ -129,8 +130,14 @@ const questions: Record<string, any[]> = {
               ))}
             </div>
 
-            {Object.entries(questions).map(([roleId, qs]) => (
+            {Object.entries(questions).map(([roleId, qs]) => {
+              const rd = roleDefs.find((r) => r.id === roleId);
+              return (
               <div class="qz-block" data-role-questions={roleId} hidden>
+                <p class="qz-for">
+                  <span class="lang-th">คำถามสำหรับตำแหน่ง: <b>{rd?.title.th}</b></span>
+                  <span class="lang-en">Questions for: <b>{rd?.title.en}</b></span>
+                </p>
                 {qs.map((q, qi) => (
                   <div class="qz-q" data-qi={qi}>
                     <p class="qz-label"><span class="qz-num">{qi + 1}</span><span class="lang-th">{q.q.th}</span><span class="lang-en block">{q.q.en}</span></p>
@@ -158,7 +165,8 @@ const questions: Record<string, any[]> = {
                   <span class="lang-th">ตรวจสอบคุณสมบัติ</span><span class="lang-en">Check my eligibility</span>
                 </button>
               </div>
-            ))}
+              );
+            })}
 
             <!-- fail message -->
             <div class="qz-fail" id="qzFail" hidden>
@@ -338,6 +346,9 @@ const questions: Record<string, any[]> = {
 .role-sub { color: var(--grey); font-size: .76rem; }
 
 .qz-block { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 22px; display: flex; flex-direction: column; gap: 18px; }
+.qz-for { margin: 0; font-size: .82rem; color: var(--grey); }
+.qz-for b { color: var(--green-bright); font-weight: 700; }
+.wiz-hint { margin: -12px 0 0; color: var(--grey); font-size: .9rem; }
 .qz-label { margin: 0 0 10px; font-size: .93rem; color: var(--heading); font-weight: 600; line-height: 1.55; }
 .qz-num { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green-soft); color: var(--green-bright); font-family: var(--mono); font-size: .7rem; font-weight: 700; margin-right: 9px; }
 .qz-opts { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -423,10 +434,17 @@ const questions: Record<string, any[]> = {
     roleCards.forEach((card) => card.addEventListener('click', () => {
       activeRole = card.dataset.role || '';
       roleCards.forEach((c) => c.classList.toggle('active', c === card));
-      blocks.forEach((b) => { b.hidden = b.dataset.roleQuestions !== activeRole; });
+      let shown: HTMLElement | null = null;
+      blocks.forEach((b) => {
+        const match = b.dataset.roleQuestions === activeRole;
+        b.hidden = !match;
+        if (match) shown = b;
+      });
       failBox.hidden = true;
       step2.hidden = true;
       setLicenceMode(licenceRoles.includes(activeRole));
+      // bring the matching question set into view so the flow is obvious
+      if (shown) (shown as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }));
 
     document.querySelectorAll('.qz-check').forEach((btn) => btn.addEventListener('click', () => {
