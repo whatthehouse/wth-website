@@ -325,6 +325,11 @@ const questions: Record<string, any[]> = {
 </BaseLayout>
 
 <style>
+/* the hidden attribute must beat the display:flex rules below (qz-block,
+   qz-fail, qz-ok) — without this, [hidden] loses the specificity tie to a
+   class selector and the "hidden" elements stay visible. */
+[hidden] { display: none !important; }
+
 /* ---------- wizard ---------- */
 .wiz { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 .wiz-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; }
