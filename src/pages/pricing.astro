@@ -43,13 +43,18 @@ import Footer from '../components/Footer.astro';
               <div class="type-btns">
                 <button class="type-btn active" data-type="house">
                   <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
-                  <span class="lang-th">บ้านเดี่ยว / ทาวน์เฮ้าส์</span>
-                  <span class="lang-en">House / Townhouse</span>
+                  <span class="lang-th">บ้านเดี่ยว</span>
+                  <span class="lang-en">Detached House</span>
+                </button>
+                <button class="type-btn" data-type="townhouse">
+                  <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 21V10l5-4 5 4v11"/><path d="M12 21V10l5-4 5 4v11"/><path d="M2 21h20"/></svg>
+                  <span class="lang-th">ทาวน์เฮ้าส์</span>
+                  <span class="lang-en">Townhouse</span>
                 </button>
                 <button class="type-btn" data-type="condo">
                   <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>
-                  <span class="lang-th">คอนโดมิเนียม</span>
-                  <span class="lang-en">Condominium</span>
+                  <span class="lang-th">คอนโด</span>
+                  <span class="lang-en">Condo</span>
                 </button>
               </div>
             </div>
@@ -63,16 +68,6 @@ import Footer from '../components/Footer.astro';
               <div class="area-input-wrap">
                 <input type="number" id="calcArea" class="area-input" placeholder="เช่น 120" min="1" max="2000" />
                 <span class="area-unit">ตร.ม. / sq.m.</span>
-              </div>
-              <div class="area-quick">
-                <span class="lang-th">เลือกเร็ว:</span>
-                <span class="lang-en">Quick pick:</span>
-                <button class="quick-btn" data-val="40">40</button>
-                <button class="quick-btn" data-val="80">80</button>
-                <button class="quick-btn" data-val="120">120</button>
-                <button class="quick-btn" data-val="150">150</button>
-                <button class="quick-btn" data-val="200">200</button>
-                <button class="quick-btn" data-val="300">300</button>
               </div>
             </div>
 
@@ -93,8 +88,8 @@ import Footer from '../components/Footer.astro';
                 <label class="area-radio">
                   <input type="radio" name="location" value="out" />
                   <span>
-                    <span class="lang-th">ลำพูน / ลำปาง / เชียงราย</span>
-                    <span class="lang-en">Lamphun / Lampang / Chiang Rai</span>
+                    <span class="lang-th">ลำพูน / ลำปาง</span>
+                    <span class="lang-en">Lamphun / Lampang</span>
                     <small class="lang-th"> (มีค่าเดินทาง)</small>
                     <small class="lang-en"> (travel fee applies)</small>
                   </span>
@@ -308,21 +303,6 @@ import Footer from '../components/Footer.astro';
 }
 .type-btn.active svg { color: var(--green-bright); }
 
-/* area input */
-.area-quick { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; font-size: .85rem; color: var(--grey); }
-.quick-btn {
-  padding: 5px 12px;
-  border: 1px solid var(--line);
-  border-radius: 50px;
-  background: var(--panel-2);
-  cursor: pointer;
-  font-size: .82rem;
-  font-family: inherit;
-  color: var(--body);
-  transition: .15s;
-}
-.quick-btn:hover { border-color: var(--green); color: var(--green-bright); background: var(--green-soft); }
-
 /* location radios */
 .area-btns { display: flex; flex-direction: column; gap: 10px; }
 .area-radio {
@@ -405,15 +385,18 @@ import Footer from '../components/Footer.astro';
 <script>
   // ── Price Calculator Logic ──
   (function () {
-    const PRICES = {
-      house: [
-        { max: 150, price: 5000 },
-        { max: 220, price: 6000 },
-        { max: 300, price: 7000 },
-        { max: 400, price: 8000 },
-        { max: 500, price: 9000 },
-        { max: Infinity, price: null }, // quote
-      ],
+    // house table is shared by detached houses and townhouses (same pricing)
+    const HOUSE = [
+      { max: 150, price: 5000 },
+      { max: 220, price: 6000 },
+      { max: 300, price: 7000 },
+      { max: 400, price: 8000 },
+      { max: 500, price: 9000 },
+      { max: Infinity, price: null }, // quote
+    ];
+    const PRICES: Record<string, { max: number; price: number | null }[]> = {
+      house: HOUSE,
+      townhouse: HOUSE,
       condo: [
         { max: 40,  price: 3000 },
         { max: 60,  price: 4000 },
@@ -430,7 +413,6 @@ import Footer from '../components/Footer.astro';
     const resultPrice = document.getElementById('resultPrice') as HTMLElement;
     const resultNote  = document.getElementById('resultNote') as HTMLElement;
     const typeBtns    = document.querySelectorAll('.type-btn');
-    const quickBtns   = document.querySelectorAll('.quick-btn');
     const locRadios   = document.querySelectorAll('input[name="location"]');
 
     function isEn() { return document.body.classList.contains('en'); }
@@ -443,7 +425,7 @@ import Footer from '../components/Footer.astro';
         return;
       }
 
-      const table = PRICES[propType as 'house' | 'condo'];
+      const table = PRICES[propType] || PRICES.house;
       const row = table.find(r => sqm <= r.max);
       const travelNote = location === 'out'
         ? (isEn() ? ' + travel fee' : ' + ค่าเดินทาง')
@@ -466,14 +448,6 @@ import Footer from '../components/Footer.astro';
         typeBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         propType = (btn as HTMLElement).dataset.type || 'house';
-        calcPrice();
-      });
-    });
-
-    // quick pick
-    quickBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        areaInput.value = (btn as HTMLElement).dataset.val || '';
         calcPrice();
       });
     });

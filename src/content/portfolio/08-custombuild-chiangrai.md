@@ -5,7 +5,7 @@ tagTh: ควบคุมงาน
 tagEn: Supervision
 title: บ้านรีโนเวท เชียงใหม่
 titleEn: Renovated house, Chiang Mai
-areaTh: เชียงราย
+areaTh: เชียงใหม่
 areaEn: Chiang Mai
 size: 200 ตร.ม.
 serviceTh: ควบคุมงานก่อสร้าง

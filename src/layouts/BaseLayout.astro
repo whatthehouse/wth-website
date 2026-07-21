@@ -8,7 +8,7 @@ export interface Props {
 }
 const {
   title,
-  description = 'WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง เชียงราย ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ | Home Inspection Chiang Mai',
+  description = 'WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ | Home Inspection Chiang Mai',
   ogImage = '/assets/img/logo.jpg',
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -61,7 +61,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     "telephone": settings.phone,
     "email": settings.email,
     "image": "/assets/img/logo.jpg",
-    "areaServed": ["Chiang Mai","Lamphun","Lampang","Chiang Rai"],
+    "areaServed": ["Chiang Mai","Lamphun","Lampang"],
     "knowsLanguage": ["th","en"],
     "address": {
       "@type": "PostalAddress",
