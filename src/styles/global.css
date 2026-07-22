@@ -476,6 +476,8 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .hero-content h1{color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.4)}
 .hero-content h1 .accent{color:var(--green-bright)}
 .hero-content .lead{color:#D4DED6;max-width:48ch}
+.hero-sample{display:inline-block;margin-top:16px;color:#D4DED6;font-weight:500;font-size:.92rem;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:2px;transition:.15s}
+.hero-sample:hover{color:#fff;border-bottom-color:var(--green-bright)}
 /* glass CTA for photo bg */
 .btn-glass{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .btn-glass:hover{background:rgba(255,255,255,.16);border-color:#fff}

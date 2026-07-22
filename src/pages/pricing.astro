@@ -240,6 +240,7 @@ import Footer from '../components/Footer.astro';
                 <span class="lang-en block">With photos and repair recommendations, delivered within <b>24 hours</b> of inspection.</span>
                 <small class="note-tiny"><span class="lang-th">*ระยะเวลาอาจเปลี่ยนแปลงได้ตามขนาดโครงการ</span><span class="lang-en">*Timeline may vary depending on project size</span></small>
               </p>
+              <a class="feat-link" href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน</span><span class="lang-en">See a sample report</span> →</a>
             </div>
           </div>
           <div class="feat">
@@ -302,6 +303,10 @@ import Footer from '../components/Footer.astro';
   font-weight: 600;
 }
 .type-btn.active svg { color: var(--green-bright); }
+
+/* "see a sample report" link in the included-report card */
+.feat-link { display: inline-block; margin-top: 8px; color: var(--green-bright); font-weight: 600; font-size: .9rem; }
+.feat-link:hover { text-decoration: underline; }
 
 /* location radios */
 .area-btns { display: flex; flex-direction: column; gap: 10px; }

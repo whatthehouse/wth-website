@@ -203,6 +203,7 @@ const services = [
                         <span class="lang-th">ดูราคา</span>
                         <span class="lang-en">View pricing</span>
                       </a>
+                      <a href="/sample-report" class="sh-sample"><span class="lang-th">ดูตัวอย่างรายงาน</span><span class="lang-en">See a sample report</span> →</a>
                     </Fragment>
                   ) : (
                     <a href="/contact" class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center">
@@ -342,6 +343,8 @@ const services = [
   margin: 0;
   font-weight: 500;
 }
+.sh-sample { display: block; text-align: center; margin-top: 12px; color: var(--green-bright); font-weight: 600; font-size: .88rem; }
+.sh-sample:hover { text-decoration: underline; }
 
 @media (max-width: 980px) {
   .svc-check-grid { grid-template-columns: 1fr; }

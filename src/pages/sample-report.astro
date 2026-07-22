@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import settings from '../data/settings.json';
+
+// Drop the real (redacted) PDF at public/assets/reports/sample-report.pdf
+const PDF = '/assets/reports/sample-report.pdf';
+
+const inside = [
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h4"/></svg>`,
+    title: { th: "สรุปผลการตรวจ", en: "Inspection summary" },
+    desc: { th: "ภาพรวมสภาพบ้าน จำนวนข้อบกพร่อง และประเด็นสำคัญที่ต้องแก้ก่อนรับมอบ", en: "Overall condition, defect counts, and the key items to fix before handover." },
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>`,
+    title: { th: "แยกตามระบบของบ้าน", en: "Broken down by system" },
+    desc: { th: "โครงสร้าง ผนัง-ฝ้า-พื้น ไฟฟ้า ประปา หลังคา ประตูหน้าต่าง งานสี และระบบปรับอากาศ", en: "Structure, walls/ceilings/floors, electrical, plumbing, roof, doors/windows, paint and A/C." },
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`,
+    title: { th: "ภาพถ่ายทุกจุด", en: "A photo for every point" },
+    desc: { th: "ข้อบกพร่องแต่ละจุดมีรูปถ่าย ตำแหน่ง และคำอธิบายชัดเจน ใช้เจรจากับโครงการได้จริง", en: "Every defect has a photo, location and clear note — usable to negotiate with the developer." },
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>`,
+    title: { th: "ระดับความรุนแรง", en: "Severity rating" },
+    desc: { th: "จัดลำดับว่าจุดไหนต้องแก้ก่อน จุดไหนรอได้ ช่วยให้คุณวางแผนการซ่อมได้ถูก", en: "Each finding is prioritised so you know what to fix first and what can wait." },
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+    title: { th: "คำแนะนำการแก้ไข", en: "Repair recommendations" },
+    desc: { th: "ไม่ใช่แค่บอกว่าผิดตรงไหน แต่แนะนำแนวทางแก้ไขที่ทำได้จริงในแต่ละจุด", en: "Not just what's wrong — a workable fix suggestion for each issue." },
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>`,
+    title: { th: "รายงาน 2 ภาษา", en: "Bilingual report" },
+    desc: { th: "ไทย-อังกฤษในเล่มเดียว ส่งเป็น PDF ภายใน 24 ชั่วโมงหลังการตรวจ", en: "Thai–English in one file, delivered as a PDF within 24 hours of inspection." },
+  },
+];
+---
+<BaseLayout
+  title="ตัวอย่างรายงานตรวจบ้าน (Sample Report) | WHAT THE HOUSE"
+  description="ดูตัวอย่างรายงานตรวจบ้านจริงของ WHAT THE HOUSE — สรุปผล แยกตามระบบ พร้อมภาพถ่ายทุกจุด ระดับความรุนแรง และคำแนะนำการแก้ไข รายงาน PDF ไทย-อังกฤษ | Sample home inspection report"
+>
+  <Header />
+  <main>
+
+    <!-- ============ PAGE HERO ============ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ตัวอย่างรายงาน</span><span class="lang-en">Sample Report</span></p>
+        <span class="eyebrow"><span class="lang-th">ตัวอย่างรายงาน</span><span class="lang-en">Sample Report</span></span>
+        <h1><span class="lang-th">ดูตัวอย่างรายงานตรวจบ้านจริง</span><span class="lang-en">See a real inspection report</span></h1>
+        <p><span class="lang-th">รายงานของเราคือสิ่งที่คุณจะได้รับหลังการตรวจ — ละเอียด อ่านเข้าใจง่าย พร้อมภาพถ่ายและคำแนะนำที่ใช้ได้จริง ลองดูตัวอย่างก่อนตัดสินใจ</span><span class="lang-en block">Our report is what you receive after an inspection — detailed, easy to read, with photos and practical advice. Take a look before you decide.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ WHAT'S INSIDE ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow"><span class="lang-th">ในเล่มมีอะไรบ้าง</span><span class="lang-en">What's inside</span></span>
+          <h2 class="section-title"><span class="lang-th">รายงานที่ครบและใช้งานได้จริง</span><span class="lang-en">A report you can actually use</span></h2>
+        </div>
+        <div class="grid grid-3">
+          {inside.map((f) => (
+            <div class="card">
+              <div class="svc-ic" set:html={f.icon} />
+              <h3><span class="lang-th">{f.title.th}</span><span class="lang-en">{f.title.en}</span></h3>
+              <p><span class="lang-th">{f.desc.th}</span><span class="lang-en block">{f.desc.en}</span></p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE SAMPLE PDF ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow"><span class="lang-th">ตัวอย่างจริง</span><span class="lang-en">The sample</span></span>
+          <h2 class="section-title"><span class="lang-th">เปิดอ่านตัวอย่างรายงาน</span><span class="lang-en">Open the sample report</span></h2>
+          <p class="section-sub"><span class="lang-th">ข้อมูลลูกค้าและที่อยู่ในตัวอย่างถูกปิดบังเพื่อความเป็นส่วนตัว</span><span class="lang-en block">Customer details and address in this sample have been redacted for privacy.</span></p>
+        </div>
+
+        <!-- ready state (shown when the PDF exists) -->
+        <div class="report-card" id="reportReady" hidden>
+          <div class="report-actions">
+            <a class="btn btn-primary btn-lg" href={PDF} download>
+              <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+              <span class="lang-th">ดาวน์โหลด PDF</span><span class="lang-en">Download PDF</span>
+            </a>
+            <a class="btn btn-ghost btn-lg" href={PDF} target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
+              <span class="lang-th">เปิดในแท็บใหม่</span><span class="lang-en">Open in new tab</span>
+            </a>
+          </div>
+          <div class="report-frame">
+            <iframe id="reportFrame" title="ตัวอย่างรายงานตรวจบ้าน WHAT THE HOUSE — WHAT THE HOUSE sample inspection report" loading="lazy"></iframe>
+          </div>
+          <p class="report-hint"><span class="lang-th">หากดูตัวอย่างในหน้านี้ไม่ได้ ให้กด "เปิดในแท็บใหม่" หรือ "ดาวน์โหลด PDF"</span><span class="lang-en block">If the preview doesn't load here, use "Open in new tab" or "Download PDF".</span></p>
+        </div>
+
+        <!-- placeholder state (shown until the PDF is uploaded) -->
+        <div class="report-soon" id="reportSoon">
+          <svg viewBox="0 0 24 24" width="34" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15h6"/></svg>
+          <b><span class="lang-th">กำลังจัดเตรียมตัวอย่างรายงาน</span><span class="lang-en">Sample report coming soon</span></b>
+          <p><span class="lang-th">ระหว่างนี้ ทักมาขอดูตัวอย่างรายงานฉบับเต็มกับเราได้เลย</span><span class="lang-en block">In the meantime, message us and we'll share a full sample report with you.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary" href={settings.lineUrl} target="_blank" rel="noopener"><span class="lang-th">ขอดูตัวอย่างทาง LINE</span><span class="lang-en">Ask for a sample on LINE</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">อยากได้รายงานแบบนี้กับบ้านของคุณ?</span><span class="lang-en">Want a report like this for your home?</span></h2>
+          <p><span class="lang-th">จองคิวตรวจบ้าน แล้วรับรายงานฉบับเต็มภายใน 24 ชั่วโมงหลังการตรวจ</span><span class="lang-en block">Book an inspection and get your full report within 24 hours.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองคิวตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-ghost btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .section-sub { color: var(--grey); font-size: 1rem; margin: .6em auto 0; max-width: 620px; }
+
+  .report-card { max-width: 900px; margin: 0 auto; }
+  .report-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .report-frame {
+    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+    background: var(--panel-2); aspect-ratio: 8.5 / 11; max-height: 78vh;
+  }
+  .report-frame iframe { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+  .report-hint { text-align: center; color: var(--faint); font-size: .84rem; margin: 14px 0 0; }
+
+  .report-soon {
+    max-width: 560px; margin: 0 auto; text-align: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 40px 28px;
+  }
+  .report-soon svg { color: var(--green-bright); margin-bottom: 14px; }
+  .report-soon b { display: block; color: var(--heading); font-size: 1.15rem; margin-bottom: 8px; }
+  .report-soon p { color: var(--grey); font-size: .95rem; margin: 0 0 20px; }
+  .report-soon .btns { display: flex; justify-content: center; }
+
+  @media (max-width: 640px) {
+    .report-actions .btn { flex: 1; justify-content: center; }
+  }
+</style>
+
+<script>
+  // Show the PDF viewer only if the file actually exists; otherwise keep the
+  // "coming soon" placeholder. Lets the page ship before the PDF is uploaded.
+  (function () {
+    const PDF = '/assets/reports/sample-report.pdf';
+    const ready = document.getElementById('reportReady') as HTMLElement;
+    const soon = document.getElementById('reportSoon') as HTMLElement;
+    const frame = document.getElementById('reportFrame') as HTMLIFrameElement;
+    if (!ready || !soon || !frame) return;
+
+    fetch(PDF, { method: 'HEAD' })
+      .then((r) => {
+        const type = r.headers.get('content-type') || '';
+        if (r.ok && !type.includes('text/html')) {
+          frame.src = PDF + '#view=FitH';
+          soon.hidden = true;
+          ready.hidden = false;
+        }
+      })
+      .catch(() => { /* keep placeholder */ });
+  })();
+</script>
