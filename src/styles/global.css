@@ -325,6 +325,9 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 @keyframes lineFill4{0%,57%{transform:scaleX(0)}69%,94%{transform:scaleX(1)}100%{transform:scaleX(0)}}
 .step h4{font-size:1.02rem;margin-bottom:.35em;color:var(--heading);letter-spacing:-.01em}
 .step p{color:var(--grey);font-size:.9rem;margin:0 auto;max-width:26ch}
+.steps-sample{text-align:center;margin:44px 0 0}
+.steps-sample a{color:var(--green-bright);font-weight:600;font-size:.98rem}
+.steps-sample a:hover{text-decoration:underline}
 
 /* reviews */
 .review{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
@@ -484,8 +487,6 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
 .hero-content h1{color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.4)}
 .hero-content h1 .accent{color:var(--green-bright)}
 .hero-content .lead{color:#D4DED6;max-width:48ch}
-.hero-sample{display:inline-block;margin-top:16px;color:#D4DED6;font-weight:500;font-size:.92rem;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:2px;transition:.15s}
-.hero-sample:hover{color:#fff;border-bottom-color:var(--green-bright)}
 /* glass CTA for photo bg */
 .btn-glass{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .btn-glass:hover{background:rgba(255,255,255,.16);border-color:#fff}
