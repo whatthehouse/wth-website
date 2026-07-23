@@ -15,6 +15,18 @@ import settings from '../data/settings.json';
 const VAT_NOTE = null;
 const QUOTE_VALID_DAYS = 30;
 
+// ── Packages ───────────────────────────────────────────────────────────────
+// The rate-card tables are the 2-round price (the main package).
+// A single-round package is offered at 80% of it for budget / second-hand /
+// one-opinion customers. Buying the 2nd round LATER costs 30% of the 2-round
+// price (floored at the 3rd-round rates), so it is always dearer than taking
+// the 2-round package up front — that's deliberate.
+const ROUND1_RATIO = 0.80;
+const ROUND2_LATER_RATIO = 0.30;
+const ROUND2_LATER_MIN = { condo: 2000, other: 3000 };
+const round100 = (n: number) => Math.round(n / 100) * 100;
+const onePrice = (p: number | null) => (p === null ? null : round100(p * ROUND1_RATIO));
+
 // ── Property types & price tiers (from the company rate card) ───────────────
 const types = [
   {
@@ -101,7 +113,7 @@ const included = {
     'ตรวจงานสถาปัตยกรรม ระบบไฟฟ้า ระบบประปา และระบบสุขาภิบาล',
     'ตรวจหลังคาและพื้นที่เหนือฝ้าในจุดที่เข้าถึงได้ (บ้านและทาวน์โฮม)',
     'ตรวจครั้งแรกพร้อมรายงาน PDF และภาพประกอบ',
-    'กลับไปตรวจติดตามรายการแก้ไขครั้งที่ 2 จำนวน 1 ครั้ง',
+    'กลับไปตรวจติดตามรายการแก้ไขอีก 1 ครั้ง (เฉพาะแพ็กเกจ 2 รอบ)',
     'ค่าเดินทางภายในเขตบริการปกติของบริษัท',
   ],
   en: [
@@ -109,12 +121,13 @@ const included = {
     'Architectural, electrical, plumbing and sanitary systems',
     'Roof and accessible ceiling voids (houses and townhomes)',
     'First inspection with a photo PDF report',
-    'One follow-up re-inspection of the listed defects',
+    'One follow-up re-inspection of the listed defects (2-round package only)',
     'Travel within our normal service area',
   ],
 };
 
 const extras = [
+  { th: 'ซื้อตรวจรอบที่ 2 ภายหลัง (หลังเลือกแพ็กเกจรอบเดียว)', en: 'Adding round 2 later (after a single-round package)', price: { th: '30% ของราคาแพ็กเกจ 2 รอบ', en: '30% of the 2-round price' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — คอนโด',        en: '3rd round onwards — condo',          price: { th: '2,000 บาท/ครั้ง', en: '2,000 THB/visit' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — บ้าน/ทาวน์โฮม', en: '3rd round onwards — house/townhome', price: { th: '3,000 บาท/ครั้ง', en: '3,000 THB/visit' } },
   { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 25%', en: '+25%' } },
@@ -205,9 +218,31 @@ const terms = {
               </div>
             </div>
 
-            <!-- 2. area -->
+            <!-- 2. package -->
             <div class="calc-step">
-              <label class="calc-label" for="calcArea"><span class="lang-th">2. พื้นที่ใช้สอย (ตร.ม.)</span><span class="lang-en">2. Usable area (sq.m.)</span></label>
+              <label class="calc-label"><span class="lang-th">2. แพ็กเกจการตรวจ</span><span class="lang-en">2. Inspection package</span></label>
+              <div class="area-btns">
+                <label class="area-radio pkg-radio">
+                  <input type="radio" name="pkg" value="two" checked />
+                  <span>
+                    <b><span class="lang-th">ตรวจ 2 รอบ</span><span class="lang-en">2 rounds</span></b>
+                    <span class="pkg-tag"><span class="lang-th">แนะนำ</span><span class="lang-en">Recommended</span></span>
+                    <span class="pkg-desc"><small class="lang-th">ตรวจครั้งแรก + กลับมาตรวจรอบแก้ไขอีก 1 ครั้ง</small><small class="lang-en">First inspection + one follow-up re-inspection</small></span>
+                  </span>
+                </label>
+                <label class="area-radio pkg-radio">
+                  <input type="radio" name="pkg" value="one" />
+                  <span>
+                    <b><span class="lang-th">ตรวจรอบเดียว</span><span class="lang-en">Single round</span></b>
+                    <span class="pkg-desc"><small class="lang-th">ตรวจครั้งเดียวพร้อมรายงาน เหมาะกับงบจำกัด บ้านมือสอง หรือต้องการความเห็นครั้งเดียว</small><small class="lang-en">One inspection with report — for tighter budgets, second-hand homes, or a one-off opinion</small></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 3. area -->
+            <div class="calc-step">
+              <label class="calc-label" for="calcArea"><span class="lang-th">3. พื้นที่ใช้สอย (ตร.ม.)</span><span class="lang-en">3. Usable area (sq.m.)</span></label>
               <div class="area-input-wrap">
                 <input type="number" id="calcArea" class="area-input" placeholder="เช่น 120" min="1" max="3000" />
                 <span class="area-unit">ตร.ม. / sq.m.</span>
@@ -216,7 +251,7 @@ const terms = {
 
             <!-- 3. options -->
             <div class="calc-step">
-              <label class="calc-label"><span class="lang-th">3. เงื่อนไขเพิ่มเติม (ถ้ามี)</span><span class="lang-en">3. Additional conditions (if any)</span></label>
+              <label class="calc-label"><span class="lang-th">4. เงื่อนไขเพิ่มเติม (ถ้ามี)</span><span class="lang-en">4. Additional conditions (if any)</span></label>
               <div class="opt-list" id="optList">
                 {options.map((o) => (
                   <label class="opt" data-opt={o.id} data-for={o.for.join(',')} hidden>
@@ -234,7 +269,7 @@ const terms = {
 
             <!-- 4. service area -->
             <div class="calc-step">
-              <label class="calc-label"><span class="lang-th">4. พื้นที่หน้างาน</span><span class="lang-en">4. Site location</span></label>
+              <label class="calc-label"><span class="lang-th">5. พื้นที่หน้างาน</span><span class="lang-en">5. Site location</span></label>
               <div class="area-btns">
                 <label class="area-radio">
                   <input type="radio" name="location" value="cm" checked />
@@ -259,6 +294,7 @@ const terms = {
               </div>
             </div>
             <ul class="bd-list" id="breakdown"></ul>
+            <p class="upsell" id="upsell" hidden></p>
 
             <!-- quotation details -->
             <div class="quote-form" id="quoteForm">
@@ -327,7 +363,8 @@ const terms = {
                 <thead>
                   <tr>
                     <th><span class="lang-th">พื้นที่ใช้สอย</span><span class="lang-en">Usable area</span></th>
-                    <th><span class="lang-th">ราคา</span><span class="lang-en">Price</span></th>
+                    <th class="th-right"><span class="lang-th">2 รอบ</span><span class="lang-en">2 rounds</span></th>
+                    <th class="th-right"><span class="lang-th">รอบเดียว</span><span class="lang-en">1 round</span></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -335,6 +372,7 @@ const terms = {
                     <tr>
                       <td><span class="lang-th">{r.th}</span><span class="lang-en">{r.en}</span></td>
                       <td class="price-cell">{r.price ? `${r.price.toLocaleString()} ฿` : <span><span class="lang-th">ประเมินราคา</span><span class="lang-en">Quote</span></span>}</td>
+                      <td class="price-cell price-alt">{r.price ? `${onePrice(r.price)!.toLocaleString()} ฿` : '—'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -518,6 +556,16 @@ const terms = {
 .bd-list li { display: flex; justify-content: space-between; gap: 14px; font-size: .89rem; color: var(--grey); border-bottom: 1px dashed var(--line); padding-bottom: 7px; }
 .bd-list li b { color: var(--heading); font-family: var(--mono); white-space: nowrap; }
 
+/* package radios + single-round upsell hint */
+.pkg-radio b { color: var(--heading); font-weight: 700; }
+.pkg-tag { display: inline-block; margin-left: 8px; font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--green-bright); border: 1px solid rgba(47,224,124,.35); border-radius: 50px; padding: 2px 8px; vertical-align: middle; }
+/* style the wrapper, never the .lang-th/.lang-en elements themselves —
+   setting display on those overrides the TH/EN toggle */
+.pkg-desc { display: block; margin-top: 3px; }
+.upsell { margin: 14px 0 0; padding: 12px 15px; border-radius: var(--radius-sm); background: var(--green-soft); border: 1px solid rgba(47,224,124,.22); color: var(--body); font-size: .87rem; line-height: 1.6; }
+.price-alt { color: var(--grey) !important; }
+.th-right { text-align: right; }
+
 /* ── quote form ── */
 .quote-form { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 22px; }
 .qf-title { font-weight: 700; color: var(--heading); margin: 0 0 14px; font-size: .95rem; }
@@ -608,22 +656,30 @@ const terms = {
   #quoteDoc .qd-foot { margin-top: 16px; border-top: 1px solid #d8ded8; padding-top: 7px; font-size: 9px; color: #5a625c; text-align: center; }
 </style>
 
-<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS }}>
+<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, ROUND2_LATER_MIN }}>
   (function () {
     const areaInput   = document.getElementById('calcArea');
     const resultPrice = document.getElementById('resultPrice');
     const resultNote  = document.getElementById('resultNote');
     const breakdown   = document.getElementById('breakdown');
+    const upsell      = document.getElementById('upsell');
     const typeBtns    = document.querySelectorAll('.type-btn');
     const optLabels   = Array.from(document.querySelectorAll('.opt'));
     const locRadios   = document.querySelectorAll('input[name="location"]');
+    const pkgRadios   = document.querySelectorAll('input[name="pkg"]');
 
     let propType = types[0].id;
     let location = 'cm';
+    let pkg = 'two';
     let current = null; // last computed quote
 
     const isEn = () => document.body.classList.contains('en');
     const baht = (n) => n.toLocaleString('en-US');
+    const round100 = (n) => Math.round(n / 100) * 100;
+    // what it costs to add round 2 after buying the single-round package
+    const round2Later = (twoRoundPrice, type) =>
+      Math.max(round100(twoRoundPrice * ROUND2_LATER_RATIO),
+               type === 'condo' ? ROUND2_LATER_MIN.condo : ROUND2_LATER_MIN.other);
 
     // show only the options that apply to the selected property type
     function syncOptions() {
@@ -649,8 +705,15 @@ const terms = {
         return { quote: true, type, tier, checked, sqm };
       }
 
-      const base = tier.price;
-      const lines = [{ label: { th: `ตรวจ${type.th} · ${tier.th}`, en: `${type.en} inspection · ${tier.en}` }, amount: base }];
+      // the tables are the 2-round price; the single-round package is a % of it
+      const twoRound = tier.price;
+      const base = pkg === 'one' ? round100(twoRound * ROUND1_RATIO) : twoRound;
+      const pkgTh = pkg === 'one' ? 'ตรวจรอบเดียว' : 'ตรวจ 2 รอบ';
+      const pkgEn = pkg === 'one' ? 'single round' : '2 rounds';
+      const lines = [{
+        label: { th: `ตรวจ${type.th} · ${tier.th} · ${pkgTh}`, en: `${type.en} · ${tier.en} · ${pkgEn}` },
+        amount: base,
+      }];
       let total = base;
 
       checked.forEach((o) => {
@@ -667,12 +730,13 @@ const terms = {
         }
       });
 
-      return { quote: false, type, tier, checked, sqm, lines, total };
+      return { quote: false, type, tier, checked, sqm, lines, total, pkg, twoRound, pkgTh, pkgEn };
     }
 
     function render() {
       current = compute();
       breakdown.innerHTML = '';
+      upsell.hidden = true;
 
       if (!current) {
         resultPrice.textContent = '—';
@@ -703,6 +767,16 @@ const terms = {
         const li = document.createElement('li');
         li.innerHTML = `<span>${isEn() ? 'Travel outside the service area' : 'ค่าเดินทางนอกเขตบริการ'}</span><b>${isEn() ? 'by distance' : 'ตามระยะทาง'}</b>`;
         breakdown.appendChild(li);
+      }
+
+      // single round: show honestly what adding round 2 later would cost
+      if (current.pkg === 'one') {
+        const later = round2Later(current.twoRound, propType);
+        const extra = current.total + later - current.twoRound;
+        upsell.innerHTML = isEn()
+          ? `Adding the re-inspection later costs <b>${baht(later)} ฿</b> — a total of <b>${baht(current.total + later)} ฿</b>, which is <b>${baht(extra)} ฿ more</b> than taking the 2-round package now (${baht(current.twoRound)} ฿).`
+          : `หากซื้อตรวจรอบแก้ไขภายหลัง คิดเพิ่ม <b>${baht(later)} ฿</b> รวมเป็น <b>${baht(current.total + later)} ฿</b> ซึ่ง<b>แพงกว่าเลือกแพ็กเกจ 2 รอบตั้งแต่แรก ${baht(extra)} ฿</b> (แพ็กเกจ 2 รอบ ${baht(current.twoRound)} ฿)`;
+        upsell.hidden = false;
       }
     }
 
@@ -736,6 +810,12 @@ const terms = {
       document.getElementById('qdTotal').textContent = baht(current.total) + ' บาท';
       const notes = [];
       if (VAT_NOTE) notes.push(VAT_NOTE.th);
+      if (current.pkg === 'one') {
+        const later = round2Later(current.twoRound, propType);
+        notes.push(`แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข) · หากเพิ่มรอบแก้ไขภายหลัง คิดเพิ่ม ${baht(later)} บาท`);
+      } else {
+        notes.push('รวมตรวจรอบแก้ไขอีก 1 ครั้ง (นัดภายใน 60 วันหลังการตรวจครั้งแรก)');
+      }
       if (location === 'out') notes.push('ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง');
       document.getElementById('qdVat').textContent = notes.join(' · ');
       return true;
@@ -761,6 +841,7 @@ const terms = {
     optLabels.forEach((el) => el.querySelector('input').addEventListener('change', render));
     areaInput.addEventListener('input', render);
     locRadios.forEach((r) => r.addEventListener('change', () => { location = r.value; render(); }));
+    pkgRadios.forEach((r) => r.addEventListener('change', () => { pkg = r.value; render(); }));
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-lang-btn]')) setTimeout(render, 50);
     });
