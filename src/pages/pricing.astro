@@ -315,6 +315,13 @@ const terms = {
                 <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span></label>
                 <input type="text" id="qProject" placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
               </div>
+              <div class="field">
+                <label><span class="lang-th">ภาษาของใบเสนอราคา</span><span class="lang-en">Quotation language</span></label>
+                <div class="qlang">
+                  <label class="qlang-opt"><input type="radio" name="qlang" value="th" checked /> <span>ไทย</span></label>
+                  <label class="qlang-opt"><input type="radio" name="qlang" value="en" /> <span>English</span></label>
+                </div>
+              </div>
               <div class="qf-actions">
                 <button type="button" class="btn btn-primary btn-lg" id="btnQuote">
                   <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
@@ -452,10 +459,10 @@ const terms = {
   <Footer />
 
   <!-- ============ PRINTABLE QUOTATION (screen-hidden) ============ -->
-  <div id="quoteDoc" class="quote-doc" aria-hidden="true">
+  <div id="quoteDoc" class="quote-doc" data-lang="th" aria-hidden="true">
     <div class="qd-top">
       <div class="qd-brand">
-        <img src="/assets/img/logo-mark.png" alt="" width="46" height="48" />
+        <img src="/assets/img/logo-print.png" alt="" width="44" height="47" />
         <div><b>WHAT THE HOUSE</b><span>HOME INSPECTIONS</span><span class="qd-slogan">BETTER HOMES • BETTER LIVING</span></div>
       </div>
       <div class="qd-meta">
@@ -497,11 +504,13 @@ const terms = {
     <div class="qd-cols">
       <div>
         <h4>ขอบเขตที่รวมในราคา / Included</h4>
-        <ul>{included.th.map((t) => <li>{t}</li>)}</ul>
+        <ul class="qd-th">{included.th.map((t) => <li>{t}</li>)}</ul>
+        <ul class="qd-en">{included.en.map((t) => <li>{t}</li>)}</ul>
       </div>
       <div>
         <h4>เงื่อนไข / Terms</h4>
-        <ol>{terms.th.map((t) => <li>{t}</li>)}</ol>
+        <ol class="qd-th">{terms.th.map((t) => <li>{t}</li>)}</ol>
+        <ol class="qd-en">{terms.en.map((t) => <li>{t}</li>)}</ol>
       </div>
     </div>
 
@@ -509,7 +518,8 @@ const terms = {
       <div><span class="qd-line"></span>ผู้เสนอราคา / Authorised signature</div>
       <div><span class="qd-line"></span>ผู้อนุมัติ / Customer acceptance</div>
     </div>
-    <p class="qd-foot">เอกสารนี้เป็นการประเมินราคาเบื้องต้นจากข้อมูลที่ลูกค้าให้ไว้ · ราคาสุดท้ายยืนยันอีกครั้งก่อนเริ่มงาน · whatthehouse.net</p>
+    <p class="qd-foot qd-th">เอกสารนี้เป็นการประเมินราคาเบื้องต้นจากข้อมูลที่ลูกค้าให้ไว้ · ราคาสุดท้ายยืนยันอีกครั้งก่อนเริ่มงาน · whatthehouse.net</p>
+    <p class="qd-foot qd-en">This is a preliminary estimate based on the information provided · the final price is confirmed before work begins · whatthehouse.net</p>
   </div>
 </BaseLayout>
 
@@ -577,6 +587,11 @@ const terms = {
 .quote-form { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 22px; }
 .qf-title { font-weight: 700; color: var(--heading); margin: 0 0 14px; font-size: .95rem; }
 .quote-form .field label { font-family: var(--font); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); }
+.qlang { display: flex; gap: 10px; flex-wrap: wrap; }
+.qlang-opt { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; border: 1.5px solid var(--line-2); border-radius: 50px; padding: 8px 16px; background: var(--panel-2); font-size: .88rem; color: var(--body); transition: .15s; }
+.qlang-opt:hover { border-color: var(--green); }
+.qlang-opt:has(input:checked) { border-color: var(--green); background: var(--green-soft); color: var(--heading); }
+.qlang-opt input { accent-color: var(--green); margin: 0; }
 .qf-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
 .qf-actions .btn { flex: 1; justify-content: center; min-width: 200px; }
 .qf-hint { color: var(--faint); font-size: .8rem; margin: 12px 0 0; }
@@ -662,6 +677,9 @@ const terms = {
   #quoteDoc .qd-sign > div { flex: 1; text-align: center; }
   #quoteDoc .qd-line { display: block; border-top: 1px solid #16181a; margin-bottom: 5px; height: 34px; }
   #quoteDoc .qd-foot { margin-top: 16px; border-top: 1px solid #d8ded8; padding-top: 7px; font-size: 9px; color: #5a625c; text-align: center; }
+  /* quotation language: driven by data-lang on the document, independent of the site toggle */
+  #quoteDoc[data-lang="en"] .qd-th { display: none !important; }
+  #quoteDoc[data-lang="th"] .qd-en { display: none !important; }
 </style>
 
 <script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, ROUND2_LATER_MIN }}>
@@ -798,9 +816,20 @@ const terms = {
     // ── quotation ──
     function fillQuote() {
       if (!current || current.quote) return false;
+      // the quotation language is chosen in the form, independent of the site toggle
+      const qLang = (document.querySelector('input[name="qlang"]:checked') || {}).value || 'th';
+      const en = qLang === 'en';
+      const doc = document.getElementById('quoteDoc');
+      doc.setAttribute('data-lang', qLang);
+      const cur = en ? 'THB' : 'บาท';
+      const money = (n) => en ? `${baht(n)} ${cur}` : `${baht(n)} ${cur}`;
+
       const now = new Date();
       const valid = new Date(now.getTime() + QUOTE_VALID_DAYS * 864e5);
-      const fmt = (d) => d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+      // Thai quotes use the Buddhist era; English quotes use the Gregorian calendar
+      const fmt = (d) => en
+        ? d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+        : d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
       const pad = (n) => String(n).padStart(2, '0');
 
       document.getElementById('qdNo').textContent =
@@ -815,23 +844,32 @@ const terms = {
       body.innerHTML = '';
       current.lines.forEach((l) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${l.label.th}</td><td class="qd-right">${baht(l.amount)} บาท</td>`;
+        tr.innerHTML = `<td>${en ? l.label.en : l.label.th}</td><td class="qd-right">${money(l.amount)}</td>`;
         body.appendChild(tr);
       });
       const areaRow = document.createElement('tr');
-      areaRow.innerHTML = `<td colspan="2" style="border:0;padding:6px 0 0;font-size:10px;color:#5a625c">พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.${location === 'out' ? ' · หน้างานนอกเขตบริการ (คิดค่าเดินทางตามระยะทาง)' : ''}</td>`;
+      const areaTxt = en
+        ? `Stated usable area: ${current.sqm} sq.m.${location === 'out' ? ' · site outside the service area (travel charged by distance)' : ''}`
+        : `พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.${location === 'out' ? ' · หน้างานนอกเขตบริการ (คิดค่าเดินทางตามระยะทาง)' : ''}`;
+      areaRow.innerHTML = `<td colspan="2" style="border:0;padding:6px 0 0;font-size:10px;color:#5a625c">${areaTxt}</td>`;
       body.appendChild(areaRow);
 
-      document.getElementById('qdTotal').textContent = baht(current.total) + ' บาท';
+      document.getElementById('qdTotal').textContent = money(current.total);
       const notes = [];
-      if (VAT_NOTE) notes.push(VAT_NOTE.th);
+      if (VAT_NOTE) notes.push(en ? VAT_NOTE.en : VAT_NOTE.th);
       if (current.pkg === 'one') {
         const later = round2Later(current.twoRound, propType);
-        notes.push(`แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข) · หากเพิ่มรอบแก้ไขภายหลัง คิดเพิ่ม ${baht(later)} บาท`);
+        notes.push(en
+          ? `Single-round package (re-inspection not included) · adding the re-inspection later costs ${money(later)}`
+          : `แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข) · หากเพิ่มรอบแก้ไขภายหลัง คิดเพิ่ม ${money(later)}`);
       } else {
-        notes.push('รวมตรวจรอบแก้ไขอีก 1 ครั้ง (นัดภายใน 60 วันหลังการตรวจครั้งแรก)');
+        notes.push(en
+          ? 'Includes one follow-up re-inspection (to be booked within 60 days of the first inspection)'
+          : 'รวมตรวจรอบแก้ไขอีก 1 ครั้ง (นัดภายใน 60 วันหลังการตรวจครั้งแรก)');
       }
-      if (location === 'out') notes.push('ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง');
+      if (location === 'out') notes.push(en
+        ? 'Excludes travel outside the service area, which is charged by distance'
+        : 'ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง');
       document.getElementById('qdVat').textContent = notes.join(' · ');
       return true;
     }
@@ -860,6 +898,12 @@ const terms = {
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-lang-btn]')) setTimeout(render, 50);
     });
+
+    // default the quotation language to whatever the visitor is browsing in
+    if (isEn()) {
+      const enRadio = document.querySelector('input[name="qlang"][value="en"]');
+      if (enRadio) enRadio.checked = true;
+    }
 
     syncOptions();
     render();
