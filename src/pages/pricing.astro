@@ -2,10 +2,171 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import settings from '../data/settings.json';
+
+// ── VAT statement shown on the page and the quotation ──────────────────────
+// Change this one line if prices are NOT VAT-inclusive.
+const VAT_NOTE = {
+  th: 'ราคาข้างต้นรวมภาษีมูลค่าเพิ่มแล้ว',
+  en: 'All prices shown include VAT.',
+};
+const QUOTE_VALID_DAYS = 30;
+
+// ── Property types & price tiers (from the company rate card) ───────────────
+const types = [
+  {
+    id: 'condo',
+    th: 'คอนโดมิเนียม', en: 'Condominium',
+    icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>`,
+    tiers: [
+      { max: 35,  price: 4000,  th: 'ไม่เกิน 35 ตร.ม.', en: 'Up to 35 sq.m.' },
+      { max: 50,  price: 5000,  th: '36–50 ตร.ม.',      en: '36–50 sq.m.' },
+      { max: 70,  price: 6000,  th: '51–70 ตร.ม.',      en: '51–70 sq.m.' },
+      { max: 100, price: 7000,  th: '71–100 ตร.ม.',     en: '71–100 sq.m.' },
+      { max: 150, price: 9000,  th: '101–150 ตร.ม.',    en: '101–150 sq.m.' },
+      { max: 200, price: 11000, th: '151–200 ตร.ม.',    en: '151–200 sq.m.' },
+      { max: null, price: null, th: 'มากกว่า 200 ตร.ม.', en: 'Over 200 sq.m.' },
+    ],
+  },
+  {
+    id: 'house1',
+    th: 'บ้านชั้นเดียว', en: 'Single-storey house',
+    icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>`,
+    tiers: [
+      { max: 120, price: 5000,  th: 'ไม่เกิน 120 ตร.ม.', en: 'Up to 120 sq.m.' },
+      { max: 150, price: 6000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
+      { max: 200, price: 8000,  th: '151–200 ตร.ม.',     en: '151–200 sq.m.' },
+      { max: 250, price: 10000, th: '201–250 ตร.ม.',     en: '201–250 sq.m.' },
+      { max: 300, price: 12000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
+      { max: 350, price: 14000, th: '301–350 ตร.ม.',     en: '301–350 sq.m.' },
+      { max: 400, price: 16000, th: '351–400 ตร.ม.',     en: '351–400 sq.m.' },
+      { max: null, price: null, th: 'มากกว่า 400 ตร.ม.',  en: 'Over 400 sq.m.' },
+    ],
+    note: { th: 'ราคาเริ่มต้นใช้กับบ้านมาตรฐาน ไม่มีสระว่ายน้ำ อาคารแยก ลิฟต์ หรืองานระบบพิเศษ', en: 'Starting price applies to standard homes — no pool, separate building, lift or special systems.' },
+  },
+  {
+    id: 'house2',
+    th: 'บ้านสองชั้น / บ้านแฝด', en: 'Two-storey / semi-detached',
+    icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M5 15h14"/><path d="M10 21v-4h4v4"/></svg>`,
+    tiers: [
+      { max: 120, price: 6000,  th: 'ไม่เกิน 120 ตร.ม.', en: 'Up to 120 sq.m.' },
+      { max: 150, price: 7000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
+      { max: 200, price: 8000,  th: '151–200 ตร.ม.',     en: '151–200 sq.m.' },
+      { max: 250, price: 10000, th: '201–250 ตร.ม.',     en: '201–250 sq.m.' },
+      { max: 300, price: 11000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
+      { max: 350, price: 13000, th: '301–350 ตร.ม.',     en: '301–350 sq.m.' },
+      { max: 400, price: 15000, th: '351–400 ตร.ม.',     en: '351–400 sq.m.' },
+      { max: 500, price: 20000, th: '401–500 ตร.ม.',     en: '401–500 sq.m.' },
+      { max: 600, price: 24000, th: '501–600 ตร.ม.',     en: '501–600 sq.m.' },
+      { max: null, price: null, th: 'มากกว่า 600 ตร.ม.',  en: 'Over 600 sq.m.' },
+    ],
+    note: { th: 'บ้านสองชั้นมีภาระงานมากกว่า ต้องตรวจบันได จุดต่อระหว่างชั้น ห้องน้ำชั้นบน และหลังคาที่เข้าถึงยากกว่า', en: 'Two-storey homes take more work — stairs, floor junctions, upper bathrooms and less accessible roof areas.' },
+  },
+  {
+    id: 'townhome',
+    th: 'ทาวน์โฮม / ทาวน์เฮาส์', en: 'Townhome / Townhouse',
+    icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 21V10l5-4 5 4v11"/><path d="M12 21V10l5-4 5 4v11"/><path d="M2 21h20"/></svg>`,
+    tiers: [
+      { max: 120, price: 6000,  th: 'ไม่เกิน 120 ตร.ม.', en: 'Up to 120 sq.m.' },
+      { max: 150, price: 7000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
+      { max: 200, price: 8000,  th: '151–200 ตร.ม.',     en: '151–200 sq.m.' },
+      { max: 250, price: 10000, th: '201–250 ตร.ม.',     en: '201–250 sq.m.' },
+      { max: 300, price: 12000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
+      { max: null, price: null, th: 'มากกว่า 300 ตร.ม.',  en: 'Over 300 sq.m.' },
+    ],
+  },
+];
+
+// ── Optional surcharges. `add` = flat baht, `pct` = % of base, `quote` = forces a custom quote ──
+const options = [
+  { id: 'duplex',   for: ['condo'],    add: 2000, th: 'ห้อง Duplex / ห้องสองชั้น',        en: 'Duplex / two-level unit' },
+  { id: 'bed3',     for: ['condo'],    add: 1000, th: 'ตั้งแต่ 3 ห้องนอนขึ้นไป',           en: '3 or more bedrooms' },
+  { id: 'penthouse',for: ['condo'],    quote: true, th: 'Penthouse / พื้นที่ภายนอกขนาดใหญ่', en: 'Penthouse / large outdoor area' },
+  { id: 'floor3',   for: ['townhome'], add: 2000, th: 'ทาวน์โฮม 3 ชั้น',                  en: '3-storey townhome' },
+  { id: 'floor4',   for: ['townhome'], add: 3000, th: 'ทาวน์โฮม 4 ชั้น / โฮมออฟฟิศ',       en: '4-storey / home office' },
+  { id: 'bath4',    for: ['townhome'], add: 1000, th: 'ห้องน้ำมากกว่า 4 ห้อง',             en: 'More than 4 bathrooms' },
+  { id: 'lift',     for: ['townhome'], add: 2000, th: 'มีลิฟต์',                          en: 'Has a lift' },
+  { id: 'pool',     for: ['house1','house2','townhome'], add: 3000, th: 'ตรวจสระว่ายน้ำ',  en: 'Swimming pool inspection' },
+  { id: 'builtin',  for: ['condo','house1','house2','townhome'], pct: 0.20, th: 'งานบิวต์อินจำนวนมาก', en: 'Extensive built-in furniture' },
+  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.25, minCondo: 2000, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
+];
+
+// ── Included scope / extras / custom-quote conditions / terms ───────────────
+const included = {
+  th: [
+    'ตรวจรับทรัพย์สินใหม่ก่อนโอนกรรมสิทธิ์',
+    'ตรวจงานสถาปัตยกรรม ระบบไฟฟ้า ระบบประปา และระบบสุขาภิบาล',
+    'ตรวจหลังคาและพื้นที่เหนือฝ้าในจุดที่เข้าถึงได้ (บ้านและทาวน์โฮม)',
+    'ตรวจครั้งแรกพร้อมรายงาน PDF และภาพประกอบ',
+    'กลับไปตรวจติดตามรายการแก้ไขครั้งที่ 2 จำนวน 1 ครั้ง',
+    'ค่าเดินทางภายในเขตบริการปกติของบริษัท',
+  ],
+  en: [
+    'Pre-transfer inspection of new property',
+    'Architectural, electrical, plumbing and sanitary systems',
+    'Roof and accessible ceiling voids (houses and townhomes)',
+    'First inspection with a photo PDF report',
+    'One follow-up re-inspection of the listed defects',
+    'Travel within our normal service area',
+  ],
+};
+
+const extras = [
+  { th: 'ตรวจรอบที่ 3 เป็นต้นไป — คอนโด',        en: '3rd round onwards — condo',          price: { th: '2,000 บาท/ครั้ง', en: '2,000 THB/visit' } },
+  { th: 'ตรวจรอบที่ 3 เป็นต้นไป — บ้าน/ทาวน์โฮม', en: '3rd round onwards — house/townhome', price: { th: '3,000 บาท/ครั้ง', en: '3,000 THB/visit' } },
+  { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 25%', en: '+25%' } },
+  { th: 'ตรวจสระว่ายน้ำ',                         en: 'Swimming pool inspection',            price: { th: '3,000 บาท', en: '3,000 THB' } },
+  { th: 'งานบิวต์อินจำนวนมาก',                    en: 'Extensive built-ins',                 price: { th: 'เพิ่ม 20%', en: '+20%' } },
+  { th: 'เดินทางนอกเขตบริการ',                    en: 'Travel outside the service area',     price: { th: 'คิดตามระยะทาง', en: 'By distance' } },
+];
+
+const customQuote = {
+  th: [
+    'พื้นที่เกินช่วงราคาที่กำหนดในตาราง',
+    'อาคารตั้งแต่ 3 ชั้นขึ้นไปที่ไม่ได้ระบุในตาราง',
+    'บ้านหรู คฤหาสน์ Penthouse หรืออาคารที่มีงานระบบซับซ้อน',
+    'บ้านที่มีสระว่ายน้ำ ลิฟต์ โซลาร์เซลล์ หรือระบบบ้านอัจฉริยะจำนวนมาก',
+    'บ้านตัวอย่างหรือทรัพย์ที่มีเฟอร์นิเจอร์บิวต์อินเต็มพื้นที่',
+    'บ้านมือสองที่มีอายุ สภาพ หรือประวัติการต่อเติมซับซ้อน',
+    'หน้างานต่างจังหวัดหรือพื้นที่ที่มีข้อจำกัดในการเดินทาง',
+  ],
+  en: [
+    'Areas beyond the tiers listed in the tables',
+    'Buildings of 3 storeys or more not covered above',
+    'Luxury homes, mansions, penthouses or complex building systems',
+    'Homes with a pool, lift, solar or extensive smart-home systems',
+    'Show homes or properties fully fitted with built-in furniture',
+    'Older second-hand homes or complex renovation history',
+    'Sites in other provinces or with access limitations',
+  ],
+};
+
+const terms = {
+  th: [
+    'ราคาคำนวณจากพื้นที่ใช้สอยตามแบบบ้าน สัญญาซื้อขาย หรือข้อมูลจากโครงการ',
+    'ลูกค้าแจ้งประเภททรัพย์ พื้นที่ใช้สอย จำนวนชั้น จำนวนห้องน้ำ และระบบพิเศษก่อนเสนอราคา',
+    'หากข้อมูลหน้างานไม่ตรงกับที่แจ้ง บริษัทขอสงวนสิทธิ์ปรับราคาให้เหมาะสมก่อนเริ่มงาน',
+    'การตรวจรอบที่ 2 ต้องนัดภายใน 60 วันหลังการตรวจครั้งแรก',
+    'การตรวจรอบที่ 2 ครอบคลุมเฉพาะรายการแก้ไขจากรายงานครั้งแรก',
+    'การทดสอบเป็นแบบไม่ทำลาย ตรวจเฉพาะพื้นที่หรืออุปกรณ์ที่เข้าถึงได้อย่างปลอดภัย',
+    'ราคาไม่รวมการรื้อ เปิดฝ้า เจาะผนัง ทดสอบโครงสร้างเชิงลึก หรือออกใบรับรองทางวิศวกรรม',
+    'การเลื่อนนัดกรุณาแจ้งล่วงหน้าไม่น้อยกว่า 24–48 ชั่วโมง',
+  ],
+  en: [
+    'Pricing is based on usable area from the drawings, sale contract or project data',
+    'Please tell us the property type, area, storeys, bathrooms and special systems before we quote',
+    'If the site differs from the information given, we may adjust the price before starting',
+    'The re-inspection must be booked within 60 days of the first inspection',
+    'The re-inspection covers only the defects listed in the first report',
+    'Testing is non-destructive and limited to safely accessible areas and equipment',
+    'Excludes demolition, opening ceilings, drilling walls, deep structural testing or engineering certification',
+    'Please reschedule at least 24–48 hours in advance',
+  ],
+};
 ---
 <BaseLayout
-  title="ค่าบริการตรวจบ้าน ตรวจคอนโด | WHAT THE HOUSE – Home Inspection Chiang Mai"
-  description="ราคาตรวจบ้านและคอนโดเชียงใหม่ เริ่มต้น 3,000 บาท คำนวณราคาตามขนาดพื้นที่ได้เลย | Home Inspection Pricing Chiang Mai"
+  title="ค่าบริการตรวจบ้าน ตรวจคอนโด | คำนวณราคา + ใบเสนอราคา PDF | WHAT THE HOUSE"
+  description="อัตราค่าบริการตรวจรับบ้านและคอนโดเชียงใหม่ คอนโดเริ่มต้น 4,000 บาท บ้านเริ่มต้น 5,000 บาท คำนวณราคาตามพื้นที่และดาวน์โหลดใบเสนอราคา PDF ได้ทันที | Home Inspection Pricing Chiang Mai"
 >
   <Header />
   <main>
@@ -15,254 +176,226 @@ import Footer from '../components/Footer.astro';
       <div class="container">
         <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ค่าบริการ</span><span class="lang-en">Pricing</span></p>
         <span class="eyebrow"><span class="lang-th">ค่าบริการ</span><span class="lang-en">Pricing</span></span>
-        <h1><span class="lang-th">ราคาค่าตรวจบ้าน</span><span class="lang-en">Inspection Pricing</span></h1>
-        <p><span class="lang-th">ราคาชัดเจน ไม่มีค่าใช้จ่ายซ่อน คำนวณราคาได้เลยจากขนาดและประเภทอสังหาริมทรัพย์</span><span class="lang-en block">Transparent pricing, no hidden fees. Calculate your inspection cost by property type and size.</span></p>
+        <h1><span class="lang-th">อัตราค่าบริการตรวจบ้าน</span><span class="lang-en">Inspection Pricing</span></h1>
+        <p><span class="lang-th">ราคาชัดเจนตามประเภทและขนาดทรัพย์สิน คำนวณราคาเองได้ทันที และดาวน์โหลดใบเสนอราคาเป็น PDF ไปใช้ได้เลย</span><span class="lang-en block">Clear pricing by property type and size. Calculate your price instantly and download a PDF quotation.</span></p>
       </div>
     </section>
 
-    <!-- ============ PRICE CALCULATOR ============ -->
+    <!-- ============ CALCULATOR ============ -->
     <section class="section">
       <div class="container">
         <div class="calc-wrap">
           <div class="calc-box">
-            <h2 class="calc-title">
-              <span class="lang-th">คำนวณราคาตรวจบ้าน</span>
-              <span class="lang-en">Calculate Your Price</span>
-            </h2>
-            <p class="calc-sub">
-              <span class="lang-th">เลือกประเภทและกรอกขนาดพื้นที่เพื่อดูราคาทันที</span>
-              <span class="lang-en block">Select property type and enter size to get an instant estimate.</span>
-            </p>
+            <h2 class="calc-title"><span class="lang-th">คำนวณราคาและออกใบเสนอราคา</span><span class="lang-en">Calculate & get a quotation</span></h2>
+            <p class="calc-sub"><span class="lang-th">เลือกประเภททรัพย์ กรอกพื้นที่ใช้สอย และเลือกเงื่อนไขที่ตรงกับหน้างานของคุณ</span><span class="lang-en block">Pick the property type, enter the usable area, and tick anything that matches your property.</span></p>
 
-            <!-- Step 1: Type -->
+            <!-- 1. type -->
             <div class="calc-step">
-              <label class="calc-label">
-                <span class="lang-th">1. ประเภทอสังหาริมทรัพย์</span>
-                <span class="lang-en">1. Property Type</span>
-              </label>
+              <label class="calc-label"><span class="lang-th">1. ประเภททรัพย์สิน</span><span class="lang-en">1. Property type</span></label>
               <div class="type-btns">
-                <button class="type-btn active" data-type="house">
-                  <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
-                  <span class="lang-th">บ้านเดี่ยว</span>
-                  <span class="lang-en">Detached House</span>
-                </button>
-                <button class="type-btn" data-type="townhouse">
-                  <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 21V10l5-4 5 4v11"/><path d="M12 21V10l5-4 5 4v11"/><path d="M2 21h20"/></svg>
-                  <span class="lang-th">ทาวน์เฮ้าส์</span>
-                  <span class="lang-en">Townhouse</span>
-                </button>
-                <button class="type-btn" data-type="condo">
-                  <svg viewBox="0 0 24 24" width="28" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>
-                  <span class="lang-th">คอนโด</span>
-                  <span class="lang-en">Condo</span>
-                </button>
+                {types.map((t, i) => (
+                  <button type="button" class={`type-btn${i === 0 ? ' active' : ''}`} data-type={t.id}>
+                    <span set:html={t.icon} />
+                    <span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <!-- Step 2: Area -->
+            <!-- 2. area -->
             <div class="calc-step">
-              <label class="calc-label" for="calcArea">
-                <span class="lang-th">2. พื้นที่ใช้สอย (ตร.ม.)</span>
-                <span class="lang-en">2. Floor Area (sq.m.)</span>
-              </label>
+              <label class="calc-label" for="calcArea"><span class="lang-th">2. พื้นที่ใช้สอย (ตร.ม.)</span><span class="lang-en">2. Usable area (sq.m.)</span></label>
               <div class="area-input-wrap">
-                <input type="number" id="calcArea" class="area-input" placeholder="เช่น 120" min="1" max="2000" />
+                <input type="number" id="calcArea" class="area-input" placeholder="เช่น 120" min="1" max="3000" />
                 <span class="area-unit">ตร.ม. / sq.m.</span>
               </div>
             </div>
 
-            <!-- Step 3: Area outside CM -->
+            <!-- 3. options -->
             <div class="calc-step">
-              <label class="calc-label">
-                <span class="lang-th">3. พื้นที่ให้บริการ</span>
-                <span class="lang-en">3. Service Area</span>
-              </label>
+              <label class="calc-label"><span class="lang-th">3. เงื่อนไขเพิ่มเติม (ถ้ามี)</span><span class="lang-en">3. Additional conditions (if any)</span></label>
+              <div class="opt-list" id="optList">
+                {options.map((o) => (
+                  <label class="opt" data-opt={o.id} data-for={o.for.join(',')} hidden>
+                    <input type="checkbox" value={o.id} />
+                    <span class="opt-txt"><span class="lang-th">{o.th}</span><span class="lang-en">{o.en}</span></span>
+                    <span class="opt-price">
+                      {o.quote ? <span><span class="lang-th">ประเมินราคา</span><span class="lang-en">Quote</span></span>
+                        : o.pct ? `+${Math.round(o.pct * 100)}%`
+                        : `+${o.add?.toLocaleString()} ฿`}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <!-- 4. service area -->
+            <div class="calc-step">
+              <label class="calc-label"><span class="lang-th">4. พื้นที่หน้างาน</span><span class="lang-en">4. Site location</span></label>
               <div class="area-btns">
                 <label class="area-radio">
                   <input type="radio" name="location" value="cm" checked />
-                  <span>
-                    <span class="lang-th">เชียงใหม่</span>
-                    <span class="lang-en">Chiang Mai</span>
-                  </span>
+                  <span><span class="lang-th">ในเขตบริการ (เชียงใหม่)</span><span class="lang-en">Within our service area (Chiang Mai)</span></span>
                 </label>
                 <label class="area-radio">
                   <input type="radio" name="location" value="out" />
                   <span>
-                    <span class="lang-th">ลำพูน / ลำปาง</span>
-                    <span class="lang-en">Lamphun / Lampang</span>
-                    <small class="lang-th"> (มีค่าเดินทาง)</small>
-                    <small class="lang-en"> (travel fee applies)</small>
+                    <span class="lang-th">นอกเขตบริการ (ลำพูน / ลำปาง)</span><span class="lang-en">Outside the area (Lamphun / Lampang)</span>
+                    <small class="lang-th"> (คิดค่าเดินทางตามระยะทาง)</small><small class="lang-en"> (travel charged by distance)</small>
                   </span>
                 </label>
               </div>
             </div>
 
-            <!-- Result -->
-            <div class="calc-result" id="calcResult">
+            <!-- result -->
+            <div class="calc-result">
               <div class="result-inner">
-                <div class="result-label">
-                  <span class="lang-th">ราคาประมาณการ</span>
-                  <span class="lang-en">Estimated Price</span>
-                </div>
+                <div class="result-label"><span class="lang-th">ราคาประมาณการ</span><span class="lang-en">Estimated price</span></div>
                 <div class="result-price" id="resultPrice">—</div>
                 <div class="result-note" id="resultNote"></div>
               </div>
-              <a href="/contact" class="btn btn-primary btn-lg result-cta">
-                <span class="lang-th">จองคิวตรวจบ้าน</span>
-                <span class="lang-en">Book an Inspection</span>
-              </a>
+            </div>
+            <ul class="bd-list" id="breakdown"></ul>
+
+            <!-- quotation details -->
+            <div class="quote-form" id="quoteForm">
+              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคา (ไม่บังคับกรอก)</span><span class="lang-en">Issue a quotation (optional fields)</span></p>
+              <div class="form-row">
+                <div class="field">
+                  <label for="qName"><span class="lang-th">ชื่อลูกค้า</span><span class="lang-en">Customer name</span></label>
+                  <input type="text" id="qName" placeholder="ชื่อ-นามสกุล / บริษัท" />
+                </div>
+                <div class="field">
+                  <label for="qPhone"><span class="lang-th">เบอร์ติดต่อ</span><span class="lang-en">Phone</span></label>
+                  <input type="tel" id="qPhone" placeholder="08X-XXX-XXXX" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span></label>
+                <input type="text" id="qProject" placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
+              </div>
+              <div class="qf-actions">
+                <button type="button" class="btn btn-primary btn-lg" id="btnQuote">
+                  <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                  <span class="lang-th">ดาวน์โหลดใบเสนอราคา (PDF)</span><span class="lang-en">Download quotation (PDF)</span>
+                </button>
+                <a class="btn btn-ghost btn-lg" href="/contact"><span class="lang-th">ให้เราเสนอราคาให้</span><span class="lang-en">Ask us to quote</span></a>
+              </div>
+              <p class="qf-hint"><span class="lang-th">ระบบจะเปิดหน้าต่างพิมพ์ — เลือก "บันทึกเป็น PDF" เพื่อดาวน์โหลดใบเสนอราคา</span><span class="lang-en block">A print dialog opens — choose "Save as PDF" to download the quotation.</span></p>
             </div>
           </div>
 
-          <!-- Side notes -->
-          <div class="calc-notes">
-            <h3><span class="lang-th">หมายเหตุ</span><span class="lang-en">Notes</span></h3>
+          <!-- notes side -->
+          <aside class="calc-notes">
+            <h3><span class="lang-th">ราคานี้รวมอะไรบ้าง</span><span class="lang-en">What's included</span></h3>
             <ul class="note-list">
-              <li>
-                <span class="nc">✓</span>
-                <span><span class="lang-th">ราคานี้รวมการตรวจ <b>2 รอบ</b> (รอบแรกและรอบแก้ไข)</span><span class="lang-en block">Price includes <b>2 rounds</b> of inspection (initial + re-inspection)</span></span>
-              </li>
-              <li>
-                <span class="nc">✓</span>
-                <span><span class="lang-th">รวมรายงาน PDF <b>ภาษาไทยและอังกฤษ</b></span><span class="lang-en block">Includes <b>Thai–English</b> PDF report</span></span>
-              </li>
-              <li>
-                <span class="nc">✓</span>
-                <span>
-                  <span class="lang-th">ส่งรายงานภายใน <b>24 ชั่วโมง</b> หลังการตรวจ</span>
-                  <span class="lang-en block">Report delivered within <b>24 hours</b> of inspection</span>
-                  <small class="note-tiny"><span class="lang-th">*ระยะเวลาอาจเปลี่ยนแปลงได้ตามขนาดโครงการ</span><span class="lang-en">*Timeline may vary depending on project size</span></small>
-                </span>
-              </li>
-              <li>
-                <span class="nc">ℹ</span>
-                <span><span class="lang-th">พื้นที่นอกเชียงใหม่ มีค่าเดินทางเพิ่มเติม ขึ้นอยู่กับระยะทาง</span><span class="lang-en block">Travel fee applies for areas outside Chiang Mai, based on distance</span></span>
-              </li>
-              <li>
-                <span class="nc">ℹ</span>
-                <span><span class="lang-th">บ้านพื้นที่เกิน 500 ตร.ม. กรุณาสอบถามราคาพิเศษ</span><span class="lang-en block">Houses over 500 sq.m. — please contact us for a custom quote</span></span>
-              </li>
-              <li>
-                <span class="nc">ℹ</span>
-                <span><span class="lang-th">คอนโดพื้นที่เกิน 120 ตร.ม. กรุณาสอบถามราคาพิเศษ</span><span class="lang-en block">Condos over 120 sq.m. — please contact us for a custom quote</span></span>
-              </li>
+              {included.th.map((t, i) => (
+                <li><span class="nc">✓</span><span><span class="lang-th">{t}</span><span class="lang-en block">{included.en[i]}</span></span></li>
+              ))}
+            </ul>
+            <div class="btu-tip">
+              <span class="lang-th">{VAT_NOTE.th}</span><span class="lang-en block">{VAT_NOTE.en}</span>
+              <a href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน →</span><span class="lang-en">See a sample report →</span></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICE TABLES ============ -->
+    <section class="section soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow"><span class="lang-th">ตารางราคา</span><span class="lang-en">Rate card</span></span>
+          <h2 class="section-title"><span class="lang-th">อัตราค่าบริการตามประเภททรัพย์</span><span class="lang-en">Rates by property type</span></h2>
+        </div>
+        <div class="price-tables">
+          {types.map((t) => (
+            <div class="price-table-wrap">
+              <div class="pt-header">
+                <span set:html={t.icon} />
+                <h3><span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span></h3>
+              </div>
+              <table class="price-tbl">
+                <thead>
+                  <tr>
+                    <th><span class="lang-th">พื้นที่ใช้สอย</span><span class="lang-en">Usable area</span></th>
+                    <th><span class="lang-th">ราคา</span><span class="lang-en">Price</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {t.tiers.map((r) => (
+                    <tr>
+                      <td><span class="lang-th">{r.th}</span><span class="lang-en">{r.en}</span></td>
+                      <td class="price-cell">{r.price ? `${r.price.toLocaleString()} ฿` : <span><span class="lang-th">ประเมินราคา</span><span class="lang-en">Quote</span></span>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {t.note && <p class="pt-note"><span class="lang-th">{t.note.th}</span><span class="lang-en block">{t.note.en}</span></p>}
+            </div>
+          ))}
+        </div>
+        <p class="pt-foot">
+          <span class="lang-th">* {VAT_NOTE.th} · ราคารวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว</span>
+          <span class="lang-en block">* {VAT_NOTE.en} Prices include 2 inspection rounds and the bilingual PDF report.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ EXTRAS + CUSTOM QUOTE ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="two-col">
+          <div class="info-card">
+            <h3><span class="lang-th">ค่าบริการเพิ่มเติม</span><span class="lang-en">Additional charges</span></h3>
+            <table class="price-tbl extras-tbl">
+              <tbody>
+                {extras.map((e) => (
+                  <tr>
+                    <td><span class="lang-th">{e.th}</span><span class="lang-en">{e.en}</span></td>
+                    <td class="price-cell"><span class="lang-th">{e.price.th}</span><span class="lang-en">{e.price.en}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div class="info-card">
+            <h3><span class="lang-th">กรณีที่ต้องประเมินราคาเป็นรายกรณี</span><span class="lang-en">Cases we quote individually</span></h3>
+            <ul class="tick-list">
+              {customQuote.th.map((t, i) => (
+                <li><span class="nc">•</span><span><span class="lang-th">{t}</span><span class="lang-en block">{customQuote.en[i]}</span></span></li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ PRICE TABLE ============ -->
+    <!-- ============ TERMS ============ -->
     <section class="section soft">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">ตารางราคา</span><span class="lang-en">Price Table</span></span>
-          <h2 class="section-title"><span class="lang-th">ราคาตรวจบ้านและคอนโด</span><span class="lang-en">Full Price Reference</span></h2>
+          <span class="eyebrow"><span class="lang-th">เงื่อนไขการใช้บริการ</span><span class="lang-en">Service terms</span></span>
+          <h2 class="section-title"><span class="lang-th">เงื่อนไขที่ควรทราบก่อนใช้บริการ</span><span class="lang-en">Before you book</span></h2>
         </div>
-
-        <div class="price-tables">
-          <!-- House table -->
-          <div class="price-table-wrap">
-            <div class="pt-header">
-              <svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
-              <h3><span class="lang-th">บ้านเดี่ยว / ทาวน์เฮ้าส์</span><span class="lang-en">House / Townhouse</span></h3>
-            </div>
-            <table class="price-tbl">
-              <thead>
-                <tr>
-                  <th><span class="lang-th">พื้นที่ (ตร.ม.)</span><span class="lang-en">Area (sq.m.)</span></th>
-                  <th><span class="lang-th">ราคา</span><span class="lang-en">Price</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>≤ 150</td><td class="price-cell">5,000 ฿</td></tr>
-                <tr><td>151 – 220</td><td class="price-cell">6,000 ฿</td></tr>
-                <tr><td>221 – 300</td><td class="price-cell">7,000 ฿</td></tr>
-                <tr><td>301 – 400</td><td class="price-cell">8,000 ฿</td></tr>
-                <tr><td>401 – 500</td><td class="price-cell">9,000 ฿</td></tr>
-                <tr><td>&gt; 500</td><td class="price-cell"><span class="lang-th">สอบถาม</span><span class="lang-en">Quote</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Condo table -->
-          <div class="price-table-wrap">
-            <div class="pt-header">
-              <svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>
-              <h3><span class="lang-th">คอนโดมิเนียม</span><span class="lang-en">Condominium</span></h3>
-            </div>
-            <table class="price-tbl">
-              <thead>
-                <tr>
-                  <th><span class="lang-th">พื้นที่ (ตร.ม.)</span><span class="lang-en">Area (sq.m.)</span></th>
-                  <th><span class="lang-th">ราคา</span><span class="lang-en">Price</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>≤ 40</td><td class="price-cell">3,000 ฿</td></tr>
-                <tr><td>41 – 60</td><td class="price-cell">4,000 ฿</td></tr>
-                <tr><td>61 – 90</td><td class="price-cell">5,000 ฿</td></tr>
-                <tr><td>91 – 120</td><td class="price-cell">6,000 ฿</td></tr>
-                <tr><td>&gt; 120</td><td class="price-cell"><span class="lang-th">สอบถาม</span><span class="lang-en">Quote</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <p class="pt-foot">
-          <span class="lang-th">* ราคาข้างต้นรวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว · พื้นที่นอกเชียงใหม่มีค่าเดินทางเพิ่มเติม</span>
-          <span class="lang-en block">* All prices include 2-round inspection and Thai–English PDF report · Travel fee applies outside Chiang Mai</span>
-        </p>
-      </div>
-    </section>
-
-    <!-- ============ WHAT'S INCLUDED ============ -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">รวมอยู่ในราคา</span><span class="lang-en">What's included</span></span>
-          <h2 class="section-title"><span class="lang-th">ค่าบริการรวมทุกอย่างแล้ว</span><span class="lang-en">Everything is included</span></h2>
-        </div>
-        <div class="grid grid-3">
-          <div class="feat">
-            <div class="fic"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.2-8.6"/><path d="M21 4l-9 9-3-3"/></svg></div>
-            <div>
-              <h4><span class="lang-th">ตรวจ 2 รอบ</span><span class="lang-en">2 inspection rounds</span></h4>
-              <p><span class="lang-th">รอบแรกก่อนรับมอบ และรอบแก้ไขหลังผู้รับเหมาซ่อม</span><span class="lang-en block">Initial inspection + re-inspection after contractor fixes.</span></p>
-            </div>
-          </div>
-          <div class="feat">
-            <div class="fic"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div>
-            <div>
-              <h4><span class="lang-th">รายงาน PDF ไทย-อังกฤษ</span><span class="lang-en">Thai–English PDF report</span></h4>
-              <p>
-                <span class="lang-th">พร้อมรูปภาพและคำแนะนำการแก้ไข ส่งภายใน <b>24 ชั่วโมง</b> หลังการตรวจ</span>
-                <span class="lang-en block">With photos and repair recommendations, delivered within <b>24 hours</b> of inspection.</span>
-                <small class="note-tiny"><span class="lang-th">*ระยะเวลาอาจเปลี่ยนแปลงได้ตามขนาดโครงการ</span><span class="lang-en">*Timeline may vary depending on project size</span></small>
-              </p>
-              <a class="feat-link" href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน</span><span class="lang-en">See a sample report</span> →</a>
-            </div>
-          </div>
-          <div class="feat">
-            <div class="fic"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <div>
-              <h4><span class="lang-th">ให้คำปรึกษาหลังรับรายงาน</span><span class="lang-en">Post-report consultation</span></h4>
-              <p><span class="lang-th">อธิบายปัญหาและแนวทางแก้ไขแบบตัวต่อตัว ไม่มีค่าใช้จ่ายเพิ่ม</span><span class="lang-en block">Walk you through findings and next steps — no extra charge.</span></p>
-            </div>
-          </div>
-        </div>
+        <ol class="terms-list">
+          {terms.th.map((t, i) => (
+            <li><span class="lang-th">{t}</span><span class="lang-en block">{terms.en[i]}</span></li>
+          ))}
+        </ol>
       </div>
     </section>
 
     <!-- ============ CTA ============ -->
-    <section class="section soft">
+    <section class="section">
       <div class="container">
         <div class="cta-band">
           <h2><span class="lang-th">พร้อมจองคิวตรวจบ้านแล้วหรือยัง?</span><span class="lang-en">Ready to book your inspection?</span></h2>
-          <p><span class="lang-th">ติดต่อเราเพื่อยืนยันราคาและจองวันตรวจ รับใบเสนอราคาภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us to confirm pricing and book your date — get a quote within 24 hours.</span></p>
+          <p><span class="lang-th">ติดต่อเราเพื่อยืนยันราคาและจองวันตรวจ รับใบเสนอราคาภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us to confirm pricing and book your date — quote within 24 hours.</span></p>
           <div class="btns">
             <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">ขอราคา / จองคิว</span><span class="lang-en">Get a Quote</span></a>
-            <a class="btn btn-ghost btn-lg" href="/services"><span class="lang-th">ดูบริการทั้งหมด</span><span class="lang-en">View Services</span></a>
+            <a class="btn btn-ghost btn-lg" href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน</span><span class="lang-en">See a sample report</span></a>
           </div>
         </div>
       </div>
@@ -270,209 +403,358 @@ import Footer from '../components/Footer.astro';
 
   </main>
   <Footer />
+
+  <!-- ============ PRINTABLE QUOTATION (screen-hidden) ============ -->
+  <div id="quoteDoc" class="quote-doc" aria-hidden="true">
+    <div class="qd-top">
+      <div class="qd-brand">
+        <img src="/assets/img/logo-mark.png" alt="" width="46" height="48" />
+        <div><b>WHAT THE HOUSE</b><span>HOME INSPECTIONS</span></div>
+      </div>
+      <div class="qd-meta">
+        <div class="qd-title">ใบเสนอราคา / QUOTATION</div>
+        <div>เลขที่ / No.: <b id="qdNo"></b></div>
+        <div>วันที่ / Date: <b id="qdDate"></b></div>
+        <div>ยืนราคาถึง / Valid until: <b id="qdValid"></b></div>
+      </div>
+    </div>
+
+    <div class="qd-parties">
+      <div>
+        <h4>ผู้เสนอราคา / From</h4>
+        <p>WHAT THE HOUSE – Home Inspections<br />
+          โทร. {settings.phoneDisplay}<br />
+          {settings.email}<br />
+          LINE: {settings.lineId}</p>
+      </div>
+      <div>
+        <h4>เสนอต่อ / To</h4>
+        <p><b id="qdCustomer">—</b><br />
+          <span id="qdPhone"></span><br />
+          <span id="qdProject"></span></p>
+      </div>
+    </div>
+
+    <table class="qd-table">
+      <thead>
+        <tr><th>รายการ / Description</th><th class="qd-right">จำนวนเงิน / Amount</th></tr>
+      </thead>
+      <tbody id="qdItems"></tbody>
+      <tfoot>
+        <tr><td class="qd-total-label">รวมทั้งสิ้น / Total</td><td class="qd-right qd-total" id="qdTotal">—</td></tr>
+      </tfoot>
+    </table>
+
+    <p class="qd-vat" id="qdVat"></p>
+
+    <div class="qd-cols">
+      <div>
+        <h4>ขอบเขตที่รวมในราคา / Included</h4>
+        <ul>{included.th.map((t) => <li>{t}</li>)}</ul>
+      </div>
+      <div>
+        <h4>เงื่อนไข / Terms</h4>
+        <ol>{terms.th.map((t) => <li>{t}</li>)}</ol>
+      </div>
+    </div>
+
+    <div class="qd-sign">
+      <div><span class="qd-line"></span>ผู้เสนอราคา / Authorised signature</div>
+      <div><span class="qd-line"></span>ผู้อนุมัติ / Customer acceptance</div>
+    </div>
+    <p class="qd-foot">เอกสารนี้เป็นการประเมินราคาเบื้องต้นจากข้อมูลที่ลูกค้าให้ไว้ · ราคาสุดท้ายยืนยันอีกครั้งก่อนเริ่มงาน · whatthehouse.net</p>
+  </div>
 </BaseLayout>
 
 <style>
-/* ── Calculator ── */
-/* type buttons */
-.type-btns { display: flex; gap: 12px; }
+/* ── type buttons ── */
+.type-btns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .type-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 18px 12px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--bg-soft);
-  cursor: pointer;
-  font-size: .9rem;
-  font-family: inherit;
-  font-weight: 500;
-  color: var(--grey);
-  transition: .2s;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 15px 8px; border: 2px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel-2); cursor: pointer; font-size: .84rem; font-family: inherit;
+  font-weight: 500; color: var(--grey); transition: .2s; text-align: center; line-height: 1.3;
 }
-.type-btn svg { color: var(--grey); transition: .2s; }
+.type-btn :global(svg) { color: var(--grey); transition: .2s; }
 .type-btn:hover { border-color: var(--green); color: var(--green-bright); }
-.type-btn:hover svg { color: var(--green-bright); }
-.type-btn.active {
-  border-color: var(--green);
-  background: var(--green-soft);
-  color: var(--green-bright);
-  font-weight: 600;
+.type-btn:hover :global(svg) { color: var(--green-bright); }
+.type-btn.active { border-color: var(--green); background: var(--green-soft); color: var(--green-bright); font-weight: 600; }
+.type-btn.active :global(svg) { color: var(--green-bright); }
+
+/* ── options ── */
+.opt-list { display: flex; flex-direction: column; gap: 8px; }
+.opt {
+  display: flex; align-items: center; gap: 11px; cursor: pointer;
+  border: 1.5px solid var(--line-2); border-radius: var(--radius-sm);
+  padding: 11px 14px; background: var(--panel-2); transition: .15s; font-size: .9rem;
 }
-.type-btn.active svg { color: var(--green-bright); }
+.opt:hover { border-color: var(--green); }
+.opt:has(input:checked) { border-color: var(--green); background: var(--green-soft); }
+.opt input { accent-color: var(--green); margin: 0; flex: none; }
+.opt-txt { flex: 1; color: var(--body); }
+.opt-price { font-family: var(--mono); font-size: .82rem; color: var(--green-bright); white-space: nowrap; }
+.opt-none { color: var(--faint); font-size: .88rem; margin: 0; }
 
-/* "see a sample report" link in the included-report card */
-.feat-link { display: inline-block; margin-top: 8px; color: var(--green-bright); font-weight: 600; font-size: .9rem; }
-.feat-link:hover { text-decoration: underline; }
-
-/* location radios */
+/* ── location radios ── */
 .area-btns { display: flex; flex-direction: column; gap: 10px; }
 .area-radio {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  cursor: pointer;
-  padding: 12px 14px;
-  border: 2px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--panel-2);
-  transition: .15s;
-  font-size: .93rem;
+  display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+  padding: 12px 14px; border: 2px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel-2); transition: .15s; font-size: .92rem;
 }
 .area-radio:has(input:checked) { border-color: var(--green); background: var(--green-soft); }
 .area-radio input { margin-top: 3px; accent-color: var(--green); }
 .area-radio small { color: var(--grey); font-size: .82rem; }
 
-/* result box */
-/* notes side */
-/* price tables */
-.price-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.price-table-wrap {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.pt-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--panel-3);
-  border-bottom: 1px solid var(--line);
-  color: #fff;
-  padding: 16px 22px;
-}
-.pt-header svg { color: var(--green-bright); }
+/* ── breakdown ── */
+.bd-list { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-direction: column; gap: 7px; }
+.bd-list li { display: flex; justify-content: space-between; gap: 14px; font-size: .89rem; color: var(--grey); border-bottom: 1px dashed var(--line); padding-bottom: 7px; }
+.bd-list li b { color: var(--heading); font-family: var(--mono); white-space: nowrap; }
+
+/* ── quote form ── */
+.quote-form { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 22px; }
+.qf-title { font-weight: 700; color: var(--heading); margin: 0 0 14px; font-size: .95rem; }
+.quote-form .field label { font-family: var(--font); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); }
+.qf-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+.qf-actions .btn { flex: 1; justify-content: center; min-width: 200px; }
+.qf-hint { color: var(--faint); font-size: .8rem; margin: 12px 0 0; }
+
+/* ── price tables ── */
+.price-tables { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.price-table-wrap { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+.pt-header { display: flex; align-items: center; gap: 10px; background: var(--panel-3); border-bottom: 1px solid var(--line); color: #fff; padding: 15px 20px; }
+.pt-header :global(svg) { color: var(--green-bright); flex: none; }
 .pt-header h3 { margin: 0; font-size: 1rem; color: #fff; }
 .price-tbl { width: 100%; border-collapse: collapse; }
-.price-tbl th {
-  text-align: left;
-  padding: 10px 22px;
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--grey);
-  background: var(--bg-soft);
-  border-bottom: 1px solid var(--line);
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-.price-tbl td {
-  padding: 13px 22px;
-  border-bottom: 1px solid var(--line);
-  font-size: .95rem;
-  color: var(--body);
-}
+.price-tbl th { text-align: left; padding: 9px 20px; font-size: .78rem; font-weight: 600; color: var(--grey); background: var(--panel-2); border-bottom: 1px solid var(--line); text-transform: uppercase; letter-spacing: .04em; }
+.price-tbl td { padding: 11px 20px; border-bottom: 1px solid var(--line); font-size: .92rem; color: var(--body); }
 .price-tbl tr:last-child td { border-bottom: 0; }
 .price-tbl tr:hover td { background: var(--panel-2); }
-.price-cell { font-family: var(--mono); font-weight: 600; color: var(--green-bright); font-size: 1.05rem; }
-.pt-foot {
-  text-align: center;
-  margin-top: 18px;
-  font-size: .85rem;
-  color: var(--grey-light);
-}
+.price-cell { font-family: var(--mono); font-weight: 600; color: var(--green-bright); text-align: right; white-space: nowrap; }
+.pt-note { margin: 0; padding: 12px 20px; border-top: 1px solid var(--line); color: var(--grey); font-size: .82rem; background: var(--panel-2); }
+.pt-foot { text-align: center; margin-top: 20px; font-size: .86rem; color: var(--grey); }
+
+/* ── extras / custom quote ── */
+.two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+.info-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+.info-card h3 { font-size: 1.08rem; margin: 0 0 16px; color: var(--heading); }
+.extras-tbl td { padding: 10px 0; }
+.tick-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.tick-list li { display: flex; gap: 10px; font-size: .9rem; color: var(--grey); }
+.tick-list .nc { background: none; color: var(--green-bright); width: auto; height: auto; }
+
+/* ── terms ── */
+.terms-list { max-width: 820px; margin: 0 auto; padding-left: 1.3em; display: flex; flex-direction: column; gap: 11px; }
+.terms-list li { color: var(--grey); font-size: .93rem; line-height: 1.65; }
 
 @media (max-width: 980px) {
   .calc-wrap { grid-template-columns: 1fr; }
   .calc-notes { order: -1; }
+  .price-tables, .two-col { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
-  .type-btns { flex-direction: column; }
-  .price-tables { grid-template-columns: 1fr; }
-  .calc-result { flex-direction: column; align-items: flex-start; }
+  .type-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .calc-box { padding: 24px 18px; }
+  .qf-actions .btn { min-width: 0; }
 }
+
+/* ── quotation document: hidden on screen, shown when printing ── */
+.quote-doc { display: none; }
 </style>
 
-<script>
-  // ── Price Calculator Logic ──
+<style is:global>
+  /* The quotation is a light A4 document — only rendered for print. */
+  @media print {
+    body > *:not(#quoteDoc) { display: none !important; }
+    #quoteDoc { display: block !important; }
+    @page { size: A4; margin: 14mm; }
+    html, body { background: #fff !important; }
+  }
+  #quoteDoc {
+    background: #fff; color: #16181a; font-size: 11.5px; line-height: 1.55;
+  }
+  #quoteDoc h4 { font-size: 11.5px; margin: 0 0 5px; color: #16181a; }
+  #quoteDoc p { margin: 0; }
+  #quoteDoc .qd-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; border-bottom: 2px solid #16181a; padding-bottom: 12px; }
+  #quoteDoc .qd-brand { display: flex; align-items: center; gap: 10px; }
+  #quoteDoc .qd-brand img { display: block; }
+  #quoteDoc .qd-brand b { display: block; font-size: 15px; letter-spacing: .01em; }
+  #quoteDoc .qd-brand span { font-size: 8.5px; letter-spacing: .18em; color: #5a625c; }
+  #quoteDoc .qd-meta { text-align: right; }
+  #quoteDoc .qd-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  #quoteDoc .qd-parties { display: flex; gap: 26px; margin: 14px 0 16px; }
+  #quoteDoc .qd-parties > div { flex: 1; }
+  #quoteDoc .qd-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  #quoteDoc .qd-table th { text-align: left; background: #f1f4f0; border: 1px solid #d8ded8; padding: 7px 9px; font-size: 11px; }
+  #quoteDoc .qd-table td { border: 1px solid #d8ded8; padding: 7px 9px; }
+  #quoteDoc .qd-right { text-align: right; }
+  #quoteDoc .qd-total-label { font-weight: 700; text-align: right; }
+  #quoteDoc .qd-total { font-weight: 700; font-size: 13.5px; }
+  #quoteDoc .qd-vat { font-size: 10.5px; color: #5a625c; margin-bottom: 14px; }
+  #quoteDoc .qd-cols { display: flex; gap: 26px; }
+  #quoteDoc .qd-cols > div { flex: 1; }
+  #quoteDoc .qd-cols ul, #quoteDoc .qd-cols ol { margin: 0; padding-left: 1.1em; font-size: 10px; color: #3a403b; }
+  #quoteDoc .qd-cols li { margin-bottom: 3px; }
+  #quoteDoc .qd-sign { display: flex; gap: 40px; margin-top: 26px; font-size: 10px; color: #5a625c; }
+  #quoteDoc .qd-sign > div { flex: 1; text-align: center; }
+  #quoteDoc .qd-line { display: block; border-top: 1px solid #16181a; margin-bottom: 5px; height: 34px; }
+  #quoteDoc .qd-foot { margin-top: 16px; border-top: 1px solid #d8ded8; padding-top: 7px; font-size: 9px; color: #5a625c; text-align: center; }
+</style>
+
+<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS }}>
   (function () {
-    // house table is shared by detached houses and townhouses (same pricing)
-    const HOUSE = [
-      { max: 150, price: 5000 },
-      { max: 220, price: 6000 },
-      { max: 300, price: 7000 },
-      { max: 400, price: 8000 },
-      { max: 500, price: 9000 },
-      { max: Infinity, price: null }, // quote
-    ];
-    const PRICES: Record<string, { max: number; price: number | null }[]> = {
-      house: HOUSE,
-      townhouse: HOUSE,
-      condo: [
-        { max: 40,  price: 3000 },
-        { max: 60,  price: 4000 },
-        { max: 90,  price: 5000 },
-        { max: 120, price: 6000 },
-        { max: Infinity, price: null }, // quote
-      ],
-    };
-
-    let propType = 'house';
-    let location = 'cm';
-
-    const areaInput  = document.getElementById('calcArea') as HTMLInputElement;
-    const resultPrice = document.getElementById('resultPrice') as HTMLElement;
-    const resultNote  = document.getElementById('resultNote') as HTMLElement;
+    const areaInput   = document.getElementById('calcArea');
+    const resultPrice = document.getElementById('resultPrice');
+    const resultNote  = document.getElementById('resultNote');
+    const breakdown   = document.getElementById('breakdown');
     const typeBtns    = document.querySelectorAll('.type-btn');
+    const optLabels   = Array.from(document.querySelectorAll('.opt'));
     const locRadios   = document.querySelectorAll('input[name="location"]');
 
-    function isEn() { return document.body.classList.contains('en'); }
+    let propType = types[0].id;
+    let location = 'cm';
+    let current = null; // last computed quote
 
-    function calcPrice() {
+    const isEn = () => document.body.classList.contains('en');
+    const baht = (n) => n.toLocaleString('en-US');
+
+    // show only the options that apply to the selected property type
+    function syncOptions() {
+      optLabels.forEach((el) => {
+        const applies = (el.dataset.for || '').split(',').includes(propType);
+        el.hidden = !applies;
+        if (!applies) el.querySelector('input').checked = false;
+      });
+    }
+
+    function compute() {
       const sqm = parseFloat(areaInput.value);
-      if (!sqm || sqm <= 0) {
+      const type = types.find((t) => t.id === propType);
+      if (!sqm || sqm <= 0) return null;
+
+      // tier: first with area <= max; the final tier has max === null (over-size → quote)
+      const tier = type.tiers.find((r) => r.max !== null && sqm <= r.max) || type.tiers[type.tiers.length - 1];
+      const checked = optLabels
+        .filter((el) => !el.hidden && el.querySelector('input').checked)
+        .map((el) => options.find((o) => o.id === el.dataset.opt));
+
+      if (!tier || tier.price === null || checked.some((o) => o.quote)) {
+        return { quote: true, type, tier, checked, sqm };
+      }
+
+      const base = tier.price;
+      const lines = [{ label: { th: `ตรวจ${type.th} · ${tier.th}`, en: `${type.en} inspection · ${tier.en}` }, amount: base }];
+      let total = base;
+
+      checked.forEach((o) => {
+        let amount = 0;
+        if (o.pct) {
+          amount = Math.round(base * o.pct);
+          if (o.minCondo && propType === 'condo') amount = Math.max(amount, o.minCondo);
+        } else if (o.add) {
+          amount = o.add;
+        }
+        if (amount > 0) {
+          lines.push({ label: { th: o.th, en: o.en }, amount });
+          total += amount;
+        }
+      });
+
+      return { quote: false, type, tier, checked, sqm, lines, total };
+    }
+
+    function render() {
+      current = compute();
+      breakdown.innerHTML = '';
+
+      if (!current) {
         resultPrice.textContent = '—';
-        resultNote.textContent = '';
+        resultNote.textContent = isEn() ? 'Enter the usable area' : 'กรอกพื้นที่ใช้สอยเพื่อดูราคา';
         return;
       }
 
-      const table = PRICES[propType] || PRICES.house;
-      const row = table.find(r => sqm <= r.max);
-      const travelNote = location === 'out'
-        ? (isEn() ? ' + travel fee' : ' + ค่าเดินทาง')
-        : '';
-
-      if (!row || row.price === null) {
-        resultPrice.textContent = isEn() ? 'Contact us' : 'สอบถามราคา';
-        resultNote.textContent = isEn() ? 'Custom quote for this size' : 'ขนาดนี้กรุณาติดต่อเพื่อรับราคาพิเศษ';
-      } else {
-        resultPrice.textContent = row.price.toLocaleString() + ' ฿' + travelNote;
+      if (current.quote) {
+        resultPrice.textContent = isEn() ? 'Custom quote' : 'ประเมินราคา';
         resultNote.textContent = isEn()
-          ? 'Includes 2 rounds + Thai–English PDF report within 24 hrs'
-          : 'รวม 2 รอบตรวจ + รายงาน PDF ไทย-อังกฤษ ภายใน 24 ชั่วโมง';
+          ? 'This property needs an individual quote — contact us'
+          : 'ทรัพย์สินลักษณะนี้ต้องประเมินราคาเป็นรายกรณี กรุณาติดต่อเรา';
+        return;
+      }
+
+      const travel = location === 'out' ? (isEn() ? ' + travel' : ' + ค่าเดินทาง') : '';
+      resultPrice.textContent = baht(current.total) + ' ฿' + travel;
+      resultNote.textContent = isEn() ? VAT_NOTE.en : VAT_NOTE.th;
+
+      current.lines.forEach((l) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${isEn() ? l.label.en : l.label.th}</span><b>${baht(l.amount)} ฿</b>`;
+        breakdown.appendChild(li);
+      });
+      if (location === 'out') {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${isEn() ? 'Travel outside the service area' : 'ค่าเดินทางนอกเขตบริการ'}</span><b>${isEn() ? 'by distance' : 'ตามระยะทาง'}</b>`;
+        breakdown.appendChild(li);
       }
     }
 
-    // type toggle
-    typeBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        typeBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        propType = (btn as HTMLElement).dataset.type || 'house';
-        calcPrice();
+    // ── quotation ──
+    function fillQuote() {
+      if (!current || current.quote) return false;
+      const now = new Date();
+      const valid = new Date(now.getTime() + QUOTE_VALID_DAYS * 864e5);
+      const fmt = (d) => d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+      const pad = (n) => String(n).padStart(2, '0');
+
+      document.getElementById('qdNo').textContent =
+        `WTH-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+      document.getElementById('qdDate').textContent = fmt(now);
+      document.getElementById('qdValid').textContent = fmt(valid);
+      document.getElementById('qdCustomer').textContent = document.getElementById('qName').value.trim() || '—';
+      document.getElementById('qdPhone').textContent = document.getElementById('qPhone').value.trim();
+      document.getElementById('qdProject').textContent = document.getElementById('qProject').value.trim();
+
+      const body = document.getElementById('qdItems');
+      body.innerHTML = '';
+      current.lines.forEach((l) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${l.label.th}</td><td class="qd-right">${baht(l.amount)} บาท</td>`;
+        body.appendChild(tr);
       });
-    });
+      const areaRow = document.createElement('tr');
+      areaRow.innerHTML = `<td colspan="2" style="border:0;padding:6px 0 0;font-size:10px;color:#5a625c">พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.${location === 'out' ? ' · หน้างานนอกเขตบริการ (คิดค่าเดินทางตามระยะทาง)' : ''}</td>`;
+      body.appendChild(areaRow);
 
-    // area input
-    areaInput.addEventListener('input', calcPrice);
+      document.getElementById('qdTotal').textContent = baht(current.total) + ' บาท';
+      document.getElementById('qdVat').textContent =
+        VAT_NOTE.th + (location === 'out' ? ' · ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง' : '');
+      return true;
+    }
 
-    // location
-    locRadios.forEach(r => {
-      r.addEventListener('change', () => {
-        location = (r as HTMLInputElement).value;
-        calcPrice();
-      });
-    });
-
-    // re-calc when language changes (prices stay same, labels change)
-    document.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('[data-lang-btn]')) {
-        setTimeout(calcPrice, 50);
+    document.getElementById('btnQuote').addEventListener('click', () => {
+      if (!fillQuote()) {
+        alert(isEn()
+          ? 'Please enter the usable area first. Properties needing a custom quote can’t be auto-quoted — please contact us.'
+          : 'กรุณากรอกพื้นที่ใช้สอยก่อน · กรณีที่ต้องประเมินราคาเป็นรายกรณี กรุณาติดต่อเราโดยตรง');
+        return;
       }
+      window.print();
     });
+
+    typeBtns.forEach((btn) => btn.addEventListener('click', () => {
+      typeBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      propType = btn.dataset.type;
+      syncOptions();
+      render();
+    }));
+    optLabels.forEach((el) => el.querySelector('input').addEventListener('change', render));
+    areaInput.addEventListener('input', render);
+    locRadios.forEach((r) => r.addEventListener('change', () => { location = r.value; render(); }));
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-lang-btn]')) setTimeout(render, 50);
+    });
+
+    syncOptions();
+    render();
   })();
 </script>
