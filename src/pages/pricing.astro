@@ -129,7 +129,7 @@ const included = {
 };
 
 const extras = [
-  { th: 'ซื้อตรวจรอบที่ 2 ภายหลัง (หลังเลือกแพ็กเกจรอบเดียว)', en: 'Adding round 2 later (after a single-round package)', price: { th: '30% ของราคาแพ็กเกจ 2 รอบ', en: '30% of the 2-round price' } },
+  { th: 'ซื้อตรวจรอบที่ 2 ภายหลัง (หลังเลือกแพ็กเกจรอบเดียว)', en: 'Adding round 2 later (after a single-round package)', price: { th: 'สูงกว่าซื้อแพ็กเกจ 2 รอบตั้งแต่แรก', en: 'Higher than booking 2 rounds up front' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — คอนโด',        en: '3rd round onwards — condo',          price: { th: '2,000 บาท/ครั้ง', en: '2,000 THB/visit' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — บ้าน/ทาวน์โฮม', en: '3rd round onwards — house/townhome', price: { th: '3,000 บาท/ครั้ง', en: '3,000 THB/visit' } },
   { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 25%', en: '+25%' } },
@@ -604,6 +604,8 @@ const terms = {
 .info-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
 .info-card h3 { font-size: 1.08rem; margin: 0 0 16px; color: var(--heading); }
 .extras-tbl td { padding: 10px 0; }
+/* these cells hold sentences, not figures — let them wrap (price-cell is nowrap) */
+.extras-tbl .price-cell { white-space: normal; padding-left: 14px; min-width: 9em; }
 .tick-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .tick-list li { display: flex; gap: 10px; font-size: .9rem; color: var(--grey); }
 .tick-list .nc { background: none; color: var(--green-bright); width: auto; height: auto; }
