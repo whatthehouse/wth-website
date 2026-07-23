@@ -315,13 +315,6 @@ const terms = {
                 <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span></label>
                 <input type="text" id="qProject" placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
               </div>
-              <div class="field">
-                <label><span class="lang-th">ภาษาของใบเสนอราคา</span><span class="lang-en">Quotation language</span></label>
-                <div class="qlang">
-                  <label class="qlang-opt"><input type="radio" name="qlang" value="th" checked /> <span>ไทย</span></label>
-                  <label class="qlang-opt"><input type="radio" name="qlang" value="en" /> <span>English</span></label>
-                </div>
-              </div>
               <div class="qf-actions">
                 <button type="button" class="btn btn-primary btn-lg" id="btnQuote">
                   <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
@@ -587,11 +580,6 @@ const terms = {
 .quote-form { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 22px; }
 .qf-title { font-weight: 700; color: var(--heading); margin: 0 0 14px; font-size: .95rem; }
 .quote-form .field label { font-family: var(--font); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); }
-.qlang { display: flex; gap: 10px; flex-wrap: wrap; }
-.qlang-opt { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; border: 1.5px solid var(--line-2); border-radius: 50px; padding: 8px 16px; background: var(--panel-2); font-size: .88rem; color: var(--body); transition: .15s; }
-.qlang-opt:hover { border-color: var(--green); }
-.qlang-opt:has(input:checked) { border-color: var(--green); background: var(--green-soft); color: var(--heading); }
-.qlang-opt input { accent-color: var(--green); margin: 0; }
 .qf-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
 .qf-actions .btn { flex: 1; justify-content: center; min-width: 200px; }
 .qf-hint { color: var(--faint); font-size: .8rem; margin: 12px 0 0; }
@@ -816,11 +804,10 @@ const terms = {
     // ── quotation ──
     function fillQuote() {
       if (!current || current.quote) return false;
-      // the quotation language is chosen in the form, independent of the site toggle
-      const qLang = (document.querySelector('input[name="qlang"]:checked') || {}).value || 'th';
-      const en = qLang === 'en';
+      // the quotation follows the site's TH/EN toggle
+      const en = isEn();
       const doc = document.getElementById('quoteDoc');
-      doc.setAttribute('data-lang', qLang);
+      doc.setAttribute('data-lang', en ? 'en' : 'th');
       const cur = en ? 'THB' : 'บาท';
       const money = (n) => en ? `${baht(n)} ${cur}` : `${baht(n)} ${cur}`;
 
@@ -898,12 +885,6 @@ const terms = {
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-lang-btn]')) setTimeout(render, 50);
     });
-
-    // default the quotation language to whatever the visitor is browsing in
-    if (isEn()) {
-      const enRadio = document.querySelector('input[name="qlang"][value="en"]');
-      if (enRadio) enRadio.checked = true;
-    }
 
     syncOptions();
     render();
