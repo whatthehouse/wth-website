@@ -4,12 +4,15 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import settings from '../data/settings.json';
 
-// ── VAT statement shown on the page and the quotation ──────────────────────
-// Change this one line if prices are NOT VAT-inclusive.
-const VAT_NOTE = {
-  th: 'ราคาข้างต้นรวมภาษีมูลค่าเพิ่มแล้ว',
-  en: 'All prices shown include VAT.',
-};
+// ── VAT statement ──────────────────────────────────────────────────────────
+// Deliberately NOT stated anywhere yet — the owner is still registering the company.
+// Planned policy once registered: the quoted prices are the base, and VAT is ADDED
+// ON TOP for customers who want a tax invoice (the customer bears it).
+// To switch it on later, just fill this in — it then shows on the page, in the
+// calculator result and on the PDF quotation automatically:
+//   const VAT_NOTE = { th: 'ราคายังไม่รวมภาษีมูลค่าเพิ่ม 7% (กรณีต้องการใบกำกับภาษี)',
+//                      en: 'Prices exclude 7% VAT (added if a tax invoice is required).' };
+const VAT_NOTE = null;
 const QUOTE_VALID_DAYS = 30;
 
 // ── Property types & price tiers (from the company rate card) ───────────────
@@ -294,7 +297,11 @@ const terms = {
               ))}
             </ul>
             <div class="btu-tip">
-              <span class="lang-th">{VAT_NOTE.th}</span><span class="lang-en block">{VAT_NOTE.en}</span>
+              {VAT_NOTE && (
+                <Fragment>
+                  <span class="lang-th">{VAT_NOTE.th}</span><span class="lang-en block">{VAT_NOTE.en}</span>
+                </Fragment>
+              )}
               <a href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน →</span><span class="lang-en">See a sample report →</span></a>
             </div>
           </aside>
@@ -337,8 +344,8 @@ const terms = {
           ))}
         </div>
         <p class="pt-foot">
-          <span class="lang-th">* {VAT_NOTE.th} · ราคารวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว</span>
-          <span class="lang-en block">* {VAT_NOTE.en} Prices include 2 inspection rounds and the bilingual PDF report.</span>
+          <span class="lang-th">* ราคารวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว{VAT_NOTE ? ` · ${VAT_NOTE.th}` : ''}</span>
+          <span class="lang-en block">* Prices include 2 inspection rounds and the bilingual PDF report.{VAT_NOTE ? ` ${VAT_NOTE.en}` : ''}</span>
         </p>
       </div>
     </section>
@@ -683,7 +690,9 @@ const terms = {
 
       const travel = location === 'out' ? (isEn() ? ' + travel' : ' + ค่าเดินทาง') : '';
       resultPrice.textContent = baht(current.total) + ' ฿' + travel;
-      resultNote.textContent = isEn() ? VAT_NOTE.en : VAT_NOTE.th;
+      resultNote.textContent = VAT_NOTE
+        ? (isEn() ? VAT_NOTE.en : VAT_NOTE.th)
+        : (isEn() ? 'Includes 2 inspection rounds + bilingual PDF report' : 'รวมตรวจ 2 รอบ + รายงาน PDF ไทย-อังกฤษ');
 
       current.lines.forEach((l) => {
         const li = document.createElement('li');
@@ -725,8 +734,10 @@ const terms = {
       body.appendChild(areaRow);
 
       document.getElementById('qdTotal').textContent = baht(current.total) + ' บาท';
-      document.getElementById('qdVat').textContent =
-        VAT_NOTE.th + (location === 'out' ? ' · ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง' : '');
+      const notes = [];
+      if (VAT_NOTE) notes.push(VAT_NOTE.th);
+      if (location === 'out') notes.push('ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง');
+      document.getElementById('qdVat').textContent = notes.join(' · ');
       return true;
     }
 
