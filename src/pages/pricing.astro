@@ -25,7 +25,9 @@ const ROUND1_RATIO = 0.80;
 const ROUND2_LATER_RATIO = 0.30;
 const ROUND2_LATER_MIN = { condo: 2000, other: 3000 };
 const round100 = (n: number) => Math.round(n / 100) * 100;
-const onePrice = (p: number | null) => (p === null ? null : round100(p * ROUND1_RATIO));
+// single-round prices are rounded to the nearest 500 (up or down, whichever is closer)
+const round500 = (n: number) => Math.round(n / 500) * 500;
+const onePrice = (p: number | null) => (p === null ? null : round500(p * ROUND1_RATIO));
 
 // ── Property types & price tiers (from the company rate card) ───────────────
 const types = [
@@ -676,6 +678,8 @@ const terms = {
     const isEn = () => document.body.classList.contains('en');
     const baht = (n) => n.toLocaleString('en-US');
     const round100 = (n) => Math.round(n / 100) * 100;
+    // single-round prices land on the nearest 500
+    const round500 = (n) => Math.round(n / 500) * 500;
     // what it costs to add round 2 after buying the single-round package
     const round2Later = (twoRoundPrice, type) =>
       Math.max(round100(twoRoundPrice * ROUND2_LATER_RATIO),
@@ -707,7 +711,7 @@ const terms = {
 
       // the tables are the 2-round price; the single-round package is a % of it
       const twoRound = tier.price;
-      const base = pkg === 'one' ? round100(twoRound * ROUND1_RATIO) : twoRound;
+      const base = pkg === 'one' ? round500(twoRound * ROUND1_RATIO) : twoRound;
       const pkgTh = pkg === 'one' ? 'ตรวจรอบเดียว' : 'ตรวจ 2 รอบ';
       const pkgEn = pkg === 'one' ? 'single round' : '2 rounds';
       const lines = [{
