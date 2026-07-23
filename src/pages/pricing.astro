@@ -211,8 +211,8 @@ const terms = {
             <div class="calc-step">
               <label class="calc-label"><span class="lang-th">1. ประเภททรัพย์สิน</span><span class="lang-en">1. Property type</span></label>
               <div class="type-btns">
-                {types.map((t, i) => (
-                  <button type="button" class={`type-btn${i === 0 ? ' active' : ''}`} data-type={t.id}>
+                {types.map((t) => (
+                  <button type="button" class="type-btn" data-type={t.id}>
                     <span set:html={t.icon} />
                     <span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span>
                   </button>
@@ -251,8 +251,8 @@ const terms = {
               </div>
             </div>
 
-            <!-- 3. options -->
-            <div class="calc-step">
+            <!-- 4. options — hidden until a property type is chosen -->
+            <div class="calc-step" id="optStep" hidden>
               <label class="calc-label"><span class="lang-th">4. เงื่อนไขเพิ่มเติม (ถ้ามี)</span><span class="lang-en">4. Additional conditions (if any)</span></label>
               <div class="opt-list" id="optList">
                 {options.map((o) => (
@@ -514,6 +514,11 @@ const terms = {
 </BaseLayout>
 
 <style>
+/* The hidden attribute must beat the display rules below (.opt is display:flex),
+   otherwise [hidden] loses the specificity tie to a class selector and the
+   "hidden" options stay on screen for every property type. */
+[hidden] { display: none !important; }
+
 /* ── type buttons ── */
 .type-btns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .type-btn {
@@ -671,7 +676,9 @@ const terms = {
     const locRadios   = document.querySelectorAll('input[name="location"]');
     const pkgRadios   = document.querySelectorAll('input[name="pkg"]');
 
-    let propType = types[0].id;
+    const optStep = document.getElementById('optStep');
+    // no property type is pre-selected — the conditions step only appears once one is picked
+    let propType = null;
     let location = 'cm';
     let pkg = 'two';
     let current = null; // last computed quote
@@ -688,8 +695,9 @@ const terms = {
 
     // show only the options that apply to the selected property type
     function syncOptions() {
+      optStep.hidden = !propType;
       optLabels.forEach((el) => {
-        const applies = (el.dataset.for || '').split(',').includes(propType);
+        const applies = !!propType && (el.dataset.for || '').split(',').includes(propType);
         el.hidden = !applies;
         if (!applies) el.querySelector('input').checked = false;
       });
@@ -698,7 +706,7 @@ const terms = {
     function compute() {
       const sqm = parseFloat(areaInput.value);
       const type = types.find((t) => t.id === propType);
-      if (!sqm || sqm <= 0) return null;
+      if (!type || !sqm || sqm <= 0) return null;
 
       // tier: first with area <= max; the final tier has max === null (over-size → quote)
       const tier = type.tiers.find((r) => r.max !== null && sqm <= r.max) || type.tiers[type.tiers.length - 1];
@@ -745,7 +753,9 @@ const terms = {
 
       if (!current) {
         resultPrice.textContent = '—';
-        resultNote.textContent = isEn() ? 'Enter the usable area' : 'กรอกพื้นที่ใช้สอยเพื่อดูราคา';
+        resultNote.textContent = !propType
+          ? (isEn() ? 'Select a property type to begin' : 'เลือกประเภททรัพย์สินเพื่อเริ่มคำนวณ')
+          : (isEn() ? 'Enter the usable area' : 'กรอกพื้นที่ใช้สอยเพื่อดูราคา');
         return;
       }
 
