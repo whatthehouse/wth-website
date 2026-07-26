@@ -302,21 +302,22 @@ const terms = {
 
             <!-- quotation details -->
             <div class="quote-form" id="quoteForm">
-              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคา (ไม่บังคับกรอก)</span><span class="lang-en">Issue a quotation (optional fields)</span></p>
+              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคา — กรอกข้อมูลให้ครบ</span><span class="lang-en">Issue a quotation — please complete all fields</span></p>
               <div class="form-row">
                 <div class="field">
-                  <label for="qName"><span class="lang-th">ชื่อลูกค้า</span><span class="lang-en">Customer name</span></label>
-                  <input type="text" id="qName" placeholder="ชื่อ-นามสกุล / บริษัท" />
+                  <label for="qName"><span class="lang-th">ชื่อลูกค้า</span><span class="lang-en">Customer name</span> <i class="req">*</i></label>
+                  <input type="text" id="qName" required placeholder="ชื่อ-นามสกุล / บริษัท" />
                 </div>
                 <div class="field">
-                  <label for="qPhone"><span class="lang-th">เบอร์ติดต่อ</span><span class="lang-en">Phone</span></label>
-                  <input type="tel" id="qPhone" placeholder="08X-XXX-XXXX" />
+                  <label for="qPhone"><span class="lang-th">เบอร์ติดต่อ</span><span class="lang-en">Phone</span> <i class="req">*</i></label>
+                  <input type="tel" id="qPhone" required placeholder="08X-XXX-XXXX" />
                 </div>
               </div>
               <div class="field">
-                <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span></label>
-                <input type="text" id="qProject" placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
+                <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span> <i class="req">*</i></label>
+                <input type="text" id="qProject" required placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
               </div>
+              <p class="qf-error" id="qfError" hidden><span class="lang-th">กรุณาเลือกประเภททรัพย์ กรอกพื้นที่ และข้อมูลลูกค้าให้ครบก่อนออกใบเสนอราคา</span><span class="lang-en block">Please choose a property type, enter the area, and complete the customer details before issuing a quotation.</span></p>
               <div class="qf-actions">
                 <button type="button" class="btn btn-primary btn-lg" id="btnQuote">
                   <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
@@ -592,6 +593,9 @@ const terms = {
 .qf-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
 .qf-actions .btn { flex: 1; justify-content: center; min-width: 200px; }
 .qf-hint { color: var(--faint); font-size: .8rem; margin: 12px 0 0; }
+.quote-form .req { color: #E5484D; font-style: normal; }
+.qf-error { margin: 14px 0 0; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(229,72,77,.08); border: 1px solid rgba(229,72,77,.35); color: #E5484D; font-size: .86rem; line-height: 1.6; }
+.field.invalid input { border-color: #E5484D; }
 
 /* ── price tables ── */
 .price-tables { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
@@ -888,13 +892,36 @@ const terms = {
       return true;
     }
 
+    const qfError = document.getElementById('qfError');
+    const reqFields = ['qName', 'qPhone', 'qProject'].map((id) => document.getElementById(id));
+
+    // clear a field's error state as soon as the user starts filling it in
+    reqFields.forEach((f) => f.addEventListener('input', () => {
+      if (f.value.trim()) f.closest('.field').classList.remove('invalid');
+    }));
+
     document.getElementById('btnQuote').addEventListener('click', () => {
-      if (!fillQuote()) {
-        alert(isEn()
-          ? 'Please enter the usable area first. Properties needing a custom quote can’t be auto-quoted — please contact us.'
-          : 'กรุณากรอกพื้นที่ใช้สอยก่อน · กรณีที่ต้องประเมินราคาเป็นรายกรณี กรุณาติดต่อเราโดยตรง');
+      // require a real, non-custom price first (type + area chosen, not an over-size "quote")
+      const priceable = !!current && !current.quote;
+      // then require every customer field
+      let allFilled = true;
+      reqFields.forEach((f) => {
+        const ok = !!f.value.trim();
+        f.closest('.field').classList.toggle('invalid', !ok);
+        if (!ok) allFilled = false;
+      });
+
+      if (!priceable || !allFilled) {
+        qfError.hidden = false;   // static bilingual message lives in the HTML
+        // focus the first empty required field for convenience
+        const firstEmpty = reqFields.find((f) => !f.value.trim());
+        if (priceable && firstEmpty) firstEmpty.focus();
+        qfError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
       }
+
+      qfError.hidden = true;
+      if (!fillQuote()) return;   // safety net; priceable already ensures this passes
       window.print();
     });
 
