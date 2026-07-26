@@ -36,12 +36,12 @@ const types = [
     th: 'คอนโดมิเนียม', en: 'Condominium',
     icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>`,
     tiers: [
-      { max: 35,  price: 4000,  th: 'ไม่เกิน 35 ตร.ม.', en: 'Up to 35 sq.m.' },
-      { max: 50,  price: 5000,  th: '36–50 ตร.ม.',      en: '36–50 sq.m.' },
-      { max: 70,  price: 6000,  th: '51–70 ตร.ม.',      en: '51–70 sq.m.' },
-      { max: 100, price: 7000,  th: '71–100 ตร.ม.',     en: '71–100 sq.m.' },
-      { max: 150, price: 9000,  th: '101–150 ตร.ม.',    en: '101–150 sq.m.' },
-      { max: 200, price: 11000, th: '151–200 ตร.ม.',    en: '151–200 sq.m.' },
+      { max: 35,  price: 3000,  th: 'ไม่เกิน 35 ตร.ม.', en: 'Up to 35 sq.m.' },
+      { max: 50,  price: 4000,  th: '36–50 ตร.ม.',      en: '36–50 sq.m.' },
+      { max: 70,  price: 5000,  th: '51–70 ตร.ม.',      en: '51–70 sq.m.' },
+      { max: 100, price: 6000,  th: '71–100 ตร.ม.',     en: '71–100 sq.m.' },
+      { max: 150, price: 8000,  th: '101–150 ตร.ม.',    en: '101–150 sq.m.' },
+      { max: 200, price: 10000, th: '151–200 ตร.ม.',    en: '151–200 sq.m.' },
       { max: null, price: null, th: 'มากกว่า 200 ตร.ม.', en: 'Over 200 sq.m.' },
     ],
   },
@@ -54,10 +54,10 @@ const types = [
       { max: 150, price: 6000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
       { max: 200, price: 8000,  th: '151–200 ตร.ม.',     en: '151–200 sq.m.' },
       { max: 250, price: 9000,  th: '201–250 ตร.ม.',     en: '201–250 sq.m.' },
-      { max: 300, price: 11000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
-      { max: 350, price: 13000, th: '301–350 ตร.ม.',     en: '301–350 sq.m.' },
+      { max: 300, price: 10000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
+      { max: 350, price: 12000, th: '301–350 ตร.ม.',     en: '301–350 sq.m.' },
       { max: 400, price: 15000, th: '351–400 ตร.ม.',     en: '351–400 sq.m.' },
-      { max: 500, price: 19000, th: '401–500 ตร.ม.',     en: '401–500 sq.m.' },
+      { max: 500, price: 18000, th: '401–500 ตร.ม.',     en: '401–500 sq.m.' },
       { max: null, price: null, th: 'มากกว่า 500 ตร.ม.',  en: 'Over 500 sq.m.' },
     ],
     note: { th: 'ราคาเริ่มต้นใช้กับบ้านมาตรฐาน ไม่มีสระว่ายน้ำ อาคารแยก ลิฟต์ หรืองานระบบพิเศษ', en: 'Starting price applies to standard homes — no pool, separate building, lift or special systems.' },
@@ -67,13 +67,12 @@ const types = [
     th: 'บ้านสองชั้น / บ้านแฝด', en: 'Two-storey / semi-detached',
     icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7"/><path d="M5 9v12h14V9"/><path d="M5 15h14"/><path d="M10 21v-4h4v4"/></svg>`,
     tiers: [
-      { max: 120, price: 6000,  th: 'ไม่เกิน 120 ตร.ม.', en: 'Up to 120 sq.m.' },
-      { max: 150, price: 7000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
+      { max: 150, price: 6000,  th: 'ไม่เกิน 150 ตร.ม.', en: 'Up to 150 sq.m.' },
       { max: 200, price: 8000,  th: '151–200 ตร.ม.',     en: '151–200 sq.m.' },
       { max: 250, price: 10000, th: '201–250 ตร.ม.',     en: '201–250 sq.m.' },
-      { max: 300, price: 11000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
-      { max: 350, price: 13000, th: '301–350 ตร.ม.',     en: '301–350 sq.m.' },
-      { max: 400, price: 15000, th: '351–400 ตร.ม.',     en: '351–400 sq.m.' },
+      { max: 300, price: 12000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
+      { max: 350, price: 15000, th: '301–350 ตร.ม.',     en: '301–350 sq.m.' },
+      { max: 400, price: 18000, th: '351–400 ตร.ม.',     en: '351–400 sq.m.' },
       { max: 500, price: 20000, th: '401–500 ตร.ม.',     en: '401–500 sq.m.' },
       { max: null, price: null, th: 'มากกว่า 500 ตร.ม.',  en: 'Over 500 sq.m.' },
     ],
@@ -84,8 +83,8 @@ const types = [
     th: 'ทาวน์โฮม / ทาวน์เฮาส์', en: 'Townhome / Townhouse',
     icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 21V10l5-4 5 4v11"/><path d="M12 21V10l5-4 5 4v11"/><path d="M2 21h20"/></svg>`,
     tiers: [
-      { max: 120, price: 6000,  th: 'ไม่เกิน 120 ตร.ม.', en: 'Up to 120 sq.m.' },
-      { max: 150, price: 7000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
+      { max: 120, price: 5000,  th: 'ไม่เกิน 120 ตร.ม.', en: 'Up to 120 sq.m.' },
+      { max: 150, price: 6000,  th: '121–150 ตร.ม.',     en: '121–150 sq.m.' },
       { max: 200, price: 8000,  th: '151–200 ตร.ม.',     en: '151–200 sq.m.' },
       { max: 250, price: 10000, th: '201–250 ตร.ม.',     en: '201–250 sq.m.' },
       { max: 300, price: 12000, th: '251–300 ตร.ม.',     en: '251–300 sq.m.' },
@@ -186,7 +185,7 @@ const terms = {
 ---
 <BaseLayout
   title="ค่าบริการตรวจบ้าน ตรวจคอนโด | คำนวณราคา + ใบเสนอราคา PDF | WHAT THE HOUSE"
-  description="อัตราค่าบริการตรวจรับบ้านและคอนโดเชียงใหม่ คอนโดเริ่มต้น 4,000 บาท บ้านเริ่มต้น 5,000 บาท คำนวณราคาตามพื้นที่และดาวน์โหลดใบเสนอราคา PDF ได้ทันที | Home Inspection Pricing Chiang Mai"
+  description="อัตราค่าบริการตรวจรับบ้านและคอนโดเชียงใหม่ คอนโดเริ่มต้น 3,000 บาท บ้านเริ่มต้น 5,000 บาท คำนวณราคาตามพื้นที่และดาวน์โหลดใบเสนอราคา PDF ได้ทันที | Home Inspection Pricing Chiang Mai"
 >
   <Header />
   <main>
