@@ -160,6 +160,7 @@ const customQuote = {
 
 const terms = {
   th: [
+    `ใบเสนอราคานี้มีอายุ ${QUOTE_VALID_DAYS} วันนับจากวันที่ออกเอกสาร`,
     'ราคาคำนวณจากพื้นที่ใช้สอยตามแบบบ้าน สัญญาซื้อขาย หรือข้อมูลจากโครงการ',
     'ลูกค้าแจ้งประเภททรัพย์ พื้นที่ใช้สอย จำนวนชั้น จำนวนห้องน้ำ และระบบพิเศษก่อนเสนอราคา',
     'หากข้อมูลหน้างานไม่ตรงกับที่แจ้ง บริษัทขอสงวนสิทธิ์ปรับราคาให้เหมาะสมก่อนเริ่มงาน',
@@ -170,6 +171,7 @@ const terms = {
     'การเลื่อนนัดกรุณาแจ้งล่วงหน้าไม่น้อยกว่า 24–48 ชั่วโมง',
   ],
   en: [
+    `This quotation is valid for ${QUOTE_VALID_DAYS} days from the date of issue`,
     'Pricing is based on usable area from the drawings, sale contract or project data',
     'Please tell us the property type, area, storeys, bathrooms and special systems before we quote',
     'If the site differs from the information given, we may adjust the price before starting',
@@ -709,11 +711,11 @@ const terms = {
   #quoteDoc .qd-cols > div { flex: 1; }
   #quoteDoc .qd-cols ul, #quoteDoc .qd-cols ol { margin: 0; padding-left: 1.1em; font-size: 10px; color: #3a403b; }
   #quoteDoc .qd-cols li { margin-bottom: 3px; }
-  #quoteDoc .qd-sign { margin-top: 30px; font-size: 10px; color: #5a625c; }
-  #quoteDoc .qd-signline { display: block; border-top: 1px solid #16181a; height: 46px; }
+  #quoteDoc .qd-sign { margin-top: 40px; font-size: 10px; color: #5a625c; }
+  #quoteDoc .qd-signline { display: block; border-top: 1px solid #c2c7c2; height: 46px; }
   #quoteDoc .qd-sign-caps { display: flex; gap: 40px; }
   #quoteDoc .qd-sign-caps > span { flex: 1; text-align: center; }
-  #quoteDoc .qd-contact { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin-top: 22px; }
+  #quoteDoc .qd-contact { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin-top: 40px; }
   #quoteDoc .qd-contact img { display: block; border: 1px solid #d8ded8; }
   #quoteDoc .qd-contact b { display: block; font-size: 10.5px; color: #16181a; }
   #quoteDoc .qd-contact span { display: block; font-size: 9px; color: #5a625c; }
