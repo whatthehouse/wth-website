@@ -461,14 +461,12 @@ const terms = {
   <!-- ============ PRINTABLE QUOTATION (screen-hidden) ============ -->
   <div id="quoteDoc" class="quote-doc" data-lang="th" aria-hidden="true">
     <div class="qd-top">
-      <div class="qd-head">
-        <div class="qd-brand">
-          <img src="/assets/img/logo-print.png" alt="" width="44" height="47" />
-          <div><b>WHAT THE HOUSE</b><span>HOME INSPECTIONS</span><span class="qd-slogan">BETTER HOMES • BETTER LIVING</span></div>
-        </div>
-        <div class="qd-title">ใบเสนอราคา / QUOTATION</div>
+      <div class="qd-brand">
+        <img src="/assets/img/logo-print.png" alt="" width="44" height="47" />
+        <div><b>WHAT THE HOUSE</b><span>HOME INSPECTIONS</span><span class="qd-slogan">BETTER HOMES • BETTER LIVING</span></div>
       </div>
       <div class="qd-meta">
+        <div class="qd-title">ใบเสนอราคา / QUOTATION</div>
         <div>เลขที่ / No.: <b id="qdNo"></b></div>
         <div>วันที่ / Date: <b id="qdDate"></b></div>
         <div>ยืนราคาถึง / Valid until: <b id="qdValid"></b></div>
@@ -478,17 +476,10 @@ const terms = {
     <div class="qd-parties">
       <div>
         <h4>ผู้เสนอราคา / From</h4>
-        <div class="qd-from-row">
-          <p>WHAT THE HOUSE – Home Inspections<br />
-            โทร. {settings.phoneDisplay}<br />
-            {settings.email}<br />
-            LINE: {settings.lineId}</p>
-          <div class="qd-qr">
-            <img src="/assets/img/line-qr.png" alt="LINE QR" width="66" height="66" />
-            <span class="qd-th">สแกนติดต่อทาง LINE</span>
-            <span class="qd-en">Scan to chat on LINE</span>
-          </div>
-        </div>
+        <p>WHAT THE HOUSE – Home Inspections<br />
+          โทร. {settings.phoneDisplay}<br />
+          {settings.email}<br />
+          LINE: {settings.lineId}</p>
       </div>
       <div>
         <h4>เสนอต่อ / To</h4>
@@ -526,6 +517,14 @@ const terms = {
     <div class="qd-sign">
       <div><span class="qd-line"></span>ผู้เสนอราคา / Authorised signature</div>
       <div><span class="qd-line"></span>ผู้อนุมัติ / Customer acceptance</div>
+    </div>
+
+    <div class="qd-contact">
+      <img src="/assets/img/line-qr.png" alt="LINE QR" width="72" height="72" />
+      <div>
+        <b class="qd-th">ติดต่อ / นัดหมายทาง LINE</b><b class="qd-en">Contact / book via LINE</b>
+        <span class="qd-th">สแกน QR เพื่อแอดไลน์ WHAT THE HOUSE</span><span class="qd-en">Scan the QR to add WHAT THE HOUSE on LINE</span>
+      </div>
     </div>
     <p class="qd-foot qd-th">เอกสารนี้เป็นการประเมินราคาเบื้องต้นจากข้อมูลที่ลูกค้าให้ไว้ · ราคาสุดท้ายยืนยันอีกครั้งก่อนเริ่มงาน · whatthehouse.net</p>
     <p class="qd-foot qd-en">This is a preliminary estimate based on the information provided · the final price is confirmed before work begins · whatthehouse.net</p>
@@ -683,16 +682,10 @@ const terms = {
   #quoteDoc .qd-brand b { display: block; font-size: 15px; letter-spacing: .01em; }
   #quoteDoc .qd-brand span { display: block; font-size: 8.5px; letter-spacing: .18em; color: #5a625c; }
   #quoteDoc .qd-slogan { margin-top: 2px; letter-spacing: .1em !important; color: #157a42 !important; font-weight: 600; }
-  #quoteDoc .qd-head { display: flex; flex-direction: column; gap: 9px; }
   #quoteDoc .qd-meta { text-align: right; }
-  #quoteDoc .qd-title { font-size: 16px; font-weight: 700; letter-spacing: .01em; }
+  #quoteDoc .qd-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
   #quoteDoc .qd-parties { display: flex; gap: 26px; margin: 14px 0 16px; }
   #quoteDoc .qd-parties > div { flex: 1; }
-  #quoteDoc .qd-from-row { display: flex; gap: 12px; align-items: flex-start; }
-  #quoteDoc .qd-from-row p { flex: 1; }
-  #quoteDoc .qd-qr { flex-shrink: 0; text-align: center; }
-  #quoteDoc .qd-qr img { display: block; border: 1px solid #d8ded8; }
-  #quoteDoc .qd-qr span { display: block; font-size: 8px; color: #5a625c; margin-top: 2px; }
   #quoteDoc .qd-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
   #quoteDoc .qd-table th { text-align: left; background: #f1f4f0; border: 1px solid #d8ded8; padding: 7px 9px; font-size: 11px; }
   #quoteDoc .qd-table td { border: 1px solid #d8ded8; padding: 7px 9px; }
@@ -706,7 +699,11 @@ const terms = {
   #quoteDoc .qd-cols li { margin-bottom: 3px; }
   #quoteDoc .qd-sign { display: flex; gap: 40px; margin-top: 44px; font-size: 10px; color: #5a625c; }
   #quoteDoc .qd-sign > div { flex: 1; text-align: center; }
-  #quoteDoc .qd-line { display: block; border-top: 1px solid #16181a; margin-bottom: 5px; height: 56px; }
+  #quoteDoc .qd-line { display: block; margin-bottom: 5px; height: 56px; }
+  #quoteDoc .qd-contact { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 22px; }
+  #quoteDoc .qd-contact img { display: block; border: 1px solid #d8ded8; }
+  #quoteDoc .qd-contact b { display: block; font-size: 10.5px; color: #16181a; }
+  #quoteDoc .qd-contact span { display: block; font-size: 9px; color: #5a625c; }
   #quoteDoc .qd-foot { margin-top: 16px; border-top: 1px solid #d8ded8; padding-top: 7px; font-size: 9px; color: #5a625c; text-align: center; }
   /* quotation language: driven by data-lang on the document, independent of the site toggle */
   #quoteDoc[data-lang="en"] .qd-th { display: none !important; }
