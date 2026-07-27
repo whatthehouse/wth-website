@@ -17,17 +17,15 @@ const QUOTE_VALID_DAYS = 30;
 
 // ── Packages ───────────────────────────────────────────────────────────────
 // The rate-card tables are the 2-round price (the main package).
-// A single-round package is offered at 80% of it for budget / second-hand /
-// one-opinion customers. Buying the 2nd round LATER costs 30% of the 2-round
-// price (floored at the 3rd-round rates), so it is always dearer than taking
-// the 2-round package up front — that's deliberate.
-const ROUND1_RATIO = 0.80;
+// A single-round package is 25% cheaper (75% of the 2-round price) for budget /
+// second-hand / one-opinion customers. Buying the 2nd round LATER costs 30% of
+// the 2-round price — so single round + a later 2nd round (75%+30% = 105%) is
+// always dearer than taking the 2-round package up front. That's deliberate.
+// All derived prices are rounded UP to a whole 500.
+const ROUND1_RATIO = 0.75;
 const ROUND2_LATER_RATIO = 0.30;
-const ROUND2_LATER_MIN = { condo: 2000, other: 3000 };
-const round100 = (n: number) => Math.round(n / 100) * 100;
-// single-round prices are rounded to the nearest 500 (up or down, whichever is closer)
-const round500 = (n: number) => Math.round(n / 500) * 500;
-const onePrice = (p: number | null) => (p === null ? null : round500(p * ROUND1_RATIO));
+const roundUp500 = (n: number) => Math.ceil(n / 500) * 500;
+const onePrice = (p: number | null) => (p === null ? null : roundUp500(p * ROUND1_RATIO));
 
 // ── Property types & price tiers (from the company rate card) ───────────────
 const types = [
@@ -700,7 +698,7 @@ const terms = {
   #quoteDoc[data-lang="th"] .qd-en { display: none !important; }
 </style>
 
-<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, ROUND2_LATER_MIN }}>
+<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO }}>
   (function () {
     const areaInput   = document.getElementById('calcArea');
     const resultPrice = document.getElementById('resultPrice');
@@ -721,13 +719,10 @@ const terms = {
 
     const isEn = () => document.body.classList.contains('en');
     const baht = (n) => n.toLocaleString('en-US');
-    const round100 = (n) => Math.round(n / 100) * 100;
-    // single-round prices land on the nearest 500
-    const round500 = (n) => Math.round(n / 500) * 500;
-    // what it costs to add round 2 after buying the single-round package
-    const round2Later = (twoRoundPrice, type) =>
-      Math.max(round100(twoRoundPrice * ROUND2_LATER_RATIO),
-               type === 'condo' ? ROUND2_LATER_MIN.condo : ROUND2_LATER_MIN.other);
+    // derived prices are rounded UP to a whole 500 (exact multiples stay as-is)
+    const roundUp500 = (n) => Math.ceil(n / 500) * 500;
+    // buying round 2 after the single-round package = 30% of the 2-round price
+    const round2Later = (twoRoundPrice) => roundUp500(twoRoundPrice * ROUND2_LATER_RATIO);
 
     // show only the options that apply to the selected property type
     function syncOptions() {
@@ -756,7 +751,7 @@ const terms = {
 
       // the tables are the 2-round price; the single-round package is a % of it
       const twoRound = tier.price;
-      const base = pkg === 'one' ? round500(twoRound * ROUND1_RATIO) : twoRound;
+      const base = pkg === 'one' ? roundUp500(twoRound * ROUND1_RATIO) : twoRound;
       const pkgTh = pkg === 'one' ? 'ตรวจรอบเดียว' : 'ตรวจ 2 รอบ';
       const pkgEn = pkg === 'one' ? 'single round' : '2 rounds';
       const lines = [{
@@ -822,7 +817,7 @@ const terms = {
 
       // single round: show honestly what adding round 2 later would cost
       if (current.pkg === 'one') {
-        const later = round2Later(current.twoRound, propType);
+        const later = round2Later(current.twoRound);
         const extra = current.total + later - current.twoRound;
         upsell.innerHTML = isEn()
           ? `Adding the re-inspection later costs <b>${baht(later)} ฿</b> — a total of <b>${baht(current.total + later)} ฿</b>, which is <b>${baht(extra)} ฿ more</b> than taking the 2-round package now (${baht(current.twoRound)} ฿).`
@@ -875,7 +870,7 @@ const terms = {
       const notes = [];
       if (VAT_NOTE) notes.push(en ? VAT_NOTE.en : VAT_NOTE.th);
       if (current.pkg === 'one') {
-        const later = round2Later(current.twoRound, propType);
+        const later = round2Later(current.twoRound);
         notes.push(en
           ? `Single-round package (re-inspection not included) · adding the re-inspection later costs ${money(later)}`
           : `แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข) · หากเพิ่มรอบแก้ไขภายหลัง คิดเพิ่ม ${money(later)}`);
