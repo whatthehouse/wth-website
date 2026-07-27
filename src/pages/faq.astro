@@ -23,6 +23,14 @@ const faqs = [
         q: { th: "ต้องอยู่ร่วมในวันตรวจด้วยไหม?", en: "Do I need to be present during the inspection?" },
         a: { th: "แนะนำให้อยู่ร่วมด้วยครับ เพราะช่างตรวจจะอธิบายปัญหาที่พบให้ฟังโดยตรง ช่วยให้เข้าใจรายงานได้ดีขึ้น หากไม่สะดวก เราสามารถดำเนินการแทนและส่งรายงานให้ได้", en: "We recommend being present — the inspector can walk you through findings in real time. If you can't attend, we'll conduct the inspection and deliver a complete report." },
       },
+      {
+        q: { th: "ตรวจบ้านต่างจากการเดินดูเองอย่างไร?", en: "How is this different from checking the house myself?" },
+        a: { th: "ช่างตรวจใช้เครื่องมือเฉพาะทาง เช่น กล้องถ่ายภาพความร้อน เครื่องวัดความชื้น และกล้องงูตรวจท่อ ที่มองไม่เห็นด้วยตาเปล่า ประกอบกับประสบการณ์และเช็กลิสต์มาตรฐาน จึงพบปัญหาที่ซ่อนอยู่ได้ครบและตรงจุดกว่าการดูด้วยตาเปล่า", en: "Our inspectors use professional tools — thermal camera, moisture meter and endoscope — that reveal what the naked eye can't, combined with experience and a standardised checklist, so hidden issues are caught far more reliably." },
+      },
+      {
+        q: { th: "การตรวจครอบคลุมส่วนไหนของบ้านบ้าง?", en: "What parts of the property are covered?" },
+        a: { th: "ครอบคลุมโครงสร้าง ผนัง พื้น ฝ้าเพดาน หลังคา ระบบไฟฟ้า ระบบประปาและสุขาภิบาล ประตู-หน้าต่าง งานสีและกระเบื้อง การรั่วซึม และการทดสอบการทำงานของระบบต่าง ๆ เท่าที่เข้าถึงได้อย่างปลอดภัย", en: "It covers structure, walls, floors, ceilings, roof, electrical, plumbing and sanitary systems, doors and windows, paint and tiling, water leakage, and functional testing of systems that can be safely accessed." },
+      },
     ],
   },
   {
@@ -39,6 +47,10 @@ const faqs = [
       {
         q: { th: "รายงานมีภาษาอังกฤษด้วยไหม?", en: "Is the report available in English?" },
         a: { th: "มีครับ รายงานของเราจัดทำเป็นทั้งภาษาไทยและภาษาอังกฤษในเอกสารเดียว เหมาะสำหรับทั้งลูกค้าชาวไทยและชาวต่างชาติ", en: "Yes. Our report is fully bilingual — Thai and English in the same document — ideal for both Thai and foreign clients." },
+      },
+      {
+        q: { th: "สอบถามเพิ่มเติมหลังได้รับรายงานได้ไหม?", en: "Can I ask questions after receiving the report?" },
+        a: { th: "ได้ครับ หากมีข้อสงสัยเกี่ยวกับรายการในรายงาน ทีมงานยินดีอธิบายเพิ่มเติมทางโทรศัพท์หรือ LINE เพื่อให้คุณเข้าใจสภาพบ้านและแนวทางแก้ไขได้อย่างชัดเจน", en: "Yes. If anything in the report is unclear, our team is happy to explain further by phone or LINE so you fully understand the condition and the recommended fixes." },
       },
     ],
   },
@@ -57,6 +69,14 @@ const faqs = [
         q: { th: "จองคิวล่วงหน้านานแค่ไหน?", en: "How far in advance should I book?" },
         a: { th: "แนะนำให้จองล่วงหน้าอย่างน้อย 3–7 วัน เพื่อให้เราจัดตารางและเตรียมทีมได้อย่างเหมาะสม โดยเฉพาะช่วงที่มีงานมาก", en: "We recommend booking at least 3–7 days in advance so we can schedule the team properly, especially during busy periods." },
       },
+      {
+        q: { th: "ต้องเตรียมอะไรก่อนวันตรวจบ้าง?", en: "What should I prepare before the inspection day?" },
+        a: { th: "ขอให้เปิดน้ำและไฟในทรัพย์สินให้พร้อมใช้งาน และเตรียมกุญแจหรือสิทธิ์เข้าพื้นที่ให้เรียบร้อย เพื่อให้เราทดสอบระบบไฟฟ้า ประปา และสุขภัณฑ์ได้ครบทุกจุด", en: "Please make sure water and electricity are switched on and arrange keys or access to the unit, so we can fully test the electrical, plumbing and sanitary fixtures." },
+      },
+      {
+        q: { th: "ถ้าต้องการตรวจรอบเดียว ไม่เอา 2 รอบ ได้ไหม?", en: "Can I choose a single-round inspection instead of two?" },
+        a: { th: "ได้ครับ เรามีแพ็กเกจตรวจรอบเดียวในราคาประหยัดกว่า เหมาะกับผู้ที่ต้องการทราบสภาพเบื้องต้น แต่เราแนะนำแพ็กเกจ 2 รอบเพื่อยืนยันว่าการแก้ไขเสร็จสมบูรณ์ก่อนรับมอบ ทั้งนี้หากเลือกรอบเดียวแล้วมาซื้อรอบที่ 2 เพิ่มภายหลัง จะมีค่าใช้จ่ายสูงกว่าการเลือก 2 รอบตั้งแต่แรก", en: "Yes. We offer a cheaper single-round package for those who just want an initial assessment, but we recommend the 2-round package to confirm all repairs are completed before handover. Note that adding a second round later costs more than choosing the 2-round package from the start." },
+      },
     ],
   },
   {
@@ -74,6 +94,14 @@ const faqs = [
         q: { th: "มีค่าใช้จ่ายอื่นนอกจากค่าตรวจไหม?", en: "Are there any extra charges?" },
         a: { th: "สำหรับพื้นที่นอกเชียงใหม่ (ลำพูน ลำปาง) มีค่าเดินทางเพิ่มเติม ซึ่งจะแจ้งราคาชัดเจนก่อนยืนยัน นอกจากนั้นไม่มีค่าใช้จ่ายซ่อนเร้น", en: "For areas outside Chiang Mai (Lamphun, Lampang), a travel fee applies — we'll quote the exact amount before confirming. No other hidden charges." },
       },
+      {
+        q: { th: "ราคาขึ้นอยู่กับอะไรบ้าง?", en: "What determines the price?" },
+        a: { th: "ขึ้นอยู่กับประเภททรัพย์ (คอนโด บ้าน หรือทาวน์โฮม) พื้นที่ใช้สอย จำนวนชั้น และระบบพิเศษ เช่น สระว่ายน้ำ ลิฟท์ หรือระบบโซลาร์เซลล์ รวมถึงสภาพของบ้านมือสอง คุณสามารถคำนวณราคาจริงตามข้อมูลของคุณได้ที่หน้าค่าบริการ", en: "It depends on the property type (condo, house or townhome), usable area, number of storeys, and special systems such as a pool, lift or solar panels — as well as the condition of second-hand homes. You can calculate an exact price on the Pricing page." },
+      },
+      {
+        q: { th: "ใบเสนอราคามีอายุนานแค่ไหน?", en: "How long is a quotation valid?" },
+        a: { th: "ใบเสนอราคามีอายุ 30 วันนับจากวันที่ออกเอกสาร หากเกินกำหนด กรุณาขอใบเสนอราคาใหม่เพื่อยืนยันราคาปัจจุบัน", en: "Each quotation is valid for 30 days from the date of issue. After that, please request a new quote to confirm the current price." },
+      },
     ],
   },
   {
@@ -90,6 +118,14 @@ const faqs = [
       {
         q: { th: "ตรวจระหว่างก่อสร้างได้ไหม?", en: "Can you inspect during construction?" },
         a: { th: "ได้ครับ บริการ \"ควบคุมงานก่อสร้าง\" ของเราจะตรวจสอบคุณภาพงานและความคืบหน้าตามงวด ช่วยให้มั่นใจก่อนจ่ายเงินค่างวดแต่ละครั้ง", en: "Yes. Our Construction Supervision service checks quality and progress at each milestone — helping you confirm work is completed properly before releasing payment." },
+      },
+      {
+        q: { th: "ตรวจสระว่ายน้ำ ลิฟท์ หรือระบบโซลาร์เซลล์ได้ไหม?", en: "Can you inspect pools, lifts or solar systems?" },
+        a: { th: "ได้ครับ ระบบพิเศษเหล่านี้ตรวจเพิ่มเติมได้ โดยมีค่าบริการเพิ่มตามประเภทงาน กรุณาระบุความต้องการตอนขอใบเสนอราคา เพื่อให้เราคำนวณขอบเขตและราคาได้ครบถ้วน", en: "Yes. These special systems can be inspected as add-ons with an additional fee depending on the scope. Please mention them when requesting a quote so we can price the full scope accurately." },
+      },
+      {
+        q: { th: "รับตรวจทาวน์โฮม อาคารพาณิชย์ หรือโฮมออฟฟิศไหม?", en: "Do you inspect townhomes, shophouses or home offices?" },
+        a: { th: "รับครับ นอกจากบ้านเดี่ยวและคอนโด เรารับตรวจทาวน์โฮม/ทาวน์เฮาส์ อาคารพาณิชย์ และโฮมออฟฟิศ ติดต่อเราเพื่อประเมินขอบเขตงานและเสนอราคาที่เหมาะสม", en: "Yes. Besides detached houses and condos, we inspect townhomes, shophouses and home offices. Contact us to assess the scope and provide a suitable quote." },
       },
     ],
   },
