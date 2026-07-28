@@ -301,22 +301,32 @@ const terms = {
 
             <!-- quotation details -->
             <div class="quote-form" id="quoteForm">
-              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคา — กรอกข้อมูลให้ครบ</span><span class="lang-en">Issue a quotation — please complete all fields</span></p>
+              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคา</span><span class="lang-en">Issue a quotation</span></p>
+              <p class="qf-note"><span class="lang-th">ข้อมูลด้านล่างไม่บังคับ — กรอกเฉพาะเมื่อต้องการให้เราติดต่อกลับ และเราจะติดต่อตามช่องทางที่คุณเลือกเท่านั้น</span><span class="lang-en block">The fields below are optional — fill them in only if you'd like us to follow up, and we'll contact you only through the channel you choose.</span></p>
               <div class="form-row">
                 <div class="field">
-                  <label for="qName"><span class="lang-th">ชื่อลูกค้า</span><span class="lang-en">Customer name</span> <i class="req">*</i></label>
-                  <input type="text" id="qName" required placeholder="ชื่อ-นามสกุล / บริษัท" />
+                  <label for="qName"><span class="lang-th">ชื่อลูกค้า</span><span class="lang-en">Customer name</span></label>
+                  <input type="text" id="qName" placeholder="ชื่อ-นามสกุล / บริษัท" />
                 </div>
                 <div class="field">
-                  <label for="qPhone"><span class="lang-th">เบอร์ติดต่อ</span><span class="lang-en">Phone</span> <i class="req">*</i></label>
-                  <input type="tel" id="qPhone" required placeholder="08X-XXX-XXXX" />
+                  <label for="qPhone"><span class="lang-th">ข้อมูลติดต่อกลับ</span><span class="lang-en">Contact detail</span></label>
+                  <input type="text" id="qPhone" placeholder="เบอร์โทร / LINE ID / อีเมล" />
                 </div>
               </div>
               <div class="field">
-                <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span> <i class="req">*</i></label>
-                <input type="text" id="qProject" required placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
+                <label for="qProject"><span class="lang-th">โครงการ / ที่อยู่ทรัพย์สิน</span><span class="lang-en">Project / property address</span></label>
+                <input type="text" id="qProject" placeholder="ชื่อโครงการ บ้านเลขที่ หรือเลขห้อง" />
               </div>
-              <p class="qf-error" id="qfError" hidden><span class="lang-th">กรุณาเลือกประเภททรัพย์ กรอกพื้นที่ และข้อมูลลูกค้าให้ครบก่อนออกใบเสนอราคา</span><span class="lang-en block">Please choose a property type, enter the area, and complete the customer details before issuing a quotation.</span></p>
+              <div class="field qf-channel">
+                <label><span class="lang-th">ช่องทางที่สะดวกให้ติดต่อกลับ</span><span class="lang-en">Preferred contact channel</span></label>
+                <div class="ch-opts">
+                  <label class="ch"><input type="radio" name="qContact" value="line" checked /> <span class="lang-th">ทาง LINE</span><span class="lang-en">LINE</span></label>
+                  <label class="ch"><input type="radio" name="qContact" value="phone" /> <span class="lang-th">โทรกลับ</span><span class="lang-en">Phone call</span></label>
+                  <label class="ch"><input type="radio" name="qContact" value="email" /> <span class="lang-th">อีเมล</span><span class="lang-en">Email</span></label>
+                  <label class="ch"><input type="radio" name="qContact" value="none" /> <span class="lang-th">ไม่ต้องติดต่อกลับ</span><span class="lang-en">No follow-up needed</span></label>
+                </div>
+              </div>
+              <p class="qf-error" id="qfError" hidden><span class="lang-th">กรุณาเลือกประเภททรัพย์และกรอกพื้นที่ก่อนออกใบเสนอราคา</span><span class="lang-en block">Please choose a property type and enter the area before issuing a quotation.</span></p>
               <div class="qf-actions">
                 <button type="button" class="btn btn-primary btn-lg" id="btnQuote">
                   <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
@@ -492,6 +502,7 @@ const terms = {
         <p><b id="qdCustomer">—</b><br />
           <span id="qdPhone"></span><br />
           <span id="qdProject"></span></p>
+        <p class="qd-channel" id="qdChannel"></p>
       </div>
     </div>
 
@@ -602,8 +613,13 @@ const terms = {
 
 /* ── quote form ── */
 .quote-form { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 22px; }
-.qf-title { font-weight: 700; color: var(--heading); margin: 0 0 14px; font-size: .95rem; }
+.qf-title { font-weight: 700; color: var(--heading); margin: 0 0 6px; font-size: .95rem; }
+.qf-note { color: var(--grey); font-size: .82rem; line-height: 1.55; margin: 0 0 14px; }
 .quote-form .field label { font-family: var(--font); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); }
+.qf-channel { margin-top: 4px; }
+.ch-opts { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 6px; }
+.ch { display: inline-flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--body); cursor: pointer; }
+.ch input { accent-color: var(--green); }
 .qf-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
 .qf-actions .btn { flex: 1; justify-content: center; min-width: 200px; }
 .qf-hint { color: var(--faint); font-size: .8rem; margin: 12px 0 0; }
@@ -700,6 +716,7 @@ const terms = {
   #quoteDoc .qd-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
   #quoteDoc .qd-parties { display: flex; gap: 26px; margin: 14px 0 16px; }
   #quoteDoc .qd-parties > div { flex: 1; }
+  #quoteDoc .qd-channel { margin-top: 4px; font-size: 10px; color: #5a625c; }
   #quoteDoc .qd-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
   #quoteDoc .qd-table th { text-align: left; background: #f1f4f0; border: 1px solid #d8ded8; padding: 7px 9px; font-size: 11px; }
   #quoteDoc .qd-table td { border: 1px solid #d8ded8; padding: 7px 9px; }
@@ -881,6 +898,15 @@ const terms = {
       document.getElementById('qdCustomer').textContent = document.getElementById('qName').value.trim() || '—';
       document.getElementById('qdPhone').textContent = document.getElementById('qPhone').value.trim();
       document.getElementById('qdProject').textContent = document.getElementById('qProject').value.trim();
+      // preferred contact channel chosen by the customer
+      const contactVal = (document.querySelector('input[name="qContact"]:checked') || {}).value || 'line';
+      const chLabel = {
+        line:  { th: 'สะดวกให้ติดต่อกลับทาง LINE', en: 'Preferred contact: LINE' },
+        phone: { th: 'สะดวกให้โทรกลับ', en: 'Preferred contact: phone call' },
+        email: { th: 'สะดวกให้ติดต่อกลับทางอีเมล', en: 'Preferred contact: email' },
+        none:  { th: 'ลูกค้าขอรับเฉพาะใบเสนอราคา — ไม่ต้องติดต่อกลับ', en: 'Quotation only — no follow-up requested' },
+      }[contactVal];
+      document.getElementById('qdChannel').textContent = chLabel ? (en ? chLabel.en : chLabel.th) : '';
 
       const body = document.getElementById('qdItems');
       body.innerHTML = '';
@@ -917,33 +943,15 @@ const terms = {
     }
 
     const qfError = document.getElementById('qfError');
-    const reqFields = ['qName', 'qPhone', 'qProject'].map((id) => document.getElementById(id));
-
-    // clear a field's error state as soon as the user starts filling it in
-    reqFields.forEach((f) => f.addEventListener('input', () => {
-      if (f.value.trim()) f.closest('.field').classList.remove('invalid');
-    }));
 
     document.getElementById('btnQuote').addEventListener('click', () => {
-      // require a real, non-custom price first (type + area chosen, not an over-size "quote")
+      // only a real, priced result is required — customer details are optional
       const priceable = !!current && !current.quote;
-      // then require every customer field
-      let allFilled = true;
-      reqFields.forEach((f) => {
-        const ok = !!f.value.trim();
-        f.closest('.field').classList.toggle('invalid', !ok);
-        if (!ok) allFilled = false;
-      });
-
-      if (!priceable || !allFilled) {
+      if (!priceable) {
         qfError.hidden = false;   // static bilingual message lives in the HTML
-        // focus the first empty required field for convenience
-        const firstEmpty = reqFields.find((f) => !f.value.trim());
-        if (priceable && firstEmpty) firstEmpty.focus();
         qfError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
       }
-
       qfError.hidden = true;
       if (!fillQuote()) return;   // safety net; priceable already ensures this passes
       window.print();
