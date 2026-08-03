@@ -590,7 +590,26 @@ const PARTNER_DISCOUNTS = { cm: 0.20, bkk: 0.10 };
           : 'รวมตรวจรอบแก้ไขอีก 1 ครั้ง (นัดภายใน 60 วันหลังการตรวจครั้งแรก)');
       }
       document.getElementById('qdVat').textContent = notes.join(' · ');
+      fitQuoteToPage();
       return true;
+    }
+
+    // Guarantee the quotation prints on a single A4 page: measure the document at
+    // real A4 print dimensions and, only if it would overflow, zoom it down to fit.
+    function fitQuoteToPage() {
+      const doc = document.getElementById('quoteDoc');
+      const saved = doc.getAttribute('style') || '';
+      Object.assign(doc.style, { display: 'block', visibility: 'hidden', position: 'fixed', left: '-9999px', top: '0', width: '210mm', padding: '14mm', boxSizing: 'border-box', background: '#fff', zoom: '1' });
+      const contentH = doc.offsetHeight;
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:fixed;left:-9999px;top:0;height:297mm';
+      document.body.appendChild(probe);
+      const pageH = probe.offsetHeight;
+      probe.remove();
+      doc.setAttribute('style', saved);   // back to its normal (print-hidden) state
+      // leave a 4px safety margin so rounding never spills onto a 2nd page
+      const z = contentH > pageH - 4 ? Math.max(0.6, (pageH - 4) / contentH) : 1;
+      doc.style.zoom = String(z);          // 1 = untouched; <1 only when needed
     }
 
     const qfError = document.getElementById('qfError');
