@@ -5,11 +5,13 @@ export interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  noindex?: boolean;
 }
 const {
   title,
   description = 'WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ | Home Inspection Chiang Mai',
   ogImage = '/assets/img/logo.jpg',
+  noindex = false,
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -21,6 +23,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="keywords" content="ตรวจบ้านเชียงใหม่, ตรวจคอนโดเชียงใหม่, ตรวจบ้านก่อนโอน, ตรวจรับบ้าน, Home Inspection Chiang Mai, Condo Inspection Chiang Mai" />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
   <link rel="canonical" href={canonicalURL} />
 
   <!-- Open Graph -->

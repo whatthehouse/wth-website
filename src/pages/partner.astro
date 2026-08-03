@@ -3,11 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import settings from '../data/settings.json';
-import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice, types, options, included, extras, customQuote, terms } from '../data/pricing-data';
+import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, types, options, included, terms } from '../data/pricing-data';
+
+// Partner discount by region — applied to the whole quote total.
+// Chiang Mai partners: 20% off · Bangkok partners: 10% off.
+const PARTNER_DISCOUNTS = { cm: 0.20, bkk: 0.10 };
 ---
 <BaseLayout
-  title="ค่าบริการตรวจบ้าน ตรวจคอนโด | คำนวณราคา + ใบเสนอราคา PDF | WHAT THE HOUSE"
-  description="อัตราค่าบริการตรวจรับบ้านและคอนโดเชียงใหม่ คอนโดเริ่มต้น 3,000 บาท บ้านเริ่มต้น 5,000 บาท คำนวณราคาตามพื้นที่และดาวน์โหลดใบเสนอราคา PDF ได้ทันที | Home Inspection Pricing Chiang Mai"
+  title="ใบเสนอราคาพันธมิตร (ภายใน) | WHAT THE HOUSE"
+  description="เครื่องมือออกใบเสนอราคาราคาพันธมิตรสำหรับพาร์ทเนอร์ WHAT THE HOUSE"
+  noindex={true}
 >
   <Header />
   <main>
@@ -15,10 +20,10 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
     <!-- ============ PAGE HERO ============ -->
     <section class="page-hero">
       <div class="container">
-        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ค่าบริการ</span><span class="lang-en">Pricing</span></p>
-        <span class="eyebrow"><span class="lang-th">ค่าบริการ</span><span class="lang-en">Pricing</span></span>
-        <h1><span class="lang-th">อัตราค่าบริการตรวจบ้าน</span><span class="lang-en">Inspection Pricing</span></h1>
-        <p><span class="lang-th">ราคาชัดเจนตามประเภทและขนาดทรัพย์สิน คำนวณราคาเองได้ทันที และดาวน์โหลดใบเสนอราคาเป็น PDF ไปใช้ได้เลย</span><span class="lang-en block">Clear pricing by property type and size. Calculate your price instantly and download a PDF quotation.</span></p>
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ราคาพันธมิตร</span><span class="lang-en">Partner</span></p>
+        <span class="eyebrow"><span class="lang-th">สำหรับพันธมิตรเท่านั้น</span><span class="lang-en">Partners only</span></span>
+        <h1><span class="lang-th">ใบเสนอราคาพันธมิตร</span><span class="lang-en">Partner Quotation</span></h1>
+        <p><span class="lang-th">คำนวณราคาพันธมิตร (ลดจากราคาปกติตามพื้นที่) และดาวน์โหลดใบเสนอราคา PDF ได้ทันที</span><span class="lang-en block">Calculate partner pricing (discounted from the standard rate by region) and download a PDF quotation instantly.</span></p>
       </div>
     </section>
 
@@ -27,8 +32,14 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       <div class="container">
         <div class="calc-wrap">
           <div class="calc-box">
+            <div class="partner-banner">
+              <b><span class="lang-th">โหมดพันธมิตร (Partner)</span><span class="lang-en">Partner mode</span></b>
+              <span class="lang-th">ราคาบนหน้านี้เป็นราคาพันธมิตร ลดจากราคาปกติตามพื้นที่ · หน้านี้เป็นลิงก์ภายใน ไม่เผยแพร่ทั่วไป</span>
+              <span class="lang-en block">Prices here are partner rates, discounted by region · this is a private internal link, not listed publicly.</span>
+            </div>
+
             <h2 class="calc-title"><span class="lang-th">คำนวณราคาและออกใบเสนอราคา</span><span class="lang-en">Calculate & get a quotation</span></h2>
-            <p class="calc-sub"><span class="lang-th">เลือกประเภททรัพย์ กรอกพื้นที่ใช้สอย และเลือกเงื่อนไขที่ตรงกับหน้างานของคุณ</span><span class="lang-en block">Pick the property type, enter the usable area, and tick anything that matches your property.</span></p>
+            <p class="calc-sub"><span class="lang-th">เลือกประเภททรัพย์ กรอกพื้นที่ใช้สอย เลือกเงื่อนไข แล้วเลือกพื้นที่พันธมิตร</span><span class="lang-en block">Pick the property type, enter the area, tick any conditions, then choose the partner region.</span></p>
 
             <!-- 1. type -->
             <div class="calc-step">
@@ -92,19 +103,22 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
               </div>
             </div>
 
-            <!-- 4. service area -->
+            <!-- 5. partner region → discount -->
             <div class="calc-step">
-              <label class="calc-label"><span class="lang-th">5. พื้นที่หน้างาน</span><span class="lang-en">5. Site location</span></label>
+              <label class="calc-label"><span class="lang-th">5. พื้นที่พันธมิตร</span><span class="lang-en">5. Partner region</span></label>
               <div class="area-btns">
                 <label class="area-radio">
                   <input type="radio" name="location" value="cm" checked />
-                  <span><span class="lang-th">ในเขตบริการ (เชียงใหม่)</span><span class="lang-en">Within our service area (Chiang Mai)</span></span>
+                  <span>
+                    <span class="lang-th">เชียงใหม่</span><span class="lang-en">Chiang Mai</span>
+                    <small class="lang-th"> (ส่วนลดพันธมิตร 20%)</small><small class="lang-en"> (20% partner discount)</small>
+                  </span>
                 </label>
                 <label class="area-radio">
-                  <input type="radio" name="location" value="out" />
+                  <input type="radio" name="location" value="bkk" />
                   <span>
-                    <span class="lang-th">นอกเขตบริการ (ลำพูน / ลำปาง)</span><span class="lang-en">Outside the area (Lamphun / Lampang)</span>
-                    <small class="lang-th"> (คิดค่าเดินทางตามระยะทาง)</small><small class="lang-en"> (travel charged by distance)</small>
+                    <span class="lang-th">กรุงเทพฯ</span><span class="lang-en">Bangkok</span>
+                    <small class="lang-th"> (ส่วนลดพันธมิตร 10%)</small><small class="lang-en"> (10% partner discount)</small>
                   </span>
                 </label>
               </div>
@@ -113,21 +127,20 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
             <!-- result -->
             <div class="calc-result">
               <div class="result-inner">
-                <div class="result-label"><span class="lang-th">ราคาประมาณการ</span><span class="lang-en">Estimated price</span></div>
+                <div class="result-label"><span class="lang-th">ราคาพันธมิตร (สุทธิ)</span><span class="lang-en">Partner price (net)</span></div>
                 <div class="result-price" id="resultPrice">—</div>
                 <div class="result-note" id="resultNote"></div>
               </div>
             </div>
             <ul class="bd-list" id="breakdown"></ul>
-            <p class="upsell" id="upsell" hidden></p>
 
             <!-- quotation details -->
             <div class="quote-form" id="quoteForm">
-              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคา</span><span class="lang-en">Issue a quotation</span></p>
+              <p class="qf-title"><span class="lang-th">ออกใบเสนอราคาพันธมิตร</span><span class="lang-en">Issue a partner quotation</span></p>
               <p class="qf-note"><span class="lang-th">ข้อมูลด้านล่างไม่บังคับ — กรอกเฉพาะเมื่อต้องการให้เราติดต่อกลับ</span><span class="lang-en block">The fields below are optional — fill them in only if you'd like us to follow up.</span></p>
               <div class="form-row">
                 <div class="field">
-                  <label for="qName"><span class="lang-th">ชื่อลูกค้า</span><span class="lang-en">Customer name</span></label>
+                  <label for="qName"><span class="lang-th">ชื่อลูกค้า / พันธมิตร</span><span class="lang-en">Customer / partner name</span></label>
                   <input type="text" id="qName" placeholder="ชื่อ-นามสกุล / บริษัท" />
                 </div>
                 <div class="field">
@@ -143,9 +156,8 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
               <div class="qf-actions">
                 <button type="button" class="btn btn-primary btn-lg" id="btnQuote">
                   <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-                  <span class="lang-th">ดาวน์โหลดใบเสนอราคา (PDF)</span><span class="lang-en">Download quotation (PDF)</span>
+                  <span class="lang-th">ดาวน์โหลดใบเสนอราคาพันธมิตร (PDF)</span><span class="lang-en">Download partner quotation (PDF)</span>
                 </button>
-                <a class="btn btn-ghost btn-lg" href="/contact"><span class="lang-th">ให้เราเสนอราคาให้</span><span class="lang-en">Ask us to quote</span></a>
               </div>
               <p class="qf-hint"><span class="lang-th">ระบบจะเปิดหน้าต่างพิมพ์ — เลือก "บันทึกเป็น PDF" เพื่อดาวน์โหลดใบเสนอราคา</span><span class="lang-en block">A print dialog opens — choose "Save as PDF" to download the quotation.</span></p>
             </div>
@@ -160,11 +172,6 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
               ))}
             </ul>
             <div class="btu-tip">
-              {VAT_NOTE && (
-                <Fragment>
-                  <span class="lang-th">{VAT_NOTE.th}</span><span class="lang-en block">{VAT_NOTE.en}</span>
-                </Fragment>
-              )}
               <a href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน →</span><span class="lang-en">See a sample report →</span></a>
             </div>
           </aside>
@@ -172,118 +179,10 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       </div>
     </section>
 
-    <!-- ============ PRICE TABLES ============ -->
-    <section class="section soft">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">ตารางราคา</span><span class="lang-en">Rate card</span></span>
-          <h2 class="section-title"><span class="lang-th">อัตราค่าบริการตามประเภททรัพย์</span><span class="lang-en">Rates by property type</span></h2>
-        </div>
-        <div class="price-tables">
-          {types.map((t) => (
-            <div class="price-table-wrap">
-              <div class="pt-header">
-                <span set:html={t.icon} />
-                <h3><span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span></h3>
-              </div>
-              <div class="pt-scroll">
-              <table class="price-tbl">
-                <thead>
-                  <tr>
-                    <th><span class="lang-th">พื้นที่ใช้สอย</span><span class="lang-en">Usable area</span></th>
-                    <th class="th-right"><span class="lang-th">2 รอบ</span><span class="lang-en">2 rounds</span></th>
-                    <th class="th-right"><span class="lang-th">รอบเดียว</span><span class="lang-en">1 round</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {t.tiers.map((r) => (
-                    <tr>
-                      <td><span class="lang-th">{r.th}</span><span class="lang-en">{r.en}</span></td>
-                      <td class="price-cell">{r.price ? `${r.price.toLocaleString()} ฿` : <span><span class="lang-th">ประเมินราคา</span><span class="lang-en">Quote</span></span>}</td>
-                      <td class="price-cell price-alt">{r.price ? `${onePrice(r.price)!.toLocaleString()} ฿` : '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-              {t.note && <p class="pt-note"><span class="lang-th">{t.note.th}</span><span class="lang-en block">{t.note.en}</span></p>}
-            </div>
-          ))}
-        </div>
-        <p class="pt-foot">
-          <span class="lang-th">* ราคารวมการตรวจ 2 รอบและรายงาน PDF ไทย-อังกฤษแล้ว{VAT_NOTE ? ` · ${VAT_NOTE.th}` : ''}</span>
-          <span class="lang-en block">* Prices include 2 inspection rounds and the bilingual PDF report.{VAT_NOTE ? ` ${VAT_NOTE.en}` : ''}</span>
-        </p>
-      </div>
-    </section>
-
-    <!-- ============ EXTRAS + CUSTOM QUOTE ============ -->
-    <section class="section">
-      <div class="container">
-        <div class="two-col">
-          <div class="info-card">
-            <h3><span class="lang-th">ค่าบริการเพิ่มเติม</span><span class="lang-en">Additional charges</span></h3>
-            <table class="price-tbl extras-tbl">
-              <tbody>
-                {extras.map((e) => (
-                  <tr>
-                    <td>
-                      <span class="lang-th">{e.th}{e.subTh && <span class="ex-sub">{e.subTh}</span>}</span>
-                      <span class="lang-en">{e.en}{e.subEn && <span class="ex-sub">{e.subEn}</span>}</span>
-                    </td>
-                    <td class="price-cell"><span class="lang-th">{e.price.th}</span><span class="lang-en">{e.price.en}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div class="info-card">
-            <h3><span class="lang-th">กรณีที่ต้องประเมินราคาเป็นรายกรณี</span><span class="lang-en">Cases we quote individually</span></h3>
-            <ul class="tick-list">
-              {customQuote.th.map((t, i) => (
-                <li><span class="nc">•</span><span><span class="lang-th">{t}</span><span class="lang-en block">{customQuote.en[i]}</span></span></li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ TERMS ============ -->
-    <section class="section soft">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">เงื่อนไขการใช้บริการ</span><span class="lang-en">Service terms</span></span>
-          <h2 class="section-title"><span class="lang-th">เงื่อนไขที่ควรทราบก่อนใช้บริการ</span><span class="lang-en">Before you book</span></h2>
-        </div>
-        <div class="terms-card">
-          <ol class="terms-list">
-            {terms.th.map((t, i) => (
-              <li><span class="lang-th">{t}</span><span class="lang-en block">{terms.en[i]}</span></li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ CTA ============ -->
-    <section class="section">
-      <div class="container">
-        <div class="cta-band">
-          <h2><span class="lang-th">พร้อมจองคิวตรวจบ้านแล้วหรือยัง?</span><span class="lang-en">Ready to book your inspection?</span></h2>
-          <p><span class="lang-th">ติดต่อเราเพื่อยืนยันราคาและจองวันตรวจ รับใบเสนอราคาภายใน 24 ชั่วโมง</span><span class="lang-en block">Contact us to confirm pricing and book your date — quote within 24 hours.</span></p>
-          <div class="btns">
-            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">ขอราคา / จองคิว</span><span class="lang-en">Get a Quote</span></a>
-            <a class="btn btn-ghost btn-lg" href="/sample-report"><span class="lang-th">ดูตัวอย่างรายงาน</span><span class="lang-en">See a sample report</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-
   </main>
   <Footer />
 
-  <!-- ============ PRINTABLE QUOTATION (screen-hidden) ============ -->
+  <!-- ============ QUOTATION DOCUMENT (print only) ============ -->
   <div id="quoteDoc" class="quote-doc" data-lang="th" aria-hidden="true">
     <div class="qd-printbar">
       <span class="qd-pb-title" id="qdPrintedTitle"></span>
@@ -296,6 +195,7 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       </div>
       <div class="qd-meta">
         <div class="qd-title">ใบเสนอราคา / QUOTATION</div>
+        <div class="qd-partner-badge"><span class="qd-th">ราคาพันธมิตร</span><span class="qd-en">PARTNER RATE</span></div>
         <div>เลขที่ / No.: <b id="qdNo"></b></div>
         <div>วันที่ / Date: <b id="qdDate"></b></div>
         <div>ยืนราคาถึง / Valid until: <b id="qdValid"></b></div>
@@ -324,7 +224,7 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       </thead>
       <tbody id="qdItems"></tbody>
       <tfoot>
-        <tr><td class="qd-total-label">รวมทั้งสิ้น / Total</td><td class="qd-right qd-total" id="qdTotal">—</td></tr>
+        <tr><td class="qd-total-label">ราคาสุทธิพันธมิตร / Partner net total</td><td class="qd-right qd-total" id="qdTotal">—</td></tr>
       </tfoot>
     </table>
 
@@ -358,16 +258,17 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
         <span class="qd-th">สแกน QR เพื่อแอดไลน์ WHAT THE HOUSE</span><span class="qd-en">Scan the QR to add WHAT THE HOUSE on LINE</span>
       </div>
     </div>
-    <p class="qd-foot qd-th">เอกสารนี้เป็นการประเมินราคาเบื้องต้นจากข้อมูลที่ลูกค้าให้ไว้ · ราคาสุดท้ายยืนยันอีกครั้งก่อนเริ่มงาน · whatthehouse.net</p>
-    <p class="qd-foot qd-en">This is a preliminary estimate based on the information provided · the final price is confirmed before work begins · whatthehouse.net</p>
+    <p class="qd-foot qd-th">เอกสารนี้เป็นการประเมินราคาเบื้องต้นจากข้อมูลที่ให้ไว้ · ราคาพันธมิตรสำหรับพาร์ทเนอร์เท่านั้น · whatthehouse.net</p>
+    <p class="qd-foot qd-en">This is a preliminary estimate based on the information provided · partner rate for partners only · whatthehouse.net</p>
   </div>
 </BaseLayout>
 
 <style>
-/* The hidden attribute must beat the display rules below (.opt is display:flex),
-   otherwise [hidden] loses the specificity tie to a class selector and the
-   "hidden" options stay on screen for every property type. */
 [hidden] { display: none !important; }
+
+/* partner banner */
+.partner-banner { background: var(--green-soft); border: 1px solid rgba(47,224,124,.35); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 24px; font-size: .86rem; line-height: 1.55; color: var(--body); }
+.partner-banner b { display: block; color: var(--green-bright); margin-bottom: 3px; }
 
 /* ── type buttons ── */
 .type-btns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
@@ -395,9 +296,8 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
 .opt input { accent-color: var(--green); margin: 0; flex: none; }
 .opt-txt { flex: 1; color: var(--body); }
 .opt-price { font-family: var(--mono); font-size: .82rem; color: var(--green-bright); white-space: nowrap; }
-.opt-none { color: var(--faint); font-size: .88rem; margin: 0; }
 
-/* ── location radios ── */
+/* ── location / region radios ── */
 .area-btns { display: flex; flex-direction: column; gap: 10px; }
 .area-radio {
   display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
@@ -412,16 +312,14 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
 .bd-list { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-direction: column; gap: 7px; }
 .bd-list li { display: flex; justify-content: space-between; gap: 14px; font-size: .89rem; color: var(--grey); border-bottom: 1px dashed var(--line); padding-bottom: 7px; }
 .bd-list li b { color: var(--heading); font-family: var(--mono); white-space: nowrap; }
+.bd-list li.bd-discount b { color: var(--green-bright); }
+.bd-list li.bd-net { border-bottom: 0; }
+.bd-list li.bd-net span, .bd-list li.bd-net b { color: var(--heading); font-weight: 700; font-size: .98rem; }
 
-/* package radios + single-round upsell hint */
+/* package radios */
 .pkg-radio b { color: var(--heading); font-weight: 700; }
 .pkg-tag { display: inline-block; margin-left: 8px; font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--green-bright); border: 1px solid rgba(47,224,124,.35); border-radius: 50px; padding: 2px 8px; vertical-align: middle; }
-/* style the wrapper, never the .lang-th/.lang-en elements themselves —
-   setting display on those overrides the TH/EN toggle */
 .pkg-desc { display: block; margin-top: 3px; }
-.upsell { margin: 14px 0 0; padding: 12px 15px; border-radius: var(--radius-sm); background: var(--green-soft); border: 1px solid rgba(47,224,124,.22); color: var(--body); font-size: .87rem; line-height: 1.6; }
-.price-alt { color: var(--grey) !important; }
-.th-right { text-align: right; }
 
 /* ── quote form ── */
 .quote-form { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 22px; }
@@ -431,65 +329,16 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
 .qf-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
 .qf-actions .btn { flex: 1; justify-content: center; min-width: 200px; }
 .qf-hint { color: var(--faint); font-size: .8rem; margin: 12px 0 0; }
-.quote-form .req { color: #E5484D; font-style: normal; }
 .qf-error { margin: 14px 0 0; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(229,72,77,.08); border: 1px solid rgba(229,72,77,.35); color: #E5484D; font-size: .86rem; line-height: 1.6; }
-.field.invalid input { border-color: #E5484D; }
-
-/* ── price tables ── */
-.price-tables { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
-.price-table-wrap { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
-.pt-header { display: flex; align-items: center; gap: 10px; background: var(--panel-3); border-bottom: 1px solid var(--line); color: #fff; padding: 15px 20px; }
-.pt-header :global(svg) { color: var(--green-bright); flex: none; }
-.pt-header h3 { margin: 0; font-size: 1rem; color: #fff; }
-/* 3 columns don't fit a phone; .price-table-wrap is overflow:hidden, so without
-   this the last column got clipped instead of being reachable */
-.pt-scroll { overflow-x: auto; }
-.price-tbl { width: 100%; border-collapse: collapse; }
-.price-tbl th { text-align: left; padding: 9px 20px; font-size: .78rem; font-weight: 600; color: var(--grey); background: var(--panel-2); border-bottom: 1px solid var(--line); text-transform: uppercase; letter-spacing: .04em; }
-.price-tbl td { padding: 11px 20px; border-bottom: 1px solid var(--line); font-size: .92rem; color: var(--body); }
-.price-tbl tr:last-child td { border-bottom: 0; }
-.price-tbl tr:hover td { background: var(--panel-2); }
-.price-cell { font-family: var(--mono); font-weight: 600; color: var(--green-bright); text-align: right; white-space: nowrap; }
-/* must out-specify `.price-tbl th`, which sets text-align:left */
-.price-tbl th.th-right { text-align: right; }
-.pt-note { margin: 0; padding: 12px 20px; border-top: 1px solid var(--line); color: var(--grey); font-size: .82rem; background: var(--panel-2); }
-.pt-foot { text-align: center; margin-top: 20px; font-size: .86rem; color: var(--grey); }
-
-/* ── extras / custom quote ── */
-.two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
-.info-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
-.info-card h3 { font-size: 1.08rem; margin: 0 0 16px; color: var(--heading); }
-.extras-tbl td { padding: 10px 0; }
-/* these cells hold sentences, not figures — let them wrap (price-cell is nowrap) */
-.extras-tbl .price-cell { white-space: normal; padding-left: 14px; min-width: 9em; }
-/* second line of a row label — set on this child, never on the .lang-* span itself */
-.ex-sub { display: block; color: var(--grey); font-size: .85em; }
-.tick-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-.tick-list li { display: flex; gap: 10px; font-size: .9rem; color: var(--grey); }
-.tick-list .nc { background: none; color: var(--green-bright); width: auto; height: auto; }
-
-/* ── terms ── */
-/* the list sat as bare left-aligned text under a centred heading, which read as
-   off-centre — give it a centred card like the other blocks on this page */
-.terms-card { max-width: 820px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px 34px; }
-.terms-list { margin: 0; padding-left: 1.25em; }
-.terms-list li { color: var(--grey); font-size: .93rem; line-height: 1.65; }
-.terms-list li + li { margin-top: 11px; }
-@media (max-width: 640px) { .terms-card { padding: 24px 20px; } }
 
 @media (max-width: 980px) {
   .calc-wrap { grid-template-columns: 1fr; }
   .calc-notes { order: -1; }
-  .price-tables, .two-col { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
   .type-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .calc-box { padding: 24px 18px; }
   .qf-actions .btn { min-width: 0; }
-  /* tighten the 3-column rate tables so they fit a phone without scrolling */
-  .price-tbl th, .price-tbl td { padding: 10px 12px; font-size: .86rem; }
-  .pt-header { padding: 13px 14px; }
-  .pt-note { padding: 11px 14px; }
 }
 
 /* ── quotation document: hidden on screen, shown when printing ── */
@@ -501,8 +350,6 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
   @media print {
     body > *:not(#quoteDoc) { display: none !important; }
     #quoteDoc { display: block !important; padding: 14mm; }
-    /* margin:0 so the browser prints no header/footer of its own —
-       the document renders its own title + print time bar instead */
     @page { size: A4; margin: 0; }
     html, body { background: #fff !important; }
   }
@@ -522,12 +369,16 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
   #quoteDoc .qd-slogan { margin-top: 2px; letter-spacing: .1em !important; color: #157a42 !important; font-weight: 600; }
   #quoteDoc .qd-meta { text-align: right; }
   #quoteDoc .qd-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  #quoteDoc .qd-partner-badge { display: inline-block; margin-bottom: 6px; font-size: 9px; font-weight: 700; letter-spacing: .08em; color: #157a42; border: 1px solid #157a42; border-radius: 4px; padding: 1px 7px; }
   #quoteDoc .qd-parties { display: flex; gap: 26px; margin: 14px 0 16px; }
   #quoteDoc .qd-parties > div { flex: 1; }
   #quoteDoc .qd-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
   #quoteDoc .qd-table th { text-align: left; background: #f1f4f0; border: 1px solid #d8ded8; padding: 7px 9px; font-size: 11px; }
   #quoteDoc .qd-table td { border: 1px solid #d8ded8; padding: 7px 9px; }
   #quoteDoc .qd-right { text-align: right; }
+  #quoteDoc .qd-subtotal td { color: #5a625c; }
+  #quoteDoc .qd-normal { text-decoration: line-through; color: #8a908a; }
+  #quoteDoc .qd-discount td { color: #157a42; font-weight: 600; }
   #quoteDoc .qd-total-label { font-weight: 700; text-align: right; }
   #quoteDoc .qd-total { font-weight: 700; font-size: 13.5px; }
   #quoteDoc .qd-vat { font-size: 10.5px; color: #5a625c; margin-bottom: 14px; }
@@ -544,38 +395,32 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
   #quoteDoc .qd-contact b { display: block; font-size: 10.5px; color: #16181a; }
   #quoteDoc .qd-contact span { display: block; font-size: 9px; color: #5a625c; }
   #quoteDoc .qd-foot { margin-top: 16px; border-top: 1px solid #d8ded8; padding-top: 7px; font-size: 9px; color: #5a625c; text-align: center; }
-  /* quotation language: driven by data-lang on the document, independent of the site toggle */
   #quoteDoc[data-lang="en"] .qd-th { display: none !important; }
   #quoteDoc[data-lang="th"] .qd-en { display: none !important; }
 </style>
 
-<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO }}>
+<script define:vars={{ types, options, VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, PARTNER_DISCOUNTS }}>
   (function () {
     const areaInput   = document.getElementById('calcArea');
     const resultPrice = document.getElementById('resultPrice');
     const resultNote  = document.getElementById('resultNote');
     const breakdown   = document.getElementById('breakdown');
-    const upsell      = document.getElementById('upsell');
     const typeBtns    = document.querySelectorAll('.type-btn');
     const optLabels   = Array.from(document.querySelectorAll('.opt'));
     const locRadios   = document.querySelectorAll('input[name="location"]');
     const pkgRadios   = document.querySelectorAll('input[name="pkg"]');
 
     const optStep = document.getElementById('optStep');
-    // no property type is pre-selected — the conditions step only appears once one is picked
     let propType = null;
-    let location = 'cm';
+    let location = 'cm';   // partner region: 'cm' (20%) or 'bkk' (10%)
     let pkg = 'two';
-    let current = null; // last computed quote
+    let current = null;
 
     const isEn = () => document.body.classList.contains('en');
     const baht = (n) => n.toLocaleString('en-US');
-    // derived prices are rounded UP to a whole 500 (exact multiples stay as-is)
     const roundUp500 = (n) => Math.ceil(n / 500) * 500;
-    // buying round 2 after the single-round package = 30% of the 2-round price
-    const round2Later = (twoRoundPrice) => roundUp500(twoRoundPrice * ROUND2_LATER_RATIO);
+    const regionName = (loc, en) => loc === 'bkk' ? (en ? 'Bangkok' : 'กรุงเทพฯ') : (en ? 'Chiang Mai' : 'เชียงใหม่');
 
-    // show only the options that apply to the selected property type
     function syncOptions() {
       optStep.hidden = !propType;
       optLabels.forEach((el) => {
@@ -590,7 +435,6 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       const type = types.find((t) => t.id === propType);
       if (!type || !sqm || sqm <= 0) return null;
 
-      // tier: first with area <= max; the final tier has max === null (over-size → quote)
       const tier = type.tiers.find((r) => r.max !== null && sqm <= r.max) || type.tiers[type.tiers.length - 1];
       const checked = optLabels
         .filter((el) => !el.hidden && el.querySelector('input').checked)
@@ -600,7 +444,6 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
         return { quote: true, type, tier, checked, sqm };
       }
 
-      // the tables are the 2-round price; the single-round package is a % of it
       const twoRound = tier.price;
       const base = pkg === 'one' ? roundUp500(twoRound * ROUND1_RATIO) : twoRound;
       const pkgTh = pkg === 'one' ? 'ตรวจรอบเดียว' : 'ตรวจ 2 รอบ';
@@ -625,13 +468,17 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
         }
       });
 
-      return { quote: false, type, tier, checked, sqm, lines, total, pkg, twoRound, pkgTh, pkgEn };
+      // partner discount off the whole total
+      const discountRate = PARTNER_DISCOUNTS[location] || 0;
+      const discount = Math.round(total * discountRate);
+      const net = total - discount;
+
+      return { quote: false, type, tier, checked, sqm, lines, total, discount, discountRate, net, pkg };
     }
 
     function render() {
       current = compute();
       breakdown.innerHTML = '';
-      upsell.hidden = true;
 
       if (!current) {
         resultPrice.textContent = '—';
@@ -649,57 +496,51 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
         return;
       }
 
-      const travel = location === 'out' ? (isEn() ? ' + travel' : ' + ค่าเดินทาง') : '';
-      resultPrice.textContent = baht(current.total) + ' ฿' + travel;
-      resultNote.textContent = VAT_NOTE
-        ? (isEn() ? VAT_NOTE.en : VAT_NOTE.th)
-        : (isEn() ? 'Includes 2 inspection rounds + bilingual PDF report' : 'รวมตรวจ 2 รอบ + รายงาน PDF ไทย-อังกฤษ');
+      const en = isEn();
+      const pct = Math.round(current.discountRate * 100);
+      resultPrice.textContent = baht(current.net) + ' ฿';
+      resultNote.textContent = en
+        ? `Standard ${baht(current.total)} ฿ · partner ${pct}% off (−${baht(current.discount)} ฿)`
+        : `ราคาปกติ ${baht(current.total)} ฿ · ส่วนลดพันธมิตร ${pct}% (−${baht(current.discount)} ฿)`;
 
       current.lines.forEach((l) => {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${isEn() ? l.label.en : l.label.th}</span><b>${baht(l.amount)} ฿</b>`;
+        li.innerHTML = `<span>${en ? l.label.en : l.label.th}</span><b>${baht(l.amount)} ฿</b>`;
         breakdown.appendChild(li);
       });
-      if (location === 'out') {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${isEn() ? 'Travel outside the service area' : 'ค่าเดินทางนอกเขตบริการ'}</span><b>${isEn() ? 'by distance' : 'ตามระยะทาง'}</b>`;
-        breakdown.appendChild(li);
-      }
-
-      // single round: show honestly what adding round 2 later would cost
-      if (current.pkg === 'one') {
-        const later = round2Later(current.twoRound);
-        const extra = current.total + later - current.twoRound;
-        upsell.innerHTML = isEn()
-          ? `Adding the re-inspection later costs <b>${baht(later)} ฿</b> — a total of <b>${baht(current.total + later)} ฿</b>, which is <b>${baht(extra)} ฿ more</b> than taking the 2-round package now (${baht(current.twoRound)} ฿).`
-          : `หากซื้อตรวจรอบแก้ไขภายหลัง คิดเพิ่ม <b>${baht(later)} ฿</b> รวมเป็น <b>${baht(current.total + later)} ฿</b> ซึ่ง<b>แพงกว่าเลือกแพ็กเกจ 2 รอบตั้งแต่แรก ${baht(extra)} ฿</b> (แพ็กเกจ 2 รอบ ${baht(current.twoRound)} ฿)`;
-        upsell.hidden = false;
-      }
+      // discount line
+      const dLi = document.createElement('li');
+      dLi.className = 'bd-discount';
+      dLi.innerHTML = `<span>${en ? `Partner discount (${regionName(location, true)} ${pct}%)` : `ส่วนลดพันธมิตร (${regionName(location, false)} ${pct}%)`}</span><b>−${baht(current.discount)} ฿</b>`;
+      breakdown.appendChild(dLi);
+      // net line
+      const nLi = document.createElement('li');
+      nLi.className = 'bd-net';
+      nLi.innerHTML = `<span>${en ? 'Partner net total' : 'ราคาสุทธิพันธมิตร'}</span><b>${baht(current.net)} ฿</b>`;
+      breakdown.appendChild(nLi);
     }
 
     // ── quotation ──
     function fillQuote() {
       if (!current || current.quote) return false;
-      // the quotation follows the site's TH/EN toggle
       const en = isEn();
       const doc = document.getElementById('quoteDoc');
       doc.setAttribute('data-lang', en ? 'en' : 'th');
       const cur = en ? 'THB' : 'บาท';
-      const money = (n) => en ? `${baht(n)} ${cur}` : `${baht(n)} ${cur}`;
+      const money = (n) => `${baht(n)} ${cur}`;
+      const pct = Math.round(current.discountRate * 100);
 
       const now = new Date();
       const valid = new Date(now.getTime() + QUOTE_VALID_DAYS * 864e5);
-      // Thai quotes use the Buddhist era; English quotes use the Gregorian calendar
       const fmt = (d) => en
         ? d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
         : d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
       const pad = (n) => String(n).padStart(2, '0');
 
       document.getElementById('qdNo').textContent =
-        `WTH-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+        `WTH-P${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
       document.getElementById('qdDate').textContent = fmt(now);
       document.getElementById('qdValid').textContent = fmt(valid);
-      // top-of-paper bar: page title (left) + the moment the document is printed (right)
       document.getElementById('qdPrintedTitle').textContent = document.title;
       document.getElementById('qdPrinted').textContent = now.toLocaleString(en ? 'en-GB' : 'th-TH');
       document.getElementById('qdCustomer').textContent = document.getElementById('qName').value.trim() || '—';
@@ -715,27 +556,37 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       });
       const areaRow = document.createElement('tr');
       const areaTxt = en
-        ? `Stated usable area: ${current.sqm} sq.m.${location === 'out' ? ' · site outside the service area (travel charged by distance)' : ''}`
-        : `พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.${location === 'out' ? ' · หน้างานนอกเขตบริการ (คิดค่าเดินทางตามระยะทาง)' : ''}`;
+        ? `Stated usable area: ${current.sqm} sq.m.`
+        : `พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.`;
       areaRow.innerHTML = `<td colspan="2" style="border:0;padding:6px 0 0;font-size:10px;color:#5a625c">${areaTxt}</td>`;
       body.appendChild(areaRow);
+      // subtotal (normal) — struck through
+      const subRow = document.createElement('tr');
+      subRow.className = 'qd-subtotal';
+      subRow.innerHTML = `<td>${en ? 'Subtotal (standard rate)' : 'ราคาปกติรวม'}</td><td class="qd-right qd-normal">${money(current.total)}</td>`;
+      body.appendChild(subRow);
+      // partner discount
+      const disRow = document.createElement('tr');
+      disRow.className = 'qd-discount';
+      disRow.innerHTML = `<td>${en ? `Partner discount (${regionName(location, true)} ${pct}%)` : `ส่วนลดพันธมิตร (${regionName(location, false)} ${pct}%)`}</td><td class="qd-right">−${money(current.discount)}</td>`;
+      body.appendChild(disRow);
 
-      document.getElementById('qdTotal').textContent = money(current.total);
+      document.getElementById('qdTotal').textContent = money(current.net);
+
       const notes = [];
+      notes.push(en
+        ? `Special partner rate — ${pct}% off the standard price (${regionName(location, true)})`
+        : `ราคาพิเศษสำหรับพันธมิตร — ลด ${pct}% จากราคาปกติ (พื้นที่${regionName(location, false)})`);
       if (VAT_NOTE) notes.push(en ? VAT_NOTE.en : VAT_NOTE.th);
       if (current.pkg === 'one') {
-        const later = round2Later(current.twoRound);
         notes.push(en
-          ? `Single-round package (re-inspection not included) · adding the re-inspection later costs ${money(later)}`
-          : `แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข) · หากเพิ่มรอบแก้ไขภายหลัง คิดเพิ่ม ${money(later)}`);
+          ? 'Single-round package (re-inspection not included)'
+          : 'แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข)');
       } else {
         notes.push(en
           ? 'Includes one follow-up re-inspection (to be booked within 60 days of the first inspection)'
           : 'รวมตรวจรอบแก้ไขอีก 1 ครั้ง (นัดภายใน 60 วันหลังการตรวจครั้งแรก)');
       }
-      if (location === 'out') notes.push(en
-        ? 'Excludes travel outside the service area, which is charged by distance'
-        : 'ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง');
       document.getElementById('qdVat').textContent = notes.join(' · ');
       return true;
     }
@@ -743,15 +594,14 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
     const qfError = document.getElementById('qfError');
 
     document.getElementById('btnQuote').addEventListener('click', () => {
-      // only a real, priced result is required — customer details are optional
       const priceable = !!current && !current.quote;
       if (!priceable) {
-        qfError.hidden = false;   // static bilingual message lives in the HTML
+        qfError.hidden = false;
         qfError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
       }
       qfError.hidden = true;
-      if (!fillQuote()) return;   // safety net; priceable already ensures this passes
+      if (!fillQuote()) return;
       window.print();
     });
 
