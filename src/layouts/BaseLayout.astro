@@ -58,21 +58,54 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": "https://whatthehouse.net/#business",
     "name": "WHAT THE HOUSE – Home Inspections",
-    "description": "บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่และภาคเหนือ",
+    "description": "บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ",
     "url": "https://whatthehouse.net",
     "telephone": settings.phone,
     "email": settings.email,
-    "image": "/assets/img/logo.jpg",
-    "areaServed": ["Chiang Mai","Lamphun","Lampang"],
+    "image": "https://whatthehouse.net/assets/img/logo.jpg",
+    "logo": "https://whatthehouse.net/assets/img/logo.jpg",
+    "priceRange": "฿฿",
+    "currenciesAccepted": "THB",
+    "paymentAccepted": "Cash, Bank transfer, PromptPay",
     "knowsLanguage": ["th","en"],
+    "areaServed": [
+      { "@type": "City", "name": "Chiang Mai" },
+      { "@type": "City", "name": "Lamphun" },
+      { "@type": "City", "name": "Lampang" }
+    ],
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Chiang Mai",
+      "addressRegion": "Chiang Mai",
       "addressCountry": "TH"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 18.8037866,
+      "longitude": 99.0182146
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "08:00",
+      "closes": "20:00"
+    }],
     "sameAs": [settings.facebookUrl, settings.lineUrl],
-    "slogan": "BETTER HOMES • BETTER LIVING"
+    "slogan": "BETTER HOMES • BETTER LIVING",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Home inspection & construction services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home & Condo Handover Inspection / ตรวจรับบ้านและคอนโด" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Construction Supervision / ควบคุมงานสร้างบ้าน" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pre-Construction Planning / วางแผนก่อนสร้างบ้าน" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Renovation & Extension Advisory / ที่ปรึกษางานต่อเติม" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Problem Diagnosis / ตรวจหาสาเหตุปัญหาบ้าน" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Contractor Work Quality Check / ตรวจคุณภาพงานผู้รับเหมา" } }
+      ]
+    }
   })} />
 </head>
 <body>

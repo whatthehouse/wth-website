@@ -130,12 +130,27 @@ const faqs = [
     ],
   },
 ];
+
+// FAQPage structured data — lets search/AI engines pull direct answers.
+// Uses the Thai text (the page's primary language, html lang="th").
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.flatMap((cat) =>
+    cat.items.map((item) => ({
+      "@type": "Question",
+      "name": item.q.th,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a.th },
+    }))
+  ),
+};
 ---
 <BaseLayout
   title="คำถามที่พบบ่อย (FAQ) | WHAT THE HOUSE – Home Inspection Chiang Mai"
   description="คำถามที่พบบ่อยเกี่ยวกับการตรวจบ้านและคอนโดเชียงใหม่ ราคา กระบวนการ รายงาน | FAQ about home inspection in Chiang Mai"
 >
   <Header />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <main>
 
     <!-- ============ PAGE HERO ============ -->
