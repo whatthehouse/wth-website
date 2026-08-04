@@ -34,8 +34,8 @@ export const types = [
     th: 'คอนโดมิเนียม', en: 'Condominium',
     icon: `<svg viewBox="0 0 24 24" width="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>`,
     tiers: [
-      { max: 35,  price: 3000,  th: 'ไม่เกิน 35 ตร.ม.', en: 'Up to 35 sq.m.' },
-      { max: 50,  price: 4000,  th: '36–50 ตร.ม.',      en: '36–50 sq.m.' },
+      { max: 30,  price: 3000,  th: 'ไม่เกิน 30 ตร.ม.', en: 'Up to 30 sq.m.' },
+      { max: 50,  price: 4000,  th: '31–50 ตร.ม.',      en: '31–50 sq.m.' },
       { max: 70,  price: 5000,  th: '51–70 ตร.ม.',      en: '51–70 sq.m.' },
       { max: 100, price: 6000,  th: '71–100 ตร.ม.',     en: '71–100 sq.m.' },
       { max: 150, price: 8000,  th: '101–150 ตร.ม.',    en: '101–150 sq.m.' },
