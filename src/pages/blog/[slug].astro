@@ -32,7 +32,7 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const articleImage = post.data.coverImage
   ? (post.data.coverImage.startsWith('http') ? post.data.coverImage : new URL(post.data.coverImage, Astro.site).href)
-  : new URL('/assets/img/logo.jpg', Astro.site).href;
+  : new URL('/assets/img/wth-logo.png', Astro.site).href;
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -49,7 +49,7 @@ const articleSchema = {
     "@type": "Organization",
     "name": "WHAT THE HOUSE",
     "url": "https://whatthehouse.net",
-    "logo": { "@type": "ImageObject", "url": "https://whatthehouse.net/assets/img/logo.jpg" },
+    "logo": { "@type": "ImageObject", "url": "https://whatthehouse.net/assets/img/wth-logo.png" },
   },
 };
 ---

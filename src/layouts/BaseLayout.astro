@@ -10,7 +10,7 @@ export interface Props {
 const {
   title,
   description = 'WHAT THE HOUSE บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ | Home Inspection Chiang Mai',
-  ogImage = '/assets/img/logo.jpg',
+  ogImage = '/assets/img/wth-logo.png',
   noindex = false,
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -34,7 +34,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta property="og:image" content={ogImage} />
 
   <!-- Favicon -->
-  <link rel="icon" href="/assets/img/logo.jpg" type="image/jpeg" />
+  <link rel="icon" href="/assets/img/wth-shield.png" type="image/png" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -64,8 +64,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     "url": "https://whatthehouse.net",
     "telephone": settings.phone,
     "email": settings.email,
-    "image": "https://whatthehouse.net/assets/img/logo.jpg",
-    "logo": "https://whatthehouse.net/assets/img/logo.jpg",
+    "image": "https://whatthehouse.net/assets/img/wth-logo.png",
+    "logo": "https://whatthehouse.net/assets/img/wth-logo.png",
     "priceRange": "฿฿",
     "currenciesAccepted": "THB",
     "paymentAccepted": "Cash, Bank transfer, PromptPay",
