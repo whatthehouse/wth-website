@@ -54,42 +54,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </>
   )}
 
-  <!-- Schema: Organization + LocalBusiness (linked @graph) -->
+  <!-- Schema: LocalBusiness (also read as the site's Organization) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://whatthehouse.net/#organization",
-      "name": "WHAT THE HOUSE – Home Inspections",
-      "url": "https://whatthehouse.net",
-      "logo": "https://whatthehouse.net/assets/img/logo.jpg",
-      "image": "https://whatthehouse.net/assets/img/logo.jpg",
-      "description": "บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ",
-      "email": settings.email,
-      "telephone": settings.phone,
-      "slogan": "BETTER HOMES • BETTER LIVING",
-      "knowsLanguage": ["th","en"],
-      "address": { "@type": "PostalAddress", "addressLocality": "Chiang Mai", "addressRegion": "Chiang Mai", "addressCountry": "TH" },
-      "areaServed": [
-        { "@type": "City", "name": "Chiang Mai" },
-        { "@type": "City", "name": "Lamphun" },
-        { "@type": "City", "name": "Lampang" }
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": settings.phone,
-        "email": settings.email,
-        "contactType": "customer service",
-        "areaServed": "TH",
-        "availableLanguage": ["Thai","English"]
-      },
-      "sameAs": [settings.facebookUrl, settings.lineUrl]
-    },
-    {
     "@type": "LocalBusiness",
     "@id": "https://whatthehouse.net/#business",
-    "parentOrganization": { "@id": "https://whatthehouse.net/#organization" },
     "name": "WHAT THE HOUSE – Home Inspections",
     "description": "บริการตรวจบ้านและตรวจคอนโดก่อนรับมอบในเชียงใหม่ ลำพูน ลำปาง ตรวจละเอียดทุกระบบ รายงาน PDF ไทย-อังกฤษ",
     "url": "https://whatthehouse.net",
@@ -145,8 +114,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       "areaServed": "TH",
       "availableLanguage": ["Thai","English"]
     }
-    }
-    ]
   })} />
 </head>
 <body>
