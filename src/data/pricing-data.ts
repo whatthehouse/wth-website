@@ -110,20 +110,24 @@ export const options = [
 // ── Included scope / extras / custom-quote conditions / terms ───────────────
 export const included = {
   th: [
-    'ตรวจรับทรัพย์สินใหม่ก่อนโอนกรรมสิทธิ์',
-    'ตรวจงานสถาปัตยกรรม ระบบไฟฟ้า ระบบประปา และระบบสุขาภิบาล',
-    'ตรวจหลังคาและพื้นที่เหนือฝ้าในจุดที่เข้าถึงได้ (บ้านและทาวน์โฮม)',
-    'ตรวจครั้งแรกพร้อมรายงาน PDF และภาพประกอบ',
-    'กลับไปตรวจติดตามรายการแก้ไขอีก 1 ครั้ง (เฉพาะแพ็กเกจ 2 รอบ)',
-    'ค่าเดินทางภายในเขตบริการปกติของบริษัท',
+    'ตรวจครอบคลุมทุกระบบสำคัญ — โครงสร้าง งานสถาปัตยกรรม ระบบไฟฟ้า ประปา สุขาภิบาล หลังคา และจุดรั่วซึม',
+    'ตรวจด้วยเครื่องมือระดับมืออาชีพ — กล้องถ่ายภาพความร้อน เครื่องวัดความชื้น และกล้องส่องท่อ เจาะหาปัญหาที่ซ่อนอยู่ซึ่งตาเปล่ามองไม่เห็น',
+    'ทีมผู้ตรวจมืออาชีพ ตรวจตามเช็กลิสต์มาตรฐานอย่างเป็นระบบทุกจุด ไม่ตกหล่น',
+    'รายงาน PDF สองภาษา (ไทย-อังกฤษ) — ภาพถ่ายทุกจุดที่พบ ระดับความรุนแรง และแนวทางแก้ไข ส่งภายใน 24 ชั่วโมง',
+    'กลับไปตรวจซ้ำอีก 1 รอบ ยืนยันว่าผู้รับเหมาแก้ไขครบก่อนคุณเซ็นรับมอบ (แพ็กเกจ 2 รอบ)',
+    'เป็นกลาง 100% อยู่ข้างคุณ — ไม่มีส่วนได้เสียกับโครงการหรือผู้รับเหมา ใช้รายงานเป็นหลักฐานเจรจาได้',
+    'ปรึกษาทีมงานเพิ่มเติมหลังรับรายงานได้ฟรี ทาง LINE หรือโทรศัพท์',
+    'รวมค่าเดินทางในเขตบริการแล้ว ไม่มีค่าใช้จ่ายแอบแฝง',
   ],
   en: [
-    'Pre-transfer inspection of new property',
-    'Architectural, electrical, plumbing and sanitary systems',
-    'Roof and accessible ceiling voids (houses and townhomes)',
-    'First inspection with a photo PDF report',
-    'One follow-up re-inspection of the listed defects (2-round package only)',
-    'Travel within our normal service area',
+    'Covers every key system — structure, architecture, electrical, plumbing, sanitary, roof and water leakage',
+    'Professional-grade tools — thermal camera, moisture meter and pipe endoscope that reveal defects hidden from the naked eye',
+    'Professional inspectors working through a standardised, systematic checklist — nothing missed',
+    'Bilingual (Thai–English) PDF report — photos of every finding, severity ratings and repair guidance, delivered within 24 hours',
+    'One follow-up re-inspection to confirm every defect is fixed before you sign off (2-round package)',
+    '100% independent and on your side — no ties to any developer or contractor; the report stands as evidence in negotiations',
+    'Free follow-up consultation with our team by LINE or phone after you receive the report',
+    'Travel within our service area included — no hidden charges',
   ],
 };
 
