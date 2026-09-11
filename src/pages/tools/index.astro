@@ -19,25 +19,11 @@ const tools = [
     icon: 'convert',
   },
   {
-    href: "#",
-    ready: false,
-    title: { th: "คำนวณโหลดไฟฟ้าในบ้าน", en: "Home Electrical Load" },
-    desc: { th: "ประเมินขนาดมิเตอร์และเบรกเกอร์ที่เหมาะกับเครื่องใช้ไฟฟ้า", en: "Estimate the meter and breaker size for your appliances." },
-    icon: 'bolt',
-  },
-  {
-    href: "#",
-    ready: false,
-    title: { th: "คำนวณกระเบื้อง / พื้นที่ปู", en: "Tile / Area Estimator" },
-    desc: { th: "คำนวณจำนวนกระเบื้องและวัสดุปูพื้นตามขนาดพื้นที่", en: "Estimate tiles and flooring materials by area." },
-    icon: 'grid',
-  },
-  {
-    href: "#",
-    ready: false,
-    title: { th: "คำนวณสีทาบ้าน", en: "Paint Estimator" },
-    desc: { th: "ประเมินปริมาณสีที่ต้องใช้ตามพื้นที่ผนัง", en: "Estimate how much paint you need by wall area." },
-    icon: 'roller',
+    href: "/tools/water-heater",
+    ready: true,
+    title: { th: "เครื่องทำน้ำอุ่น: เบรกเกอร์ & สายไฟ", en: "Water Heater: Breaker & Wire" },
+    desc: { th: "เลือกขนาดเครื่องทำน้ำอุ่นให้เหมาะกับเบรกเกอร์และขนาดสายไฟ พร้อมข้อกำหนดความปลอดภัย", en: "Match your water heater size to the right breaker and wire size, with safety requirements." },
+    icon: 'heater',
   },
 ];
 ---
@@ -67,9 +53,7 @@ const tools = [
               <div class="tool-ic">
                 {t.icon === 'ac' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="4" width="20" height="9" rx="2"/><path d="M6 17v1M10 17c0 1.5-1 2-1 3M14 17c0 1.5 1 2 1 3M18 17v1M5 9h14"/></svg>}
                 {t.icon === 'convert' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 16H3l3-3m-3 3l3 3M17 8h4l-3-3m3 3l-3 3"/><path d="M7 16h14M17 8H3"/></svg>}
-                {t.icon === 'bolt' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>}
-                {t.icon === 'grid' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>}
-                {t.icon === 'roller' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="14" height="6" rx="1"/><path d="M17 7h3v4h-9v3M11 14v7"/></svg>}
+                {t.icon === 'heater' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2.5s6 6.8 6 10.5a6 6 0 0 1-12 0c0-3.7 6-10.5 6-10.5z"/><path d="M12.6 9.5L10.4 13h3.2l-2.2 3.4"/></svg>}
               </div>
               <h3><span class="lang-th">{t.title.th}</span><span class="lang-en">{t.title.en}</span></h3>
               <p><span class="lang-th">{t.desc.th}</span><span class="lang-en block">{t.desc.en}</span></p>

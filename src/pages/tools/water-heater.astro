@@ -1,0 +1,315 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// Standard Thai practice for a dedicated instant water-heater circuit at 220 V,
+// copper THW conductors in conduit. Breaker and wire pairs follow what MEA/PEA
+// and heater manufacturers publish for each size.
+const heaters = [
+  { w: 3500, amp: '15.9', breaker: 20, wire: '2.5' },
+  { w: 4500, amp: '20.5', breaker: 25, wire: '4' },
+  { w: 6000, amp: '27.3', breaker: 32, wire: '6' },
+  { w: 8000, amp: '36.4', breaker: 40, wire: '10' },
+];
+---
+<BaseLayout
+  title="เครื่องทำน้ำอุ่น ใช้เบรกเกอร์กี่แอมป์ สายไฟกี่ sq.mm | WHAT THE HOUSE"
+  description="เครื่องมือแนะนำขนาดเบรกเกอร์และสายไฟให้เหมาะกับเครื่องทำน้ำอุ่น 3500–8000 วัตต์ พร้อมเช็กว่าสายไฟเดิมที่บ้านรองรับได้กี่วัตต์ และข้อกำหนดความปลอดภัย RCD 30mA | Water heater breaker & wire size guide"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">เครื่องทำน้ำอุ่น</span><span class="lang-en">Water Heater</span></p>
+        <span class="eyebrow"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Free Tool</span></span>
+        <h1><span class="lang-th">เครื่องทำน้ำอุ่น<br>ใช้เบรกเกอร์และสายไฟขนาดไหน?</span><span class="lang-en">Water heater: which breaker &amp; wire size?</span></h1>
+        <p><span class="lang-th">เครื่องทำน้ำอุ่นคือเครื่องใช้ไฟฟ้าที่กินไฟสูงที่สุดในบ้าน — สายไฟเล็กเกินไปคือสาเหตุอันดับต้น ๆ ของสายไหม้และไฟดูดในห้องน้ำ</span><span class="lang-en block">A water heater is the heaviest electrical load in most homes — undersized wiring is a leading cause of burnt cables and bathroom shocks.</span></p>
+      </div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section class="section">
+      <div class="container">
+        <div class="calc-wrap">
+          <div class="calc-box">
+            <h2 class="calc-title"><span class="lang-th">เลือกขนาดเครื่องทำน้ำอุ่น</span><span class="lang-en">Pick your water heater size</span></h2>
+            <p class="calc-sub"><span class="lang-th">เลือกกำลังไฟของเครื่อง แล้วดูขนาดเบรกเกอร์และสายไฟที่ต้องใช้</span><span class="lang-en block">Choose the heater's wattage to see the breaker and wire size it needs.</span></p>
+
+            <!-- heater size -->
+            <div class="calc-step">
+              <label class="calc-label"><span class="lang-th">1. กำลังไฟของเครื่อง (วัตต์)</span><span class="lang-en">1. Heater power (watts)</span></label>
+              <div class="wh-sizes">
+                {heaters.map((h, i) => (
+                  <button type="button" class={`wh-size${i === 0 ? ' active' : ''}`} data-w={h.w} data-amp={h.amp} data-breaker={h.breaker} data-wire={h.wire}>
+                    <b>{h.w.toLocaleString()}</b>
+                    <small>วัตต์ / W</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <!-- result -->
+            <div class="wh-results">
+              <div class="wh-res">
+                <span class="wh-res-label"><span class="lang-th">กระแสใช้งาน</span><span class="lang-en">Current draw</span></span>
+                <b id="whAmp">15.9 A</b>
+              </div>
+              <div class="wh-res hi">
+                <span class="wh-res-label"><span class="lang-th">เบรกเกอร์</span><span class="lang-en">Breaker</span></span>
+                <b id="whBreaker">20 A</b>
+              </div>
+              <div class="wh-res hi">
+                <span class="wh-res-label"><span class="lang-th">สายไฟ (ทองแดง)</span><span class="lang-en">Wire (copper)</span></span>
+                <b id="whWire">2.5 sq.mm</b>
+              </div>
+            </div>
+
+            <!-- mandatory safety -->
+            <div class="wh-must">
+              <p class="wh-must-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M12 8v5M12 16h.01"/></svg>
+                <span class="lang-th">สิ่งที่ต้องมีเสมอ ไม่ว่าเครื่องขนาดไหน</span><span class="lang-en">Required for every size</span>
+              </p>
+              <ul class="wh-must-list">
+                <li><span class="lang-th"><b>เครื่องตัดไฟรั่ว (RCD/ELCB) ขนาด 30 mA</b> สำหรับวงจรเครื่องทำน้ำอุ่นโดยเฉพาะ — ป้องกันไฟดูดในห้องน้ำ</span><span class="lang-en block"><b>A 30 mA RCD/ELCB</b> on the heater's own circuit — this is what protects against shock in a wet room.</span></li>
+                <li><span class="lang-th"><b>สายดิน</b> ต่อครบถึงตัวเครื่อง ห้ามละเว้นเด็ดขาด</span><span class="lang-en block"><b>A proper earth (ground)</b> run all the way to the unit — never skip it.</span></li>
+                <li><span class="lang-th"><b>วงจรแยกเฉพาะ</b> จากตู้ไฟ ไม่พ่วงกับเต้ารับหรือเครื่องใช้อื่น</span><span class="lang-en block"><b>A dedicated circuit</b> from the consumer unit — never shared with sockets or other appliances.</span></li>
+                <li><span class="lang-th">สายไฟทองแดงมาตรฐาน <b>มอก.</b> เดินในท่อร้อยสาย และเบรกเกอร์ต้องไม่ใหญ่เกินขนาดสายไฟ</span><span class="lang-en block">TIS-standard copper cable in conduit — and the breaker must never be larger than the cable can carry.</span></li>
+              </ul>
+            </div>
+
+            <!-- reverse check -->
+            <div class="calc-step wh-check">
+              <label class="calc-label"><span class="lang-th">2. เช็กของเดิมที่บ้าน (ถ้ามีอยู่แล้ว)</span><span class="lang-en">2. Check your existing wiring</span></label>
+              <p class="wh-check-sub"><span class="lang-th">กรอกขนาดสายไฟและเบรกเกอร์ที่ติดตั้งอยู่ แล้วดูว่ารองรับเครื่องได้กี่วัตต์</span><span class="lang-en block">Enter the wire and breaker already installed to see the largest heater they can safely support.</span></p>
+              <div class="wh-check-row">
+                <div class="field">
+                  <label for="whHaveWire"><span class="lang-th">สายไฟที่ใช้อยู่</span><span class="lang-en">Existing wire</span></label>
+                  <select id="whHaveWire">
+                    <option value="1.5">1.5 sq.mm</option>
+                    <option value="2.5" selected>2.5 sq.mm</option>
+                    <option value="4">4 sq.mm</option>
+                    <option value="6">6 sq.mm</option>
+                    <option value="10">10 sq.mm</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="whHaveBreaker"><span class="lang-th">เบรกเกอร์ที่ใช้อยู่</span><span class="lang-en">Existing breaker</span></label>
+                  <select id="whHaveBreaker">
+                    <option value="16">16 A</option>
+                    <option value="20" selected>20 A</option>
+                    <option value="25">25 A</option>
+                    <option value="32">32 A</option>
+                    <option value="40">40 A</option>
+                    <option value="50">50 A</option>
+                  </select>
+                </div>
+              </div>
+              <div class="wh-verdict" id="whVerdict"></div>
+            </div>
+
+            <div class="wh-warn">
+              <span class="lang-th">⚠️ ค่าทั้งหมดเป็นการประเมินเบื้องต้นตามมาตรฐานทั่วไป (220V สายทองแดง วงจรแยก) <b>การติดตั้งจริงต้องให้ช่างไฟที่มีความรู้ตรวจสอบหน้างาน</b> เพราะระยะเดินสาย วิธีเดินสาย และขนาดมิเตอร์มีผลต่อขนาดที่ถูกต้อง</span>
+              <span class="lang-en block">⚠️ These are general estimates (220 V, copper, dedicated circuit). <b>A qualified electrician must verify the actual installation</b> — cable run length, installation method and meter size all affect the correct sizing.</span>
+            </div>
+          </div>
+
+          <!-- notes -->
+          <aside class="calc-notes">
+            <h3><span class="lang-th">เกร็ดน่ารู้</span><span class="lang-en">Good to know</span></h3>
+            <ul class="note-list">
+              <li><span class="nc">1</span><span><span class="lang-th">เบรกเกอร์ใหญ่เกินขนาดสายไฟ = อันตรายที่สุด เพราะสายจะร้อนจนไหม้ก่อนที่เบรกเกอร์จะตัด</span><span class="lang-en block">A breaker bigger than the cable is the worst case — the wire overheats before the breaker ever trips.</span></span></li>
+              <li><span class="nc">2</span><span><span class="lang-th">RCD 30 mA คือสิ่งที่ช่วยชีวิตจริงในห้องน้ำ เบรกเกอร์ธรรมดาป้องกันไฟดูดไม่ได้</span><span class="lang-en block">A 30 mA RCD is what actually saves lives in a bathroom — an ordinary breaker does not protect against shock.</span></span></li>
+              <li><span class="nc">3</span><span><span class="lang-th">เครื่อง 6,000 วัตต์ขึ้นไป ควรมีมิเตอร์ 15(45)A ขึ้นไป — มิเตอร์ 5(15)A มักไม่พอ</span><span class="lang-en block">From 6,000 W up you generally need a 15(45)A meter — a 5(15)A meter is usually not enough.</span></span></li>
+              <li><span class="nc">4</span><span><span class="lang-th">บ้านใหม่หลายหลังเดินสายเผื่อไว้แค่ 2.5 sq.mm ถ้าจะติดเครื่อง 6,000 วัตต์ ต้องเดินสายใหม่</span><span class="lang-en block">Many new homes only pre-wire 2.5 sq.mm — a 6,000 W heater needs a new cable run.</span></span></li>
+            </ul>
+
+            <h3 class="wh-tbl-head"><span class="lang-th">ตารางอ้างอิง</span><span class="lang-en">Reference table</span></h3>
+            <table class="wh-table">
+              <thead>
+                <tr>
+                  <th><span class="lang-th">วัตต์</span><span class="lang-en">Watts</span></th>
+                  <th><span class="lang-th">เบรกเกอร์</span><span class="lang-en">Breaker</span></th>
+                  <th><span class="lang-th">สายไฟ</span><span class="lang-en">Wire</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {heaters.map((h) => (
+                  <tr>
+                    <td>{h.w.toLocaleString()}</td>
+                    <td>{h.breaker} A</td>
+                    <td>{h.wire} sq.mm</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div class="wh-tip"><span class="lang-th">ไม่แน่ใจว่าสายไฟและสายดินในบ้านถูกต้องไหม?</span><span class="lang-en block">Not sure your wiring and earth are correct?</span> <a href="/services"><span class="lang-th">ให้เราตรวจระบบไฟให้ →</span><span class="lang-en">Let us inspect your electrical system →</span></a></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">อยากมั่นใจว่าระบบไฟในบ้านปลอดภัยจริง?</span><span class="lang-en">Want to be sure your electrics are safe?</span></h2>
+          <p><span class="lang-th">ทีมเราตรวจระบบไฟ สายดิน และเครื่องตัดไฟรั่ว ด้วยเครื่องมือเฉพาะทาง พร้อมรายงานพร้อมภาพ</span><span class="lang-en block">We test wiring, earthing and RCDs with professional instruments — with a full photo report.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-outline btn-lg" href="/pricing"><span class="lang-th">ดูราคา</span><span class="lang-en">View Pricing</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+/* heater size buttons */
+.wh-sizes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.wh-size {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 14px 8px; border: 2px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel-2); cursor: pointer; font-family: inherit; transition: .2s;
+}
+.wh-size b { color: var(--heading); font-family: var(--mono); font-size: 1.02rem; }
+.wh-size small { color: var(--grey); font-size: .72rem; }
+.wh-size:hover { border-color: var(--green); }
+.wh-size.active { border-color: var(--green); background: var(--green-soft); }
+.wh-size.active b { color: var(--green-bright); }
+
+/* results */
+.wh-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px; }
+.wh-res {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 16px; text-align: center;
+}
+.wh-res.hi { background: linear-gradient(135deg, var(--panel-3), var(--panel-2)); border-color: rgba(47,224,124,.28); }
+.wh-res-label { display: block; font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: 8px; }
+.wh-res b { font-family: var(--mono); font-size: 1.3rem; color: #fff; }
+.wh-res.hi b { color: var(--green-bright); }
+
+/* must-have safety */
+.wh-must { margin-top: 24px; border: 1px solid rgba(47,224,124,.25); background: var(--green-soft); border-radius: var(--radius-sm); padding: 18px 20px; }
+.wh-must-title { display: flex; align-items: center; gap: 9px; margin: 0 0 12px; font-weight: 700; color: var(--heading); font-size: .95rem; }
+.wh-must-title svg { width: 19px; height: 19px; flex: none; color: var(--green-bright); }
+.wh-must-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+.wh-must-list li { font-size: .88rem; color: var(--body); line-height: 1.65; padding-left: 16px; position: relative; }
+.wh-must-list li::before { content: '✓'; position: absolute; left: 0; color: var(--green-bright); font-weight: 700; font-size: .8rem; }
+.wh-must-list b { color: var(--heading); }
+
+/* reverse check */
+.wh-check { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 24px; }
+.wh-check-sub { margin: -4px 0 14px; color: var(--grey); font-size: .88rem; }
+.wh-check-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.wh-check-row .field { margin-bottom: 0; }
+.wh-check-row .field label { font-family: var(--font); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); }
+.wh-verdict { margin-top: 14px; border-radius: var(--radius-sm); padding: 14px 16px; font-size: .9rem; line-height: 1.65; }
+.wh-verdict.ok { background: var(--green-soft); border: 1px solid rgba(47,224,124,.3); color: var(--body); }
+.wh-verdict.bad { background: rgba(229,72,77,.08); border: 1px solid rgba(229,72,77,.35); color: var(--body); }
+.wh-verdict b { color: var(--heading); }
+
+.wh-warn { margin-top: 22px; font-size: .84rem; color: var(--grey); line-height: 1.7; }
+.wh-warn b { color: var(--body); }
+
+/* aside table */
+.wh-tbl-head { margin-top: 26px; }
+.wh-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.wh-table th { text-align: left; font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); padding: 7px 8px; border-bottom: 1px solid var(--line); }
+.wh-table td { padding: 8px; border-bottom: 1px solid var(--line); color: var(--body); font-family: var(--mono); }
+.wh-table tr:last-child td { border-bottom: 0; }
+.wh-tip { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .88rem; color: var(--grey); }
+.wh-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
+
+@media (max-width: 720px) {
+  .wh-sizes { grid-template-columns: repeat(2, 1fr); }
+  .wh-results { grid-template-columns: 1fr; }
+  .wh-check-row { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+  (function () {
+    const sizeBtns = Array.from(document.querySelectorAll('.wh-size')) as HTMLElement[];
+    const ampOut = document.getElementById('whAmp') as HTMLElement;
+    const breakerOut = document.getElementById('whBreaker') as HTMLElement;
+    const wireOut = document.getElementById('whWire') as HTMLElement;
+    const haveWire = document.getElementById('whHaveWire') as HTMLSelectElement;
+    const haveBreaker = document.getElementById('whHaveBreaker') as HTMLSelectElement;
+    const verdict = document.getElementById('whVerdict') as HTMLElement;
+    if (!sizeBtns.length) return;
+
+    // same table as the page data: watts -> required breaker (A) and wire (sq.mm)
+    const HEATERS = [
+      { w: 3500, breaker: 20, wire: 2.5 },
+      { w: 4500, breaker: 25, wire: 4 },
+      { w: 6000, breaker: 32, wire: 6 },
+      { w: 8000, breaker: 40, wire: 10 },
+    ];
+    // the largest breaker each cable size may safely be protected by
+    const WIRE_MAX_BREAKER: Record<string, number> = { '1.5': 16, '2.5': 20, '4': 25, '6': 32, '10': 40 };
+
+    const isEn = () => document.body.classList.contains('en');
+
+    function showSize(btn: HTMLElement) {
+      sizeBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      ampOut.textContent = btn.dataset.amp + ' A';
+      breakerOut.textContent = btn.dataset.breaker + ' A';
+      wireOut.textContent = btn.dataset.wire + ' sq.mm';
+    }
+
+    function checkExisting() {
+      const wire = haveWire.value;
+      const breaker = Number(haveBreaker.value);
+      const wireMax = WIRE_MAX_BREAKER[wire] ?? 0;
+      const en = isEn();
+
+      // 1) breaker larger than the cable can carry — the dangerous case
+      if (breaker > wireMax) {
+        verdict.className = 'wh-verdict bad';
+        verdict.innerHTML = en
+          ? `<b>Unsafe combination.</b> A ${breaker} A breaker on ${wire} sq.mm cable is too large — the cable can overheat before the breaker trips. For ${wire} sq.mm, use a breaker no bigger than <b>${wireMax} A</b>.`
+          : `<b>ชุดนี้ไม่ปลอดภัย</b> — เบรกเกอร์ ${breaker} A ใหญ่เกินสายไฟ ${wire} sq.mm สายอาจร้อนจนไหม้ก่อนเบรกเกอร์ตัด สำหรับสาย ${wire} sq.mm ควรใช้เบรกเกอร์ไม่เกิน <b>${wireMax} A</b>`;
+        return;
+      }
+
+      // 2) largest heater this wire + breaker pair supports
+      const limit = Math.min(breaker, wireMax);
+      const fit = HEATERS.filter((h) => h.breaker <= limit && h.wire <= Number(wire));
+      if (!fit.length) {
+        verdict.className = 'wh-verdict bad';
+        verdict.innerHTML = en
+          ? `<b>Not enough for any standard water heater.</b> ${wire} sq.mm with a ${breaker} A breaker is below the smallest size (3,500 W needs 2.5 sq.mm + 20 A). A new cable run is needed.`
+          : `<b>ยังไม่พอสำหรับเครื่องทำน้ำอุ่นขนาดมาตรฐาน</b> — สาย ${wire} sq.mm กับเบรกเกอร์ ${breaker} A ต่ำกว่าขนาดเล็กสุด (3,500 W ต้องใช้ 2.5 sq.mm + 20 A) ต้องเดินสายใหม่`;
+        return;
+      }
+      const best = fit[fit.length - 1];
+      const next = HEATERS[HEATERS.indexOf(best) + 1];
+      verdict.className = 'wh-verdict ok';
+      verdict.innerHTML = en
+        ? `<b>Supports up to ${best.w.toLocaleString()} W.</b> ${wire} sq.mm with a ${breaker} A breaker safely runs a ${best.w.toLocaleString()} W heater.` +
+          (next ? ` For ${next.w.toLocaleString()} W you would need ${next.wire} sq.mm + a ${next.breaker} A breaker.` : '') +
+          ` Make sure a 30 mA RCD and an earth are fitted.`
+        : `<b>รองรับได้สูงสุด ${best.w.toLocaleString()} วัตต์</b> — สาย ${wire} sq.mm กับเบรกเกอร์ ${breaker} A ใช้กับเครื่อง ${best.w.toLocaleString()} วัตต์ได้อย่างปลอดภัย` +
+          (next ? ` หากต้องการ ${next.w.toLocaleString()} วัตต์ ต้องเปลี่ยนเป็นสาย ${next.wire} sq.mm + เบรกเกอร์ ${next.breaker} A` : '') +
+          ` และต้องมีเครื่องตัดไฟรั่ว 30 mA พร้อมสายดินเสมอ`;
+    }
+
+    sizeBtns.forEach((b) => b.addEventListener('click', () => showSize(b)));
+    haveWire.addEventListener('change', checkExisting);
+    haveBreaker.addEventListener('change', checkExisting);
+    document.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('[data-lang-btn]')) setTimeout(checkExisting, 0);
+    });
+
+    showSize(sizeBtns[0]);
+    checkExisting();
+  })();
+</script>
