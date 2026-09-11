@@ -23,10 +23,9 @@ const roles = [
   },
 ];
 
-// ---------- 3 recruitment groups ----------
+// ---------- open position(s) ----------
 const groups = [
   {
-    no: "01",
     title: { th: "ผู้ตรวจบ้านร่วมทีม", en: "Team Home Inspector" },
     role: { th: "ตรวจสอบหน้างาน เก็บภาพ บันทึกข้อบกพร่อง และจัดทำข้อมูลตามมาตรฐานของบริษัท", en: "Inspect on-site, photograph and record defects, and produce data to company standards." },
     reqs: {
@@ -51,59 +50,12 @@ const groups = [
         "No conflict of interest with projects or contractors",
       ],
     },
-    note: { th: "ใบ กว. ไม่ใช่ข้อบังคับสำหรับกลุ่มนี้ — แต่ผู้ที่มีใบอนุญาตหรือใบรับรองที่เกี่ยวข้องจะได้รับการพิจารณาเป็นพิเศษ", en: "An engineering licence is not required for this group — holders of a relevant licence or certification receive special consideration." },
-  },
-  {
-    no: "02",
-    title: { th: "สถาปนิกร่วมตรวจงานสถาปัตยกรรม", en: "Co-inspecting Architect" },
-    role: { th: "ตรวจงานสถาปัตยกรรมและงานตกแต่ง โดยเฉพาะช่วงงานสถาปัตย์ระหว่างก่อสร้าง ฟังก์ชันการใช้งาน และความสอดคล้องกับแบบ", en: "Inspect architectural and finishing work — especially the architectural phase during construction, functional use, and conformance to the design." },
-    reqs: {
-      th: [
-        "มีใบอนุญาตประกอบวิชาชีพสถาปัตยกรรมควบคุมที่ยังไม่หมดอายุ",
-        "ใบอนุญาตตรงกับสาขาและประเภทงานที่รับผิดชอบ",
-        "แสดงเลขที่ใบอนุญาต ระดับ สาขา และวันหมดอายุได้",
-        "ยินยอมให้บริษัทตรวจสอบสถานะใบอนุญาต",
-        "อ่านแบบสถาปัตยกรรมและเข้าใจรายละเอียดงานก่อสร้างได้ดี",
-        "มีประสบการณ์งานออกแบบหรือควบคุมงานสถาปัตยกรรม บ้านพักอาศัย หรืออาคาร",
-      ],
-      en: [
-        "Hold a valid (unexpired) professional architect licence",
-        "Licence matches the field and type of work you will be responsible for",
-        "Able to provide licence number, level, field and expiry date",
-        "Consent to the company verifying your licence status",
-        "Read architectural drawings and understand construction detailing well",
-        "Experience in architectural design or supervision of homes or buildings",
-      ],
-    },
-    note: { th: "กลุ่มนี้ต้องมีใบอนุญาตวิชาชีพสถาปนิก — เหมาะกับงานตรวจช่วงสถาปัตยกรรมและระหว่างก่อสร้าง ซึ่งสถาปนิกมีความเข้าใจเป็นพิเศษ", en: "This group must hold an architect licence — a strong fit for architectural-phase and in-construction inspection, where architects bring particular insight." },
-  },
-  {
-    no: "03",
-    title: { th: "วิศวกรร่วมตรวจหรือรับรองงาน", en: "Co-inspecting / Certifying Engineer" },
-    role: { th: "งานที่ต้องใช้การวิเคราะห์ทางวิศวกรรม การให้ความเห็นเฉพาะทาง หรือการลงนามรับรองในขอบเขตที่กฎหมายกำหนด", en: "Work requiring engineering analysis, specialist opinions, or formal sign-off within the scope defined by law." },
-    reqs: {
-      th: [
-        "มีใบอนุญาตประกอบวิชาชีพวิศวกรรมควบคุม (กว.) ที่ยังไม่หมดอายุ",
-        "ใบอนุญาตตรงกับสาขาและประเภทงานที่รับผิดชอบ",
-        "แสดงเลขที่ใบอนุญาต ระดับ สาขา และวันหมดอายุได้",
-        "ยินยอมให้บริษัทตรวจสอบสถานะใบอนุญาต",
-        "มีประสบการณ์เกี่ยวกับอาคาร บ้านพักอาศัย หรืองานระบบที่เกี่ยวข้อง",
-      ],
-      en: [
-        "Hold a valid (unexpired) professional engineering licence",
-        "Licence matches the field and type of work you will be responsible for",
-        "Able to provide licence number, level, field and expiry date",
-        "Consent to the company verifying your licence status",
-        "Experience with buildings, residential homes or related systems",
-      ],
-    },
-    note: { th: "กลุ่มนี้ต้องมีใบ กว. เพราะเป็นบทบาทที่เกี่ยวข้องกับความรับผิดชอบทางวิชาชีพโดยตรง", en: "This group must hold an engineering licence — the role carries direct professional responsibility." },
   },
 ];
 ---
 <BaseLayout
-  title="ร่วมงานกับเรา | ผู้ตรวจบ้าน วิศวกร และสถาปนิก | WHAT THE HOUSE"
-  description="ร่วมทีม WHAT THE HOUSE — เปิดรับผู้ตรวจบ้าน วิศวกรมีใบ กว. และสถาปนิกมีใบอนุญาตวิชาชีพ ดูคุณสมบัติแต่ละกลุ่มและสมัครออนไลน์ | Careers at WHAT THE HOUSE Chiang Mai"
+  title="ร่วมงานกับเรา | สมัครผู้ตรวจบ้าน | WHAT THE HOUSE"
+  description="ร่วมทีม WHAT THE HOUSE — เปิดรับผู้ตรวจบ้านร่วมทีมตรวจหน้างานในเชียงใหม่ ดูคุณสมบัติและสมัครออนไลน์ | Careers at WHAT THE HOUSE Chiang Mai"
 >
   <Header />
   <main>
@@ -114,7 +66,7 @@ const groups = [
         <p class="breadcrumb"><a href="/">หน้าแรก</a> / <span class="lang-th">ร่วมงานกับเรา</span><span class="lang-en">Careers</span></p>
         <span class="eyebrow"><span class="lang-th">ร่วมงานกับเรา</span><span class="lang-en">Careers</span></span>
         <h1><span class="lang-th">มาสร้างมาตรฐาน<br>การตรวจบ้านไปด้วยกัน</span><span class="lang-en">Build the standard of home inspection with us</span></h1>
-        <p><span class="lang-th">เราเปิดรับทั้งผู้ตรวจบ้าน วิศวกร และสถาปนิก — ดูคุณสมบัติของแต่ละกลุ่มด้านล่าง แล้วสมัครออนไลน์ได้เลย</span><span class="lang-en block">We welcome home inspectors, engineers and architects — check each group's qualifications below, then apply online.</span></p>
+        <p><span class="lang-th">ตอนนี้เรากำลังเปิดรับ "ผู้ตรวจบ้าน" ร่วมทีม — ดูคุณสมบัติด้านล่าง แล้วสมัครออนไลน์ได้เลย</span><span class="lang-en block">We're currently hiring a Home Inspector to join the team — check the qualifications below, then apply online.</span></p>
         <div class="btns" style="justify-content:center;margin-top:26px">
           <a class="btn btn-primary btn-lg" href="/careers/apply"><span class="lang-th">สมัครร่วมงาน</span><span class="lang-en">Apply now</span></a>
         </div>
@@ -160,14 +112,14 @@ const groups = [
     <section class="section">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">กลุ่มที่เปิดรับ</span><span class="lang-en">Who we're looking for</span></span>
-          <h2 class="section-title"><span class="lang-th">เปิดรับร่วมงาน 3 กลุ่มหลัก</span><span class="lang-en">3 main groups we recruit</span></h2>
+          <span class="eyebrow"><span class="lang-th">ตำแหน่งที่เปิดรับ</span><span class="lang-en">Open position</span></span>
+          <h2 class="section-title"><span class="lang-th">ตอนนี้เราเปิดรับ "ผู้ตรวจบ้าน"</span><span class="lang-en">We're hiring a Home Inspector</span></h2>
         </div>
         <div class="job-list">
           {groups.map((g) => (
             <div class="job">
               <div class="job-head">
-                <h3><span class="gp-no">{g.no}</span><span class="lang-th">{g.title.th}</span><span class="lang-en">{g.title.en}</span></h3>
+                <h3><span class="lang-th">{g.title.th}</span><span class="lang-en">{g.title.en}</span></h3>
               </div>
               <p class="job-desc"><span class="lang-th">{g.role.th}</span><span class="lang-en block">{g.role.en}</span></p>
               <ul class="job-reqs">
@@ -175,7 +127,6 @@ const groups = [
                   <li><span class="jr-ic">✓</span><span><span class="lang-th">{r}</span><span class="lang-en block">{g.reqs.en[i]}</span></span></li>
                 ))}
               </ul>
-              <p class="gp-note"><span class="lang-th">{g.note.th}</span><span class="lang-en block">{g.note.en}</span></p>
             </div>
           ))}
         </div>
