@@ -4,25 +4,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import settings from '../data/settings.json';
 
-// ---------- team roles: the right expertise for each job ----------
-const roles = [
-  {
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
-    title: { th: "ผู้ตรวจบ้าน", en: "Home Inspector" },
-    desc: { th: "ตรวจงานหน้างานอย่างละเอียดครบทุกจุดตามมาตรฐานของบริษัท ผ่านการอบรมและทดสอบก่อนลงพื้นที่จริง", en: "Thorough, standardised on-site inspection — trained and tested before real fieldwork." },
-  },
-  {
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="4" r="1.6"/><path d="M12 5.6V9"/><path d="M11 9L5 20"/><path d="M13 9l6 11"/><path d="M8.2 15.5h7.6"/></svg>`,
-    title: { th: "สถาปนิก", en: "Architect" },
-    desc: { th: "ดูแลงานสถาปัตยกรรมและงานตกแต่ง ถนัดเป็นพิเศษกับการตรวจช่วงงานสถาปัตย์ระหว่างก่อสร้างและความสอดคล้องกับแบบ", en: "Architectural and finishing work — especially strong on in-construction architectural checks and conformance to the design." },
-  },
-  {
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>`,
-    title: { th: "วิศวกร", en: "Engineer" },
-    desc: { th: "รับผิดชอบงานที่ต้องใช้การวิเคราะห์เชิงวิศวกรรมและการรับรองเฉพาะทางในขอบเขตที่กฎหมายกำหนด", en: "Work needing engineering analysis and formal certification within the scope defined by law." },
-  },
-];
-
 // ---------- open position(s) ----------
 const groups = [
   {
@@ -88,28 +69,8 @@ const groups = [
       </div>
     </section>
 
-    <!-- ============ TEAM ROLES (right expertise for the job) ============ -->
-    <section class="section soft">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow"><span class="lang-th">ทีมของเรา</span><span class="lang-en">Our team</span></span>
-          <h2 class="section-title"><span class="lang-th">เลือกคนให้เหมาะกับงาน</span><span class="lang-en">The right expertise for every job</span></h2>
-          <p class="section-sub"><span class="lang-th">แต่ละงานมีผู้เชี่ยวชาญที่เหมาะกับมันดูแล — ตั้งแต่ผู้ตรวจบ้าน สถาปนิก ไปจนถึงวิศวกร</span><span class="lang-en block">Every job is handled by the specialist best suited to it — from inspectors and architects to engineers.</span></p>
-        </div>
-        <div class="lv-grid">
-          {roles.map((r) => (
-            <div class="lv-card">
-              <span class="lv-ic" set:html={r.icon} />
-              <h3><span class="lang-th">{r.title.th}</span><span class="lang-en">{r.title.en}</span></h3>
-              <p><span class="lang-th">{r.desc.th}</span><span class="lang-en block">{r.desc.en}</span></p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
     <!-- ============ RECRUITMENT GROUPS ============ -->
-    <section class="section">
+    <section class="section soft">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow"><span class="lang-th">ตำแหน่งที่เปิดรับ</span><span class="lang-en">Open position</span></span>
