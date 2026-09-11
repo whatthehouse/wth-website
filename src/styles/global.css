@@ -607,6 +607,9 @@ h2.section-title{font-size:clamp(1.7rem,3.6vw,2.5rem);margin-bottom:.2em}
   .stats{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr}
   .eq-grid{grid-template-columns:1fr}
+  /* narrow phones: the wordmark ran into the TH/EN toggle — show the shield mark only.
+     The logo's alt text still carries the brand name, and the footer keeps its wordmark. */
+  .site-header .brand-text{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
