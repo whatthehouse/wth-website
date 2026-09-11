@@ -1,0 +1,331 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// Split-type air conditioners on a 220 V dedicated circuit, copper THW in conduit.
+// Watt/current figures are typical values for each BTU class — the exact figure is on
+// the unit's nameplate and varies by brand and by inverter vs fixed-speed.
+const units = [
+  { btu: 9000,  w: 900,  amp: '4.1',  breaker: 16, wire: '2.5' },
+  { btu: 12000, w: 1200, amp: '5.5',  breaker: 16, wire: '2.5' },
+  { btu: 18000, w: 1750, amp: '8.0',  breaker: 16, wire: '2.5' },
+  { btu: 24000, w: 2350, amp: '10.7', breaker: 20, wire: '2.5' },
+  { btu: 30000, w: 2950, amp: '13.4', breaker: 20, wire: '4' },
+  { btu: 36000, w: 3500, amp: '15.9', breaker: 25, wire: '4' },
+  { btu: 48000, w: 4700, amp: '21.4', breaker: 32, wire: '6' },
+  { btu: 60000, w: 5900, amp: '26.8', breaker: 40, wire: '10' },
+];
+---
+<BaseLayout
+  title="แอร์ใช้สายไฟเบอร์ไหน เบรกเกอร์กี่แอมป์ | WHAT THE HOUSE"
+  description="เครื่องมือแนะนำขนาดสายไฟและเบรกเกอร์ให้เหมาะกับแอร์ 9,000–60,000 BTU พร้อมเช็กว่าสายไฟเดิมที่บ้านรองรับแอร์ได้กี่ BTU และข้อควรรู้เรื่องเบรกเกอร์ Type C สายดิน คอยล์ร้อน | Air conditioner breaker & wire size guide"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">สายไฟแอร์</span><span class="lang-en">A/C Wiring</span></p>
+        <span class="eyebrow"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Free Tool</span></span>
+        <h1><span class="lang-th">แอร์ใช้สายไฟเบอร์ไหน<br>เบรกเกอร์กี่แอมป์?</span><span class="lang-en">What wire and breaker does your A/C need?</span></h1>
+        <p><span class="lang-th">แอร์เป็นเครื่องใช้ไฟฟ้าที่มีกระแสกระชากตอนคอมเพรสเซอร์เริ่มทำงาน — เดินสายเล็กไปหรือใช้เบรกเกอร์ผิดชนิด คือสาเหตุที่ไฟตกบ่อยและสายร้อน</span><span class="lang-en block">An air conditioner draws a large surge when the compressor kicks in — undersized cable or the wrong breaker type is why the power keeps tripping and the cable runs hot.</span></p>
+      </div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section class="section">
+      <div class="container">
+        <div class="calc-wrap">
+          <div class="calc-box">
+            <h2 class="calc-title"><span class="lang-th">เลือกขนาดแอร์</span><span class="lang-en">Pick your A/C size</span></h2>
+            <p class="calc-sub"><span class="lang-th">เลือกขนาด BTU ของแอร์ แล้วดูขนาดเบรกเกอร์และสายไฟที่ต้องใช้</span><span class="lang-en block">Choose the unit's BTU rating to see the breaker and wire size it needs.</span></p>
+
+            <!-- size -->
+            <div class="calc-step">
+              <label class="calc-label"><span class="lang-th">1. ขนาดแอร์ (BTU)</span><span class="lang-en">1. A/C size (BTU)</span></label>
+              <div class="ac-sizes">
+                {units.map((u, i) => (
+                  <button type="button" class={`ac-size${i === 2 ? ' active' : ''}`} data-btu={u.btu} data-w={u.w} data-amp={u.amp} data-breaker={u.breaker} data-wire={u.wire}>
+                    <b>{(u.btu / 1000)}k</b>
+                    <small>{u.btu.toLocaleString()}</small>
+                  </button>
+                ))}
+              </div>
+              <p class="ac-watt-line">
+                <span class="lang-th">กำลังไฟโดยประมาณ</span><span class="lang-en">Approx. power</span>:
+                <b id="acWatt">1,750</b> <span class="lang-th">วัตต์</span><span class="lang-en">W</span>
+                <small><span class="lang-th">— ค่าจริงดูจากป้ายสเปคข้างเครื่อง (อินเวอร์เตอร์กินไฟน้อยกว่า)</span><span class="lang-en block">— check the nameplate for the exact figure (inverter units draw less)</span></small>
+              </p>
+            </div>
+
+            <!-- result -->
+            <div class="ac-results">
+              <div class="ac-res">
+                <span class="ac-res-label"><span class="lang-th">กระแสใช้งาน</span><span class="lang-en">Current draw</span></span>
+                <b id="acAmp">8.0 A</b>
+              </div>
+              <div class="ac-res hi">
+                <span class="ac-res-label"><span class="lang-th">เบรกเกอร์</span><span class="lang-en">Breaker</span></span>
+                <b id="acBreaker">16 A</b>
+              </div>
+              <div class="ac-res hi">
+                <span class="ac-res-label"><span class="lang-th">สายไฟ (ทองแดง)</span><span class="lang-en">Wire (copper)</span></span>
+                <b id="acWire">2.5 sq.mm</b>
+              </div>
+            </div>
+
+            <!-- mandatory -->
+            <div class="ac-must">
+              <p class="ac-must-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6z"/><path d="M12 8v5M12 16h.01"/></svg>
+                <span class="lang-th">สิ่งที่ต้องมีเสมอ ไม่ว่าแอร์ขนาดไหน</span><span class="lang-en">Required for every size</span>
+              </p>
+              <ul class="ac-must-list">
+                <li><span class="lang-th"><b>เบรกเกอร์ Type C</b> — แอร์มีกระแสกระชากตอนคอมเพรสเซอร์สตาร์ท ถ้าใช้ Type B จะทริปบ่อยโดยไม่มีอะไรเสีย</span><span class="lang-en block"><b>A Type C breaker</b> — the compressor's start-up surge will nuisance-trip a Type B breaker even when nothing is wrong.</span></li>
+                <li><span class="lang-th"><b>วงจรแยกเฉพาะ</b> ของแอร์แต่ละเครื่อง ไม่พ่วงกับเต้ารับหรือไฟแสงสว่าง</span><span class="lang-en block"><b>A dedicated circuit</b> per unit — never shared with sockets or lighting.</span></li>
+                <li><span class="lang-th"><b>สายดินต่อถึงคอยล์ร้อน</b> (ตัวนอก) ด้วย ไม่ใช่แค่คอยล์เย็น — เป็นจุดที่ถูกข้ามบ่อยที่สุด</span><span class="lang-en block"><b>Earth bonded to the outdoor unit</b> too, not just the indoor one — the most commonly skipped step.</span></li>
+                <li><span class="lang-th">สายเชื่อมระหว่างคอยล์เย็น–คอยล์ร้อน ต้องเป็น<b>สายที่ทนแดดทนฝน</b> ตามที่ผู้ผลิตกำหนด และเดินในท่อ</span><span class="lang-en block">The indoor–outdoor interconnecting cable must be a <b>weather-rated type</b> as specified by the maker, run in conduit.</span></li>
+              </ul>
+            </div>
+
+            <!-- reverse check -->
+            <div class="calc-step ac-check">
+              <label class="calc-label"><span class="lang-th">2. เช็กของเดิมที่บ้าน (ถ้ามีสายรอไว้แล้ว)</span><span class="lang-en">2. Check your existing wiring</span></label>
+              <p class="ac-check-sub"><span class="lang-th">บ้านใหม่มักเดินสายรอแอร์ไว้ให้ — กรอกดูว่ารองรับแอร์ได้ถึงกี่ BTU</span><span class="lang-en block">New homes usually pre-wire for A/C — check how many BTU that cable can actually support.</span></p>
+              <div class="ac-check-row">
+                <div class="field">
+                  <label for="acHaveWire"><span class="lang-th">สายไฟที่เดินไว้</span><span class="lang-en">Existing wire</span></label>
+                  <select id="acHaveWire">
+                    <option value="1.5">1.5 sq.mm</option>
+                    <option value="2.5" selected>2.5 sq.mm</option>
+                    <option value="4">4 sq.mm</option>
+                    <option value="6">6 sq.mm</option>
+                    <option value="10">10 sq.mm</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="acHaveBreaker"><span class="lang-th">เบรกเกอร์ที่ใช้อยู่</span><span class="lang-en">Existing breaker</span></label>
+                  <select id="acHaveBreaker">
+                    <option value="16" selected>16 A</option>
+                    <option value="20">20 A</option>
+                    <option value="25">25 A</option>
+                    <option value="32">32 A</option>
+                    <option value="40">40 A</option>
+                    <option value="50">50 A</option>
+                  </select>
+                </div>
+              </div>
+              <div class="ac-verdict" id="acVerdict"></div>
+            </div>
+
+            <div class="ac-warn">
+              <span class="lang-th">⚠️ ค่าทั้งหมดเป็นการประเมินเบื้องต้นตามค่าทั่วไปของแอร์แต่ละขนาด (220V สายทองแดง วงจรแยก) <b>ค่าที่ถูกต้องที่สุดคือป้ายสเปคของแอร์รุ่นนั้น</b> และการติดตั้งจริงควรให้ช่างที่มีความรู้ตรวจสอบหน้างาน เพราะระยะเดินสายและวิธีเดินสายมีผลต่อขนาดสายที่ต้องใช้</span>
+              <span class="lang-en block">⚠️ These are typical figures per BTU class (220 V, copper, dedicated circuit). <b>The unit's nameplate is the authoritative figure</b>, and a qualified technician should verify the real installation — cable run length and installation method both affect the required size.</span>
+            </div>
+          </div>
+
+          <!-- notes -->
+          <aside class="calc-notes">
+            <h3><span class="lang-th">เกร็ดน่ารู้</span><span class="lang-en">Good to know</span></h3>
+            <ul class="note-list">
+              <li><span class="nc">1</span><span><span class="lang-th">แอร์ทริปบ่อยทั้งที่เครื่องปกติ มักเกิดจากใช้เบรกเกอร์ Type B แทน Type C ไม่ใช่แอร์เสีย</span><span class="lang-en block">An A/C that trips for no reason is usually on a Type B breaker instead of Type C — not a faulty unit.</span></span></li>
+              <li><span class="nc">2</span><span><span class="lang-th">คอยล์ร้อนอยู่นอกบ้านโดนฝน ถ้าไม่มีสายดินและมีไฟรั่ว จะกลายเป็นจุดอันตรายทันที</span><span class="lang-en block">The outdoor unit sits in the rain — without an earth, any leakage current makes it dangerous to touch.</span></span></li>
+              <li><span class="nc">3</span><span><span class="lang-th">บ้านใหม่หลายหลังเดินสายรอแอร์ไว้แค่ 2.5 sq.mm ถ้าจะติดแอร์ 30,000 BTU ขึ้นไป ต้องเดินสายใหม่</span><span class="lang-en block">Many new homes pre-wire only 2.5 sq.mm — 30,000 BTU and up needs a new cable run.</span></span></li>
+              <li><span class="nc">4</span><span><span class="lang-th">แอร์อินเวอร์เตอร์กินไฟน้อยกว่าตอนใช้งาน แต่ยังต้องเลือกสายและเบรกเกอร์ตามพิกัดสูงสุดของเครื่อง</span><span class="lang-en block">Inverter units use less power in normal running, but cable and breaker are still sized to the unit's maximum rating.</span></span></li>
+            </ul>
+
+            <h3 class="ac-tbl-head"><span class="lang-th">ตารางอ้างอิง</span><span class="lang-en">Reference table</span></h3>
+            <table class="ac-table">
+              <thead>
+                <tr>
+                  <th>BTU</th>
+                  <th><span class="lang-th">เบรกเกอร์</span><span class="lang-en">Breaker</span></th>
+                  <th><span class="lang-th">สายไฟ</span><span class="lang-en">Wire</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {units.map((u) => (
+                  <tr>
+                    <td>{u.btu.toLocaleString()}</td>
+                    <td>{u.breaker} A</td>
+                    <td>{u.wire} sq.mm</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div class="ac-tip">
+              <span class="lang-th">ยังไม่รู้ว่าห้องนี้ต้องใช้แอร์กี่ BTU?</span><span class="lang-en block">Not sure how many BTU your room needs?</span>
+              <a href="/tools/btu-calculator"><span class="lang-th">คำนวณขนาดแอร์ (BTU) →</span><span class="lang-en">Calculate the BTU size →</span></a>
+            </div>
+            <div class="ac-tip">
+              <span class="lang-th">อยากให้ตรวจว่าสายไฟ สายดิน และตู้ไฟในบ้านถูกต้องไหม?</span><span class="lang-en block">Want your wiring, earthing and consumer unit checked?</span>
+              <a href="/services"><span class="lang-th">ดูบริการตรวจระบบไฟ →</span><span class="lang-en">See our electrical inspection →</span></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section soft">
+      <div class="container">
+        <div class="cta-band">
+          <h2><span class="lang-th">ติดแอร์ใหม่ทั้งบ้าน อยากมั่นใจว่าไฟรองรับไหว?</span><span class="lang-en">Installing A/C throughout the house?</span></h2>
+          <p><span class="lang-th">เราตรวจตู้ไฟ สายไฟ สายดิน และโหลดรวมทั้งบ้าน พร้อมรายงานพร้อมภาพ ก่อนคุณลงเงินกับงานเดินไฟใหม่</span><span class="lang-en block">We check the consumer unit, cabling, earthing and total load — with a full photo report, before you pay for rewiring.</span></p>
+          <div class="btns">
+            <a class="btn btn-primary btn-lg" href="/contact"><span class="lang-th">จองตรวจบ้าน</span><span class="lang-en">Book an Inspection</span></a>
+            <a class="btn btn-outline btn-lg" href="/tools"><span class="lang-th">ดูเครื่องมืออื่น</span><span class="lang-en">More tools</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+.ac-sizes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.ac-size {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 13px 6px; border: 2px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel-2); cursor: pointer; font-family: inherit; transition: .2s;
+}
+.ac-size b { color: var(--heading); font-family: var(--mono); font-size: 1.02rem; }
+.ac-size small { color: var(--grey); font-size: .68rem; font-family: var(--mono); }
+.ac-size:hover { border-color: var(--green); }
+.ac-size.active { border-color: var(--green); background: var(--green-soft); }
+.ac-size.active b { color: var(--green-bright); }
+.ac-watt-line { margin: 14px 0 0; color: var(--grey); font-size: .88rem; }
+.ac-watt-line b { font-family: var(--mono); color: var(--green-bright); font-size: 1.02rem; }
+.ac-watt-line small { display: block; color: var(--faint); font-size: .8rem; margin-top: 3px; }
+
+.ac-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+.ac-res { background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
+.ac-res.hi { background: linear-gradient(135deg, var(--panel-3), var(--panel-2)); border-color: rgba(47,224,124,.28); }
+.ac-res-label { display: block; font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: 8px; }
+.ac-res b { font-family: var(--mono); font-size: 1.3rem; color: #fff; }
+.ac-res.hi b { color: var(--green-bright); }
+
+.ac-must { margin-top: 24px; border: 1px solid rgba(47,224,124,.25); background: var(--green-soft); border-radius: var(--radius-sm); padding: 18px 20px; }
+.ac-must-title { display: flex; align-items: center; gap: 9px; margin: 0 0 12px; font-weight: 700; color: var(--heading); font-size: .95rem; }
+.ac-must-title svg { width: 19px; height: 19px; flex: none; color: var(--green-bright); }
+.ac-must-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+.ac-must-list li { font-size: .88rem; color: var(--body); line-height: 1.65; padding-left: 16px; position: relative; }
+.ac-must-list li::before { content: '✓'; position: absolute; left: 0; color: var(--green-bright); font-weight: 700; font-size: .8rem; }
+.ac-must-list b { color: var(--heading); }
+
+.ac-check { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 24px; }
+.ac-check-sub { margin: -4px 0 14px; color: var(--grey); font-size: .88rem; }
+.ac-check-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ac-check-row .field { margin-bottom: 0; }
+.ac-check-row .field label { font-family: var(--font); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--heading); }
+.ac-verdict { margin-top: 14px; border-radius: var(--radius-sm); padding: 14px 16px; font-size: .9rem; line-height: 1.65; }
+.ac-verdict.ok { background: var(--green-soft); border: 1px solid rgba(47,224,124,.3); color: var(--body); }
+.ac-verdict.bad { background: rgba(229,72,77,.08); border: 1px solid rgba(229,72,77,.35); color: var(--body); }
+.ac-verdict b { color: var(--heading); }
+
+.ac-warn { margin-top: 22px; font-size: .84rem; color: var(--grey); line-height: 1.7; }
+.ac-warn b { color: var(--body); }
+
+.ac-tbl-head { margin-top: 26px; }
+.ac-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.ac-table th { text-align: left; font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); padding: 7px 8px; border-bottom: 1px solid var(--line); }
+.ac-table td { padding: 8px; border-bottom: 1px solid var(--line); color: var(--body); font-family: var(--mono); }
+.ac-table tr:last-child td { border-bottom: 0; }
+.ac-tip { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .88rem; color: var(--grey); }
+.ac-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
+
+@media (max-width: 720px) {
+  .ac-sizes { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .ac-size { padding: 11px 4px; }
+  .ac-results { grid-template-columns: 1fr; }
+  .ac-check-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) { .ac-sizes { grid-template-columns: repeat(3, 1fr); } }
+</style>
+
+<script>
+  (function () {
+    const sizeBtns = Array.from(document.querySelectorAll('.ac-size')) as HTMLElement[];
+    const wattOut = document.getElementById('acWatt') as HTMLElement;
+    const ampOut = document.getElementById('acAmp') as HTMLElement;
+    const breakerOut = document.getElementById('acBreaker') as HTMLElement;
+    const wireOut = document.getElementById('acWire') as HTMLElement;
+    const haveWire = document.getElementById('acHaveWire') as HTMLSelectElement;
+    const haveBreaker = document.getElementById('acHaveBreaker') as HTMLSelectElement;
+    const verdict = document.getElementById('acVerdict') as HTMLElement;
+    if (!sizeBtns.length) return;
+
+    const UNITS = [
+      { btu: 9000,  breaker: 16, wire: 2.5 },
+      { btu: 12000, breaker: 16, wire: 2.5 },
+      { btu: 18000, breaker: 16, wire: 2.5 },
+      { btu: 24000, breaker: 20, wire: 2.5 },
+      { btu: 30000, breaker: 20, wire: 4 },
+      { btu: 36000, breaker: 25, wire: 4 },
+      { btu: 48000, breaker: 32, wire: 6 },
+      { btu: 60000, breaker: 40, wire: 10 },
+    ];
+    // the largest breaker each cable size may safely be protected by
+    const WIRE_MAX_BREAKER: Record<string, number> = { '1.5': 16, '2.5': 20, '4': 25, '6': 32, '10': 40 };
+
+    const isEn = () => document.body.classList.contains('en');
+
+    function showSize(btn: HTMLElement) {
+      sizeBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      wattOut.textContent = Number(btn.dataset.w).toLocaleString();
+      ampOut.textContent = btn.dataset.amp + ' A';
+      breakerOut.textContent = btn.dataset.breaker + ' A';
+      wireOut.textContent = btn.dataset.wire + ' sq.mm';
+    }
+
+    function checkExisting() {
+      const wire = haveWire.value;
+      const breaker = Number(haveBreaker.value);
+      const wireMax = WIRE_MAX_BREAKER[wire] ?? 0;
+      const en = isEn();
+
+      if (breaker > wireMax) {
+        verdict.className = 'ac-verdict bad';
+        verdict.innerHTML = en
+          ? `<b>Unsafe combination.</b> A ${breaker} A breaker on ${wire} sq.mm cable is too large — the cable can overheat before the breaker trips. For ${wire} sq.mm, use a breaker no bigger than <b>${wireMax} A</b>.`
+          : `<b>ชุดนี้ไม่ปลอดภัย</b> — เบรกเกอร์ ${breaker} A ใหญ่เกินสายไฟ ${wire} sq.mm สายอาจร้อนจนไหม้ก่อนเบรกเกอร์ตัด สำหรับสาย ${wire} sq.mm ควรใช้เบรกเกอร์ไม่เกิน <b>${wireMax} A</b>`;
+        return;
+      }
+
+      const limit = Math.min(breaker, wireMax);
+      const fit = UNITS.filter((u) => u.breaker <= limit && u.wire <= Number(wire));
+      if (!fit.length) {
+        verdict.className = 'ac-verdict bad';
+        verdict.innerHTML = en
+          ? `<b>Not enough for any standard split unit.</b> ${wire} sq.mm with a ${breaker} A breaker is below the smallest size (9,000 BTU needs 2.5 sq.mm + 16 A). A new cable run is needed.`
+          : `<b>ยังไม่พอสำหรับแอร์ขนาดมาตรฐาน</b> — สาย ${wire} sq.mm กับเบรกเกอร์ ${breaker} A ต่ำกว่าขนาดเล็กสุด (9,000 BTU ต้องใช้ 2.5 sq.mm + 16 A) ต้องเดินสายใหม่`;
+        return;
+      }
+      const best = fit[fit.length - 1];
+      const next = UNITS[UNITS.indexOf(best) + 1];
+      verdict.className = 'ac-verdict ok';
+      verdict.innerHTML = en
+        ? `<b>Supports up to ${best.btu.toLocaleString()} BTU.</b> ${wire} sq.mm with a ${breaker} A breaker safely runs a ${best.btu.toLocaleString()} BTU unit.` +
+          (next ? ` For ${next.btu.toLocaleString()} BTU you would need ${next.wire} sq.mm + a ${next.breaker} A breaker.` : '') +
+          ` Use a Type C breaker and make sure the outdoor unit is earthed.`
+        : `<b>รองรับได้สูงสุด ${best.btu.toLocaleString()} BTU</b> — สาย ${wire} sq.mm กับเบรกเกอร์ ${breaker} A ใช้กับแอร์ ${best.btu.toLocaleString()} BTU ได้อย่างปลอดภัย` +
+          (next ? ` หากต้องการ ${next.btu.toLocaleString()} BTU ต้องเปลี่ยนเป็นสาย ${next.wire} sq.mm + เบรกเกอร์ ${next.breaker} A` : '') +
+          ` และควรใช้เบรกเกอร์ Type C พร้อมต่อสายดินถึงคอยล์ร้อนเสมอ`;
+    }
+
+    sizeBtns.forEach((b) => b.addEventListener('click', () => showSize(b)));
+    haveWire.addEventListener('change', checkExisting);
+    haveBreaker.addEventListener('change', checkExisting);
+    document.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('[data-lang-btn]')) setTimeout(checkExisting, 0);
+    });
+
+    showSize(sizeBtns[2]);
+    checkExisting();
+  })();
+</script>
