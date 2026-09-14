@@ -671,7 +671,7 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
 
       // single round: show honestly what adding round 2 later would cost
       if (current.pkg === 'one') {
-        const later = round2Later(current.twoRound);
+        const later = round2Later(current.twoRoundTotal);
         const sum = current.total + later;
         // compare against the 2-round package WITH the same surcharges, not the bare tier price
         const extra = sum - current.twoRoundTotal;
@@ -736,7 +736,7 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       const notes = [];
       if (VAT_NOTE) notes.push(en ? VAT_NOTE.en : VAT_NOTE.th);
       if (current.pkg === 'one') {
-        const later = round2Later(current.twoRound);
+        const later = round2Later(current.twoRoundTotal);
         notes.push(en
           ? `Single-round package (re-inspection not included) · adding the re-inspection later costs ${money(later)}`
           : `แพ็กเกจตรวจรอบเดียว (ไม่รวมรอบแก้ไข) · หากเพิ่มรอบแก้ไขภายหลัง คิดเพิ่ม ${money(later)}`);

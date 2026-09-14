@@ -18,9 +18,11 @@ export const QUOTE_VALID_DAYS = 30;
 // ── Packages ───────────────────────────────────────────────────────────────
 // The rate-card tables are the 2-round price (the main package).
 // A single-round package is 25% cheaper (75% of the 2-round price) for budget /
-// second-hand / one-opinion customers. Buying the 2nd round LATER costs 30% of
-// the 2-round price — so single round + a later 2nd round (75%+30% = 105%) is
-// always dearer than taking the 2-round package up front. That's deliberate.
+// second-hand / one-opinion customers. Buying the 2nd round LATER costs 30% of the
+// 2-round price OF THAT JOB — i.e. including its surcharges, so a harder property
+// pays (and its inspector earns) proportionally more for the return visit. That
+// keeps single round + a later 2nd round at 75%+30% = 105% of the 2-round package
+// in every case, so committing up front is always the cheaper choice. Deliberate.
 // All derived prices are rounded UP to a whole 500.
 export const ROUND1_RATIO = 0.75;
 export const ROUND2_LATER_RATIO = 0.30;
@@ -104,7 +106,7 @@ export const options = [
   { id: 'pool',     for: ['house1','house2'], add: 3000, th: 'ตรวจสระว่ายน้ำ',            en: 'Swimming pool inspection' },
   { id: 'solar',    for: ['house1','house2'], add: 3000, th: 'ตรวจระบบโซลาร์เซลล์',       en: 'Solar panel system inspection' },
   { id: 'builtin',  for: ['condo','house1','house2','townhome'], pct: 0.20, th: 'งานบิวต์อินจำนวนมาก', en: 'Extensive built-in furniture' },
-  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.25, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
+  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.30, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
 ];
 
 // ── Included scope / extras / custom-quote conditions / terms ───────────────
@@ -135,7 +137,7 @@ export const extras = [
   { th: 'ซื้อตรวจรอบที่ 2 ภายหลัง', subTh: '(หลังเลือกแพ็กเกจรอบเดียว)', en: 'Adding round 2 later', subEn: '(after a single-round package)', price: { th: 'คิดค่าบริการเพิ่ม', en: 'Additional charge applies' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — คอนโด',        en: '3rd round onwards — condo',          price: { th: '1,000 บาท/ครั้ง', en: '1,000 THB/visit' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — บ้าน/ทาวน์โฮม', en: '3rd round onwards — house/townhome', price: { th: '2,000 บาท/ครั้ง', en: '2,000 THB/visit' } },
-  { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 25%', en: '+25%' } },
+  { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 30%', en: '+30%' } },
   { th: 'ตรวจสระว่ายน้ำ',                         en: 'Swimming pool inspection',            price: { th: '3,000 บาท', en: '3,000 THB' } },
   { th: 'ตรวจระบบโซลาร์เซลล์',                    en: 'Solar panel system inspection',       price: { th: '3,000 บาท', en: '3,000 THB' } },
   { th: 'งานบิวต์อินจำนวนมาก',                    en: 'Extensive built-ins',                 price: { th: 'เพิ่ม 20%', en: '+20%' } },
