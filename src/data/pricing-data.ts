@@ -104,7 +104,7 @@ export const options = [
   { id: 'pool',     for: ['house1','house2'], add: 3000, th: 'ตรวจสระว่ายน้ำ',            en: 'Swimming pool inspection' },
   { id: 'solar',    for: ['house1','house2'], add: 3000, th: 'ตรวจระบบโซลาร์เซลล์',       en: 'Solar panel system inspection' },
   { id: 'builtin',  for: ['condo','house1','house2','townhome'], pct: 0.20, th: 'งานบิวต์อินจำนวนมาก', en: 'Extensive built-in furniture' },
-  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.25, minCondo: 2000, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
+  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.25, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
 ];
 
 // ── Included scope / extras / custom-quote conditions / terms ───────────────

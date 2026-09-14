@@ -459,7 +459,6 @@ const PARTNER_DISCOUNTS = { cm: 0.20, bkk: 0.10 };
         let amount = 0;
         if (o.pct) {
           amount = Math.round(base * o.pct);
-          if (o.minCondo && propType === 'condo') amount = Math.max(amount, o.minCondo);
         } else if (o.add) {
           amount = o.add;
         }

@@ -610,21 +610,23 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       }];
       let total = base;
 
+      // a percentage surcharge depends on the package base, so work it out from
+      // whichever base we are pricing against
+      const surchargeFor = (b, o) => (o.pct ? Math.round(b * o.pct) : (o.add || 0));
+
       checked.forEach((o) => {
-        let amount = 0;
-        if (o.pct) {
-          amount = Math.round(base * o.pct);
-          if (o.minCondo && propType === 'condo') amount = Math.max(amount, o.minCondo);
-        } else if (o.add) {
-          amount = o.add;
-        }
+        const amount = surchargeFor(base, o);
         if (amount > 0) {
           lines.push({ label: { th: o.th, en: o.en }, amount });
           total += amount;
         }
       });
 
-      return { quote: false, type, tier, checked, sqm, lines, total, pkg, twoRound, pkgTh, pkgEn };
+      // the same job priced as the 2-round package, surcharges included — the only fair
+      // figure to compare "single round + a re-inspection bought later" against
+      const twoRoundTotal = checked.reduce((sum, o) => sum + Math.max(surchargeFor(twoRound, o), 0), twoRound);
+
+      return { quote: false, type, tier, checked, sqm, lines, total, pkg, twoRound, twoRoundTotal, pkgTh, pkgEn };
     }
 
     function render() {
@@ -652,7 +654,9 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       resultPrice.textContent = baht(current.total) + ' ฿' + travel;
       resultNote.textContent = VAT_NOTE
         ? (isEn() ? VAT_NOTE.en : VAT_NOTE.th)
-        : (isEn() ? 'Includes 2 inspection rounds + bilingual PDF report' : 'รวมตรวจ 2 รอบ + รายงาน PDF ไทย-อังกฤษ');
+        : current.pkg === 'one'
+          ? (isEn() ? 'Single inspection round + bilingual PDF report' : 'ตรวจรอบเดียว + รายงาน PDF ไทย-อังกฤษ')
+          : (isEn() ? 'Includes 2 inspection rounds + bilingual PDF report' : 'รวมตรวจ 2 รอบ + รายงาน PDF ไทย-อังกฤษ');
 
       current.lines.forEach((l) => {
         const li = document.createElement('li');
@@ -668,10 +672,19 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       // single round: show honestly what adding round 2 later would cost
       if (current.pkg === 'one') {
         const later = round2Later(current.twoRound);
-        const extra = current.total + later - current.twoRound;
-        upsell.innerHTML = isEn()
-          ? `Adding the re-inspection later costs <b>${baht(later)} ฿</b> — a total of <b>${baht(current.total + later)} ฿</b>, which is <b>${baht(extra)} ฿ more</b> than taking the 2-round package now (${baht(current.twoRound)} ฿).`
-          : `หากซื้อตรวจรอบแก้ไขภายหลัง คิดเพิ่ม <b>${baht(later)} ฿</b> รวมเป็น <b>${baht(current.total + later)} ฿</b> ซึ่ง<b>แพงกว่าเลือกแพ็กเกจ 2 รอบตั้งแต่แรก ${baht(extra)} ฿</b> (แพ็กเกจ 2 รอบ ${baht(current.twoRound)} ฿)`;
+        const sum = current.total + later;
+        // compare against the 2-round package WITH the same surcharges, not the bare tier price
+        const extra = sum - current.twoRoundTotal;
+        const head = isEn()
+          ? `Adding the re-inspection later costs <b>${baht(later)} ฿</b> — a total of <b>${baht(sum)} ฿</b>`
+          : `หากซื้อตรวจรอบแก้ไขภายหลัง คิดเพิ่ม <b>${baht(later)} ฿</b> รวมเป็น <b>${baht(sum)} ฿</b>`;
+        upsell.innerHTML = extra > 0
+          ? (isEn()
+              ? `${head}, which is <b>${baht(extra)} ฿ more</b> than taking the 2-round package now (<b>${baht(current.twoRoundTotal)} ฿</b>).`
+              : `${head} ซึ่ง<b>แพงกว่าเลือกแพ็กเกจ 2 รอบตั้งแต่แรก ${baht(extra)} ฿</b> (แพ็กเกจ 2 รอบ <b>${baht(current.twoRoundTotal)} ฿</b>)`)
+          : (isEn()
+              ? `${head} — close to the 2-round package now (<b>${baht(current.twoRoundTotal)} ฿</b>), but the re-inspection has to be booked separately later.`
+              : `${head} ซึ่งใกล้เคียงกับแพ็กเกจ 2 รอบตั้งแต่แรก (<b>${baht(current.twoRoundTotal)} ฿</b>) แต่ต้องนัดตรวจรอบแก้ไขเพิ่มภายหลัง`);
         upsell.hidden = false;
       }
     }
