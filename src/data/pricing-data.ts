@@ -94,17 +94,21 @@ export const types = [
   },
 ];
 
-// ── Optional surcharges. `add` = flat baht, `pct` = % of base, `quote` = forces a custom quote ──
+// ── Optional surcharges. `pct` = % of the package base, `quote` = forces a custom quote ──
+// Every condition is a PERCENTAGE of the base price, so extra work always scales with
+// the size of the property — a bigger, harder job pays (and pays its inspector) more.
+// The only exception is the solar system: panel count, inverter type and roof access
+// vary far too much to price with a single number, so it always goes to a custom quote.
 export const options = [
-  { id: 'duplex',   for: ['condo'],    add: 2000, th: 'ห้อง Duplex / ห้องสองชั้น',        en: 'Duplex / two-level unit' },
-  { id: 'bed3',     for: ['condo'],    add: 1000, th: 'ตั้งแต่ 3 ห้องนอนขึ้นไป',           en: '3 or more bedrooms' },
+  { id: 'duplex',   for: ['condo'],    pct: 0.25, th: 'ห้อง Duplex / ห้องสองชั้น',        en: 'Duplex / two-level unit' },
+  { id: 'bed3',     for: ['condo'],    pct: 0.15, th: 'ตั้งแต่ 3 ห้องนอนขึ้นไป',           en: '3 or more bedrooms' },
   { id: 'penthouse',for: ['condo'],    quote: true, th: 'Penthouse / พื้นที่ภายนอกขนาดใหญ่', en: 'Penthouse / large outdoor area' },
-  { id: 'floor3',   for: ['townhome'], add: 2000, th: 'ทาวน์โฮม 3 ชั้น',                  en: '3-storey townhome' },
-  { id: 'floor4',   for: ['townhome'], add: 3000, th: 'ทาวน์โฮม 4 ชั้น / โฮมออฟฟิศ',       en: '4-storey / home office' },
-  { id: 'bath4',    for: ['townhome'], add: 1000, th: 'ห้องน้ำมากกว่า 4 ห้อง',             en: 'More than 4 bathrooms' },
-  { id: 'lift',     for: ['house2'], add: 2000, th: 'มีลิฟต์',                            en: 'Has a lift' },
-  { id: 'pool',     for: ['house1','house2'], add: 3000, th: 'ตรวจสระว่ายน้ำ',            en: 'Swimming pool inspection' },
-  { id: 'solar',    for: ['house1','house2'], add: 3000, th: 'ตรวจระบบโซลาร์เซลล์',       en: 'Solar panel system inspection' },
+  { id: 'floor3',   for: ['townhome'], pct: 0.25, th: 'ทาวน์โฮม 3 ชั้น',                  en: '3-storey townhome' },
+  { id: 'floor4',   for: ['townhome'], pct: 0.35, th: 'ทาวน์โฮม 4 ชั้น / โฮมออฟฟิศ',       en: '4-storey / home office' },
+  { id: 'bath4',    for: ['townhome'], pct: 0.15, th: 'ห้องน้ำมากกว่า 4 ห้อง',             en: 'More than 4 bathrooms' },
+  { id: 'lift',     for: ['house2'], pct: 0.15, th: 'มีลิฟต์',                            en: 'Has a lift' },
+  { id: 'pool',     for: ['house1','house2'], pct: 0.25, th: 'ตรวจสระว่ายน้ำ',            en: 'Swimming pool inspection' },
+  { id: 'solar',    for: ['house1','house2'], quote: true, th: 'ตรวจระบบโซลาร์เซลล์',     en: 'Solar panel system inspection' },
   { id: 'builtin',  for: ['condo','house1','house2','townhome'], pct: 0.20, th: 'งานบิวต์อินจำนวนมาก', en: 'Extensive built-in furniture' },
   { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.30, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
 ];
@@ -138,8 +142,8 @@ export const extras = [
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — คอนโด',        en: '3rd round onwards — condo',          price: { th: '1,000 บาท/ครั้ง', en: '1,000 THB/visit' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — บ้าน/ทาวน์โฮม', en: '3rd round onwards — house/townhome', price: { th: '2,000 บาท/ครั้ง', en: '2,000 THB/visit' } },
   { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 30%', en: '+30%' } },
-  { th: 'ตรวจสระว่ายน้ำ',                         en: 'Swimming pool inspection',            price: { th: '3,000 บาท', en: '3,000 THB' } },
-  { th: 'ตรวจระบบโซลาร์เซลล์',                    en: 'Solar panel system inspection',       price: { th: '3,000 บาท', en: '3,000 THB' } },
+  { th: 'ตรวจสระว่ายน้ำ',                         en: 'Swimming pool inspection',            price: { th: 'เพิ่ม 25%', en: '+25%' } },
+  { th: 'ตรวจระบบโซลาร์เซลล์',                    en: 'Solar panel system inspection',       price: { th: 'ประเมินราคา', en: 'Custom quote' } },
   { th: 'งานบิวต์อินจำนวนมาก',                    en: 'Extensive built-ins',                 price: { th: 'เพิ่ม 20%', en: '+20%' } },
   { th: 'เดินทางนอกเขตบริการ',                    en: 'Travel outside the service area',     price: { th: 'คิดตามระยะทาง', en: 'By distance' } },
 ];
