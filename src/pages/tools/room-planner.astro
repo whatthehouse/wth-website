@@ -170,7 +170,7 @@ const TEMPLATES = {
                   <button type="button" class="rp-btn rp-btn-del" data-act="del">✕ <span class="lang-th">ลบ</span><span class="lang-en">Delete</span></button>
                 </div>
               </div>
-              <p class="rp-hint"><span class="lang-th">ลากเพื่อย้าย · แตะชิ้นงานเพื่อหมุนหรือลบ · ประตู/หน้าต่างลากไปติดผนังไหนก็ได้ · คอมพิวเตอร์: ลูกศรขยับ, R หมุน, Delete ลบ</span><span class="lang-en block">Drag to move · tap an item to rotate or delete · doors &amp; windows snap to any wall · keyboard: arrows nudge, R rotates, Delete removes</span></p>
+              <p class="rp-hint"><span class="lang-th">ลากเพื่อย้าย · คลิก/แตะสองครั้งเพื่อหมุน · ประตู/หน้าต่างลากไปติดผนังไหนก็ได้ · คีย์บอร์ด: ลูกศรขยับ (Shift = ทีละ 25 ซม.), R หมุน, Delete ลบ</span><span class="lang-en block">Drag to move · double-click or double-tap to rotate · doors &amp; windows snap to any wall · keyboard: arrows nudge (Shift = 25 cm), R rotates, Delete removes</span></p>
             </div>
 
             <!-- checks + actions -->
@@ -235,7 +235,7 @@ const TEMPLATES = {
 
 /* stage */
 .rp-stage { background: #efeee8; border-radius: var(--radius-sm); overflow: hidden; display: flex; justify-content: center; }
-#rpSvg { display: block; width: 100%; height: auto; max-height: 72vh; touch-action: none; user-select: none; -webkit-user-select: none; }
+#rpSvg { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .rp-selbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding: 10px 12px; border: 1px solid rgba(47,224,124,.3); background: var(--green-soft); border-radius: var(--radius-sm); }
 .rp-sel-info b { color: var(--heading); font-size: .92rem; }
 .rp-sel-info small { font-family: var(--mono); color: var(--grey); font-size: .72rem; margin-left: 6px; }
@@ -267,9 +267,22 @@ const TEMPLATES = {
 .rp-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
 .rp-disclaimer { margin: 16px 4px 0; font-size: .78rem; color: var(--faint); line-height: 1.7; }
 
-@media (max-width: 1100px) {
-  .rp-body { grid-template-columns: 160px minmax(0, 1fr); }
-  .rp-side { grid-column: 1 / -1; }
+/* Built mainly for iPad, Mac and PC. Down to iPad-landscape width (1000px) the
+   livability check stays beside the plan, so warnings update in view while dragging. */
+#rpSvg { max-height: 78vh; }
+@media (max-width: 1240px) {
+  .rp-body { grid-template-columns: 150px minmax(0, 1fr) 240px; gap: 16px; }
+  .rp { padding: 18px; }
+}
+@media (max-width: 999px) {
+  .rp-body { grid-template-columns: 150px minmax(0, 1fr); }
+  .rp-side { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; align-items: start; }
+  .rp-side > h3, .rp-side > .rp-status, .rp-side > .rp-warns, .rp-side > .rp-legend { grid-column: 1; }
+  .rp-side > .rp-actions { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
+  .rp-side > .rp-note, .rp-side > .rp-tip { grid-column: 2; }
+}
+@media (max-width: 720px) {
+  .rp-side { display: block; }
 }
 @media (max-width: 720px) {
   .rp { padding: 14px; }
@@ -648,7 +661,17 @@ const TEMPLATES = {
     const cx = x + b.w / 2, cy = y + b.h / 2;
     if (cx !== o.cx || cy !== o.cy) { o.cx = cx; o.cy = cy; drag.moved = true; render(false); }
   });
-  const endDrag = () => { if (drag && drag.moved) save(); drag = null; };
+  // double-click (mouse) or double-tap (iPad) an item to rotate it
+  let lastTap = { id: null, t: 0 };
+  const endDrag = () => {
+    if (drag && drag.moved) save();
+    else if (drag) {
+      const now = Date.now();
+      if (lastTap.id === drag.id && now - lastTap.t < 350) { rotateSel(); lastTap = { id: null, t: 0 }; }
+      else lastTap = { id: drag.id, t: now };
+    }
+    drag = null;
+  };
   svg.addEventListener('pointerup', endDrag);
   svg.addEventListener('pointercancel', endDrag);
 
