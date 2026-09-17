@@ -1,0 +1,798 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// Furniture catalogue — real Thai-market sizes in centimetres.
+// w = width, d = depth, as seen with the item's FRONT facing down the screen.
+// `clear` = the free space a person needs in front of / beside the item to use it:
+//   s    = sides that need the space (front / back / left / right)
+//   d    = how deep that space must be (cm)
+//   any  = only ONE of the listed sides needs to be free (e.g. getting into bed)
+//   from = side zones start this far along the item (0 = back edge), so a
+//          nightstand at the bed head does not count as blocking access
+// `tall` = full-height furniture that should not stand in front of a window.
+const CATALOG = {
+  bed6:      { th: 'เตียง 6 ฟุต',        en: 'King bed (6 ft)',     w: 180, d: 200, clear: [
+               { s: ['front'], d: 60, th: 'ปลายเตียงควรเว้นทางเดินอย่างน้อย 60 ซม.', en: 'leave at least 60 cm to walk past the foot of the bed' },
+               { s: ['left', 'right'], d: 50, any: true, from: 0.35, th: 'ควรมีทางขึ้น-ลงเตียงอย่างน้อย 1 ด้าน กว้าง 50 ซม.', en: 'needs at least one 50 cm side to get in and out' } ] },
+  bed5:      { th: 'เตียง 5 ฟุต',        en: 'Queen bed (5 ft)',    w: 150, d: 200, clear: [
+               { s: ['front'], d: 60, th: 'ปลายเตียงควรเว้นทางเดินอย่างน้อย 60 ซม.', en: 'leave at least 60 cm to walk past the foot of the bed' },
+               { s: ['left', 'right'], d: 50, any: true, from: 0.35, th: 'ควรมีทางขึ้น-ลงเตียงอย่างน้อย 1 ด้าน กว้าง 50 ซม.', en: 'needs at least one 50 cm side to get in and out' } ] },
+  bed35:     { th: 'เตียง 3.5 ฟุต',      en: 'Single bed (3.5 ft)', w: 105, d: 200, clear: [
+               { s: ['left', 'right'], d: 50, any: true, from: 0.35, th: 'ควรมีทางขึ้น-ลงเตียงอย่างน้อย 1 ด้าน กว้าง 50 ซม.', en: 'needs at least one 50 cm side to get in and out' } ] },
+  nightstand:{ th: 'โต๊ะข้างเตียง',      en: 'Nightstand',          w: 45,  d: 40,  clear: [] },
+  wardrobe:  { th: 'ตู้เสื้อผ้า',         en: 'Wardrobe',            w: 120, d: 60,  tall: true, clear: [
+               { s: ['front'], d: 60, th: 'หน้าตู้ควรเว้นอย่างน้อย 60 ซม. เพื่อเปิดบานตู้ได้สุด', en: 'leave 60 cm in front so the doors open fully' } ] },
+  dresser:   { th: 'โต๊ะเครื่องแป้ง',     en: 'Dressing table',      w: 100, d: 45,  clear: [
+               { s: ['front'], d: 60, th: 'หน้าโต๊ะควรเว้น 60 ซม. สำหรับนั่ง', en: 'leave 60 cm in front to sit down' } ] },
+  desk:      { th: 'โต๊ะทำงาน',          en: 'Desk',                w: 120, d: 60,  clear: [
+               { s: ['front'], d: 70, th: 'หน้าโต๊ะควรเว้น 70 ซม. สำหรับเลื่อนเก้าอี้', en: 'leave 70 cm in front to pull the chair out' } ] },
+  sofa3:     { th: 'โซฟา 3 ที่นั่ง',      en: '3-seat sofa',         w: 200, d: 85,  clear: [
+               { s: ['front'], d: 40, th: 'หน้าโซฟาควรเว้น 40 ซม. สำหรับวางขาและเดินผ่าน', en: 'leave 40 cm in front for legs and passing' } ] },
+  sofa2:     { th: 'โซฟา 2 ที่นั่ง',      en: '2-seat sofa',         w: 150, d: 85,  clear: [
+               { s: ['front'], d: 40, th: 'หน้าโซฟาควรเว้น 40 ซม. สำหรับวางขาและเดินผ่าน', en: 'leave 40 cm in front for legs and passing' } ] },
+  coffee:    { th: 'โต๊ะกลาง',           en: 'Coffee table',        w: 100, d: 50,  clear: [] },
+  tv:        { th: 'ชั้นวางทีวี',         en: 'TV cabinet',          w: 160, d: 40,  clear: [] },
+  dining4:   { th: 'โต๊ะอาหาร 4 ที่',     en: 'Dining table (4)',    w: 120, d: 75,  clear: [
+               { s: ['front'], d: 60, th: 'ด้านเก้าอี้ควรเว้น 60 ซม. สำหรับเลื่อนเก้าอี้', en: 'leave 60 cm on the chair side to pull chairs out' },
+               { s: ['back'],  d: 60, th: 'ด้านเก้าอี้ควรเว้น 60 ซม. สำหรับเลื่อนเก้าอี้', en: 'leave 60 cm on the chair side to pull chairs out' } ] },
+  fridge:    { th: 'ตู้เย็น',             en: 'Fridge',              w: 70,  d: 70,  tall: true, clear: [
+               { s: ['front'], d: 70, th: 'หน้าตู้เย็นควรเว้น 70 ซม. เพื่อเปิดประตูได้สุด', en: 'leave 70 cm in front so the door opens fully' } ] },
+  washer:    { th: 'เครื่องซักผ้า',       en: 'Washing machine',     w: 60,  d: 60,  clear: [
+               { s: ['front'], d: 60, th: 'หน้าเครื่องควรเว้น 60 ซม. สำหรับเปิดฝาและหยิบผ้า', en: 'leave 60 cm in front to open it and load laundry' } ] },
+};
+const OPENINGS = {
+  door:   { th: 'ประตู',     en: 'Door',   w: 80 },
+  window: { th: 'หน้าต่าง',  en: 'Window', w: 120 },
+};
+
+// Starter rooms. Items are { t, cx, cy, rot } — centre point in cm, rotation in
+// degrees clockwise (0 = front faces down). Openings sit on a wall at `pos` cm.
+const TEMPLATES = {
+  bedroom: { th: 'ห้องนอนคอนโด', en: 'Condo bedroom', W: 300, L: 350,
+    items: [
+      { t: 'bed5', cx: 150, cy: 100, rot: 0 },
+      { t: 'nightstand', cx: 52.5, cy: 20, rot: 0 },
+      { t: 'nightstand', cx: 247.5, cy: 20, rot: 0 },
+      { t: 'wardrobe', cx: 30, cy: 270, rot: 270 },
+    ],
+    open: [
+      { t: 'window', wall: 'top', pos: 150, w: 150 },
+      { t: 'door', wall: 'bottom', pos: 240, w: 80 },
+    ] },
+  living: { th: 'ห้องนั่งเล่น + ทานข้าว', en: 'Living & dining', W: 400, L: 500,
+    items: [
+      { t: 'sofa3', cx: 42.5, cy: 160, rot: 270 },
+      { t: 'coffee', cx: 155, cy: 160, rot: 90 },
+      { t: 'tv', cx: 380, cy: 160, rot: 90 },
+      { t: 'dining4', cx: 300, cy: 390, rot: 0 },
+    ],
+    open: [
+      { t: 'window', wall: 'top', pos: 200, w: 200 },
+      { t: 'door', wall: 'left', pos: 420, w: 90 },
+    ] },
+  studio: { th: 'คอนโดสตูดิโอ 24 ตร.ม.', en: 'Studio condo 24 sq.m.', W: 350, L: 700,
+    items: [
+      { t: 'bed5', cx: 100, cy: 100, rot: 0 },
+      { t: 'nightstand', cx: 197.5, cy: 20, rot: 0 },
+      { t: 'wardrobe', cx: 320, cy: 160, rot: 90 },
+      { t: 'sofa2', cx: 42.5, cy: 400, rot: 270 },
+      { t: 'tv', cx: 330, cy: 400, rot: 90 },
+      { t: 'fridge', cx: 35, cy: 665, rot: 180 },
+    ],
+    open: [
+      { t: 'window', wall: 'top', pos: 175, w: 250 },
+      { t: 'door', wall: 'bottom', pos: 290, w: 80 },
+    ] },
+  empty: { th: 'ห้องว่าง', en: 'Empty room', W: 300, L: 400, items: [], open: [
+      { t: 'door', wall: 'bottom', pos: 250, w: 80 },
+    ] },
+};
+---
+<BaseLayout
+  title="จัดวางเฟอร์นิเจอร์ในห้องออนไลน์ ฟรี | วาดแปลนห้องง่าย ๆ | WHAT THE HOUSE"
+  description="ลองจัดวางเฟอร์นิเจอร์ในห้องด้วยตัวเอง ฟรี ไม่ต้องสมัคร ใช้ขนาดเฟอร์นิเจอร์จริงแบบไทย พร้อมเตือนเมื่อทางเดินแคบ ประตูเปิดชน หรือเปิดตู้ไม่สุด บันทึกเป็นรูปภาพได้ | Free room & furniture layout planner"
+>
+  <Header />
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">จัดวางเฟอร์นิเจอร์</span><span class="lang-en">Room Planner</span></p>
+        <span class="eyebrow"><span class="lang-th">เครื่องมือ · ต้นแบบ</span><span class="lang-en">Free Tool · Beta</span></span>
+        <h1><span class="lang-th">ลองจัดวางเฟอร์นิเจอร์<br>ก่อนซื้อ ก่อนย้ายเข้า</span><span class="lang-en">Plan your furniture before you buy or move in</span></h1>
+        <p><span class="lang-th">ลากวางเฟอร์นิเจอร์ขนาดจริงลงในห้อง ระบบช่วยเช็กว่าวางแล้ว<b>ใช้ชีวิตได้จริง</b> — ทางเดินพอไหม ประตูเปิดชนไหม ตู้เปิดสุดไหม</span><span class="lang-en block">Drag real-size furniture into your room and we check it actually <b>works day to day</b> — enough walkway, doors that open, wardrobes that swing fully.</span></p>
+      </div>
+    </section>
+
+    <section class="section rp-section">
+      <div class="container">
+        <div class="rp">
+
+          <!-- top bar: templates + room size -->
+          <div class="rp-top">
+            <div class="rp-tpls">
+              <span class="rp-cap"><span class="lang-th">เริ่มจากแบบห้อง</span><span class="lang-en">Start from</span></span>
+              <div class="rp-tpl-btns">
+                {Object.entries(TEMPLATES).map(([id, t]) => (
+                  <button type="button" class="rp-chip" data-tpl={id}><span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span></button>
+                ))}
+              </div>
+            </div>
+            <div class="rp-size">
+              <label>
+                <span class="rp-cap"><span class="lang-th">กว้าง (ม.)</span><span class="lang-en">Width (m)</span></span>
+                <input type="number" id="rpW" min="1.5" max="15" step="0.05" inputmode="decimal" />
+              </label>
+              <span class="rp-x">×</span>
+              <label>
+                <span class="rp-cap"><span class="lang-th">ยาว (ม.)</span><span class="lang-en">Length (m)</span></span>
+                <input type="number" id="rpL" min="1.5" max="15" step="0.05" inputmode="decimal" />
+              </label>
+              <span class="rp-area"><b id="rpArea">—</b> <span class="lang-th">ตร.ม.</span><span class="lang-en">sq.m.</span></span>
+            </div>
+          </div>
+
+          <div class="rp-body">
+            <!-- palette -->
+            <div class="rp-palette">
+              <span class="rp-cap rp-pal-head"><span class="lang-th">แตะเพื่อเพิ่ม</span><span class="lang-en">Tap to add</span></span>
+              <div class="rp-pal-list">
+                {Object.entries(CATALOG).map(([id, c]) => (
+                  <button type="button" class="rp-add" data-add={id}>
+                    <b><span class="lang-th">{c.th}</span><span class="lang-en">{c.en}</span></b>
+                    <small>{c.w}×{c.d}</small>
+                  </button>
+                ))}
+                {Object.entries(OPENINGS).map(([id, c]) => (
+                  <button type="button" class="rp-add rp-add-open" data-add={id}>
+                    <b><span class="lang-th">{c.th}</span><span class="lang-en">{c.en}</span></b>
+                    <small>{c.w}</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <!-- drawing -->
+            <div class="rp-main">
+              <div class="rp-stage">
+                <svg id="rpSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Room plan"></svg>
+              </div>
+
+              <div class="rp-selbar" id="rpSel" hidden>
+                <div class="rp-sel-info"><b id="rpSelName"></b> <small id="rpSelSize"></small></div>
+                <div class="rp-sel-btns">
+                  <button type="button" class="rp-btn" data-act="rotate" id="rpRotate">⟳ <span class="lang-th">หมุน</span><span class="lang-en">Rotate</span></button>
+                  <button type="button" class="rp-btn" data-act="flip" id="rpFlip">⇋ <span class="lang-th">กลับด้านบาน</span><span class="lang-en">Flip swing</span></button>
+                  <button type="button" class="rp-btn" data-act="dup" id="rpDup">⧉ <span class="lang-th">ทำซ้ำ</span><span class="lang-en">Duplicate</span></button>
+                  <button type="button" class="rp-btn rp-btn-del" data-act="del">✕ <span class="lang-th">ลบ</span><span class="lang-en">Delete</span></button>
+                </div>
+              </div>
+              <p class="rp-hint"><span class="lang-th">ลากเพื่อย้าย · แตะชิ้นงานเพื่อหมุนหรือลบ · ประตู/หน้าต่างลากไปติดผนังไหนก็ได้ · คอมพิวเตอร์: ลูกศรขยับ, R หมุน, Delete ลบ</span><span class="lang-en block">Drag to move · tap an item to rotate or delete · doors &amp; windows snap to any wall · keyboard: arrows nudge, R rotates, Delete removes</span></p>
+            </div>
+
+            <!-- checks + actions -->
+            <aside class="rp-side">
+              <h3><span class="lang-th">ตรวจความสะดวกในการใช้งาน</span><span class="lang-en">Livability check</span></h3>
+              <div class="rp-status" id="rpStatus"></div>
+              <ul class="rp-warns" id="rpWarns"></ul>
+
+              <div class="rp-legend">
+                <span><i class="lg-ok"></i><span class="lang-th">พื้นที่ใช้งานที่ต้องเว้นไว้</span><span class="lang-en">Space needed to use it</span></span>
+                <span><i class="lg-bad"></i><span class="lang-th">ระยะไม่พอ</span><span class="lang-en">Not enough space</span></span>
+              </div>
+
+              <div class="rp-actions">
+                <button type="button" class="btn btn-primary" id="rpExport"><span class="lang-th">บันทึกเป็นรูปภาพ</span><span class="lang-en">Save as image</span></button>
+                <button type="button" class="btn btn-ghost" id="rpClear"><span class="lang-th">ล้างเฟอร์นิเจอร์</span><span class="lang-en">Clear furniture</span></button>
+              </div>
+              <p class="rp-note"><span class="lang-th">งานจะถูกเก็บไว้ในเครื่องของคุณอัตโนมัติ ไม่ต้องสมัครสมาชิก และไม่ส่งข้อมูลให้ใคร</span><span class="lang-en block">Your layout is saved on this device automatically — no sign-up, nothing sent anywhere.</span></p>
+
+              <div class="rp-tip"><span class="lang-th">จัดห้องเสร็จแล้ว ก่อนย้ายเข้าให้เราตรวจบ้านให้ก่อน — รอยร้าว รั่วซึม ระบบไฟ เจอก่อนแก้ง่ายกว่า</span><span class="lang-en block">Layout sorted? Have us inspect the home before you move in — cracks, leaks and wiring are far easier to fix before the furniture arrives.</span> <a href="/services"><span class="lang-th">ดูบริการตรวจบ้าน →</span><span class="lang-en">See inspection services →</span></a></div>
+            </aside>
+          </div>
+        </div>
+
+        <p class="rp-disclaimer"><span class="lang-th">เครื่องมือนี้เป็นแบบร่างคร่าว ๆ สำหรับวางแผนจัดเฟอร์นิเจอร์เท่านั้น ไม่ใช่แบบก่อสร้าง ระยะที่แนะนำเป็นค่าทั่วไปเพื่อความสะดวกในการใช้งาน ควรวัดขนาดห้องและเฟอร์นิเจอร์จริงก่อนสั่งซื้อ</span><span class="lang-en block">This is a rough sketch for planning furniture only — not a construction drawing. Recommended clearances are general comfort guidelines; always measure the real room and furniture before buying.</span></p>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style is:global>
+.rp-section { padding-top: 34px; }
+.rp [hidden] { display: none !important; }
+.rp { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.rp-cap { display: block; font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: 7px; }
+
+/* top bar */
+.rp-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.rp-tpl-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.rp-chip { font-family: inherit; font-size: .85rem; padding: 8px 14px; border-radius: 50px; border: 1px solid var(--line); background: var(--panel-2); color: var(--heading); cursor: pointer; transition: .18s; }
+.rp-chip:hover { border-color: var(--green); color: var(--green-bright); }
+.rp-size { display: flex; align-items: flex-end; gap: 10px; }
+.rp-size label { display: block; }
+.rp-size input { width: 92px; font-family: var(--mono); font-size: 1rem; padding: 9px 10px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); color: var(--heading); }
+.rp-size input:focus { outline: none; border-color: var(--green); }
+.rp-x { color: var(--faint); font-family: var(--mono); padding-bottom: 10px; }
+.rp-area { padding-bottom: 10px; color: var(--grey); font-size: .9rem; white-space: nowrap; }
+.rp-area b { font-family: var(--mono); color: var(--green-bright); font-size: 1.05rem; }
+
+/* body grid */
+.rp-body { display: grid; grid-template-columns: 170px minmax(0, 1fr) 270px; gap: 20px; align-items: start; }
+
+/* palette */
+.rp-pal-list { display: flex; flex-direction: column; gap: 6px; max-height: 620px; overflow-y: auto; padding-right: 2px; }
+.rp-add { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left; font-family: inherit; padding: 8px 11px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); cursor: pointer; transition: .18s; }
+.rp-add b { font-size: .84rem; font-weight: 600; color: var(--heading); }
+.rp-add small { font-family: var(--mono); font-size: .66rem; color: var(--grey); }
+.rp-add:hover { border-color: var(--green); background: var(--green-soft); }
+.rp-add-open { border-style: dashed; }
+
+/* stage */
+.rp-stage { background: #efeee8; border-radius: var(--radius-sm); overflow: hidden; display: flex; justify-content: center; }
+#rpSvg { display: block; width: 100%; height: auto; max-height: 72vh; touch-action: none; user-select: none; -webkit-user-select: none; }
+.rp-selbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding: 10px 12px; border: 1px solid rgba(47,224,124,.3); background: var(--green-soft); border-radius: var(--radius-sm); }
+.rp-sel-info b { color: var(--heading); font-size: .92rem; }
+.rp-sel-info small { font-family: var(--mono); color: var(--grey); font-size: .72rem; margin-left: 6px; }
+.rp-sel-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.rp-btn { font-family: inherit; font-size: .82rem; padding: 7px 12px; border-radius: 50px; border: 1px solid var(--line); background: var(--panel); color: var(--heading); cursor: pointer; }
+.rp-btn:hover { border-color: var(--green); }
+.rp-btn-del:hover { border-color: #E5484D; color: #ff7a7e; }
+.rp-hint { margin: 10px 0 0; font-size: .78rem; color: var(--faint); line-height: 1.6; }
+
+/* side */
+.rp-side h3 { font-size: 1rem; margin: 0 0 10px; }
+.rp-status { border-radius: var(--radius-sm); padding: 11px 13px; font-size: .88rem; line-height: 1.55; }
+.rp-status.ok { background: var(--green-soft); border: 1px solid rgba(47,224,124,.3); color: var(--body); }
+.rp-status.bad { background: rgba(229,72,77,.08); border: 1px solid rgba(229,72,77,.35); color: var(--body); }
+.rp-status b { color: var(--heading); }
+.rp-warns { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
+.rp-warns button { width: 100%; text-align: left; font-family: inherit; font-size: .82rem; line-height: 1.5; color: var(--body); background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid #E5484D; border-radius: 6px; padding: 8px 10px; cursor: pointer; }
+.rp-warns button:hover { border-color: rgba(229,72,77,.5); border-left-color: #E5484D; }
+.rp-warns b { color: var(--heading); }
+.rp-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 14px 0 0; font-size: .76rem; color: var(--grey); }
+.rp-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.rp-legend i { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+.rp-legend .lg-ok { background: rgba(18,153,90,.35); border: 1px dashed #12995a; }
+.rp-legend .lg-bad { background: rgba(217,67,74,.35); border: 1px dashed #d9434a; }
+.rp-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.rp-actions .btn { width: 100%; justify-content: center; }
+.rp-note { margin: 10px 0 0; font-size: .76rem; color: var(--faint); line-height: 1.6; }
+.rp-tip { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: .84rem; color: var(--grey); line-height: 1.6; }
+.rp-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
+.rp-disclaimer { margin: 16px 4px 0; font-size: .78rem; color: var(--faint); line-height: 1.7; }
+
+@media (max-width: 1100px) {
+  .rp-body { grid-template-columns: 160px minmax(0, 1fr); }
+  .rp-side { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  .rp { padding: 14px; }
+  .rp-body { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .rp-pal-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; max-height: none; padding-bottom: 6px; }
+  .rp-add { flex: none; }
+  .rp-add b { white-space: nowrap; }
+  #rpSvg { max-height: 62vh; }
+  .rp-size input { width: 78px; }
+}
+</style>
+
+<script define:vars={{ CATALOG, OPENINGS, TEMPLATES }}>
+(function () {
+  const svg = document.getElementById('rpSvg');
+  if (!svg) return;
+
+  const STORE_KEY = 'wth-room-planner-v1';
+  const PAD = 48, WALL = 10, GRID = 5, MAGNET = 8;
+  // same face as the site (Prompt); system fonts cover the exported image, where web fonts can't load
+  const FONT = "Prompt, system-ui, 'Segoe UI', Tahoma, sans-serif";
+  const C = {
+    floor: '#fbfaf6', grid: '#ecebe4', grid2: '#d9d6cb', wall: '#2b302d', item: '#e4eee7', itemStroke: '#5b6a61',
+    sel: '#12995a', bad: '#d9434a', badFill: '#fde6e6', zoneOk: 'rgba(18,153,90,.14)', zoneBad: 'rgba(217,67,74,.22)',
+    text: '#2b302d', dim: '#6b726d', glass: '#dcecf7', glassLine: '#6aa8d2',
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const isEn = () => document.body.classList.contains('en');
+  const uid = () => Math.random().toString(36).slice(2, 9);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // ── state ────────────────────────────────────────────────────────────────
+  let S = null;          // { W, L, items:[{id,t,cx,cy,rot}], open:[{id,t,wall,pos,w,flip}] }
+  let sel = null;        // selected id
+  let drag = null;       // { id, dx, dy, moved }
+
+  function fromTemplate(key) {
+    const t = TEMPLATES[key];
+    return {
+      W: t.W, L: t.L,
+      items: t.items.map((i) => ({ id: uid(), ...i })),
+      open: t.open.map((o) => ({ id: uid(), flip: false, ...o })),
+    };
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      if (!d || typeof d.W !== 'number' || typeof d.L !== 'number' || !Array.isArray(d.items) || !Array.isArray(d.open)) return null;
+      d.items = d.items.filter((i) => CATALOG[i.t] && [0, 90, 180, 270].includes(i.rot));
+      d.open = d.open.filter((o) => OPENINGS[o.t] && ['top', 'bottom', 'left', 'right'].includes(o.wall));
+      return d;
+    } catch (e) { return null; }
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* private mode etc. — still works, just not remembered */ }
+  }
+
+  // ── geometry ─────────────────────────────────────────────────────────────
+  const nm = (o) => { const c = CATALOG[o.t] || OPENINGS[o.t]; return isEn() ? c.en : c.th; };
+  const find = (id) => S.items.find((i) => i.id === id) || S.open.find((o) => o.id === id);
+  const isOpening = (o) => !!OPENINGS[o.t];
+
+  function bbox(it) {
+    const c = CATALOG[it.t];
+    const sw = it.rot % 180 ? c.d : c.w, sh = it.rot % 180 ? c.w : c.d;
+    return { x: it.cx - sw / 2, y: it.cy - sh / 2, w: sw, h: sh };
+  }
+  // local (u across the width, v front-to-back; +v = front) → room coordinates
+  function toWorld(it, u, v) {
+    let x, y;
+    if (it.rot === 0) { x = u; y = v; }
+    else if (it.rot === 90) { x = -v; y = u; }
+    else if (it.rot === 180) { x = -u; y = -v; }
+    else { x = v; y = -u; }
+    return { x: it.cx + x, y: it.cy + y };
+  }
+  const rectOf = (p, q) => ({ x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(p.x - q.x), h: Math.abs(p.y - q.y) });
+  const inter = (a, b) => a.x < b.x + b.w - 1 && b.x < a.x + a.w - 1 && a.y < b.y + b.h - 1 && b.y < a.y + a.h - 1;
+  const inside = (r) => r.x >= -1 && r.y >= -1 && r.x + r.w <= S.W + 1 && r.y + r.h <= S.L + 1;
+
+  function zoneRect(it, side, D, from) {
+    const { w, d } = CATALOG[it.t];
+    const vf = -d / 2 + (from || 0) * d;
+    let u0, u1, v0, v1;
+    if (side === 'front') { u0 = -w / 2; u1 = w / 2; v0 = d / 2; v1 = d / 2 + D; }
+    else if (side === 'back') { u0 = -w / 2; u1 = w / 2; v0 = -d / 2 - D; v1 = -d / 2; }
+    else if (side === 'left') { u0 = -w / 2 - D; u1 = -w / 2; v0 = vf; v1 = d / 2; }
+    else { u0 = w / 2; u1 = w / 2 + D; v0 = vf; v1 = d / 2; }
+    return rectOf(toWorld(it, u0, v0), toWorld(it, u1, v1));
+  }
+
+  // walls: `a` runs along the wall, `n` points into the room
+  const wallLen = (wall) => (wall === 'top' || wall === 'bottom' ? S.W : S.L);
+  function w2w(wall, a, n) {
+    if (wall === 'top') return { x: a, y: n };
+    if (wall === 'bottom') return { x: a, y: S.L - n };
+    if (wall === 'left') return { x: n, y: a };
+    return { x: S.W - n, y: a };
+  }
+  const doorZone = (o) => rectOf(w2w(o.wall, o.pos - o.w / 2, 0), w2w(o.wall, o.pos + o.w / 2, o.w));
+  const windowZone = (o) => rectOf(w2w(o.wall, o.pos - o.w / 2, 0), w2w(o.wall, o.pos + o.w / 2, 20));
+
+  function clampItem(it) {
+    const b = bbox(it);
+    const x = Math.min(Math.max(b.x, 0), Math.max(S.W - b.w, 0));
+    const y = Math.min(Math.max(b.y, 0), Math.max(S.L - b.h, 0));
+    it.cx = x + b.w / 2; it.cy = y + b.h / 2;
+  }
+  function clampOpening(o) {
+    const len = wallLen(o.wall);
+    o.w = Math.min(o.w, len);
+    o.pos = Math.min(Math.max(o.pos, o.w / 2), len - o.w / 2);
+  }
+
+  // snap one axis: magnet to walls / other items' edges, otherwise the 5 cm grid
+  function snapAxis(start, size, roomSize, edges) {
+    let best = null;
+    edges.concat([0, roomSize]).forEach((e) => {
+      [e - start, e - (start + size)].forEach((delta) => {
+        if (Math.abs(delta) <= MAGNET && (best === null || Math.abs(delta) < Math.abs(best))) best = delta;
+      });
+    });
+    const v = best !== null ? start + best : Math.round(start / GRID) * GRID;
+    return Math.min(Math.max(v, 0), Math.max(roomSize - size, 0));
+  }
+
+  // ── livability analysis ──────────────────────────────────────────────────
+  function analyse() {
+    const warns = [];
+    const zones = {};
+    const boxes = S.items.map(bbox);
+    const doors = S.open.filter((o) => o.t === 'door').map((o) => doorZone(o));
+    const windows = S.open.filter((o) => o.t === 'window').map((o) => windowZone(o));
+    const add = (id, th, en) => { if (!warns.some((w) => w.id === id && w.th === th)) warns.push({ id, th, en }); };
+
+    S.items.forEach((it, i) => {
+      const c = CATALOG[it.t], b = boxes[i];
+      if (!inside(b)) add(it.id, `<b>${esc(c.th)}</b> ใหญ่เกินห้อง`, `<b>${esc(c.en)}</b> does not fit in the room`);
+      for (let j = i + 1; j < S.items.length; j++) {
+        if (inter(b, boxes[j])) {
+          const o = CATALOG[S.items[j].t];
+          add(it.id, `<b>${esc(c.th)}</b> วางทับกับ${esc(o.th)}`, `<b>${esc(c.en)}</b> overlaps the ${esc(o.en.toLowerCase())}`);
+        }
+      }
+      if (doors.some((z) => inter(b, z))) add(it.id, `บานประตูเปิดชน<b>${esc(c.th)}</b>`, `The door swings into the <b>${esc(c.en.toLowerCase())}</b>`);
+      if (c.tall && windows.some((z) => inter(b, z))) add(it.id, `<b>${esc(c.th)}</b> เป็นของสูง วางบังหน้าต่าง`, `<b>${esc(c.en)}</b> is tall and blocks a window`);
+
+      const list = [];
+      (c.clear || []).forEach((rule) => {
+        const res = rule.s.map((side) => {
+          const r = zoneRect(it, side, rule.d, rule.from);
+          const bad = !inside(r) || boxes.some((ob, k) => k !== i && inter(r, ob));
+          return { r, bad };
+        });
+        const fail = rule.any ? res.every((z) => z.bad) : res.some((z) => z.bad);
+        res.forEach((z) => list.push({ r: z.r, bad: z.bad, fail }));
+        if (fail) add(it.id, `<b>${esc(c.th)}</b>: ${esc(rule.th)}`, `<b>${esc(c.en)}</b>: ${esc(rule.en)}`);
+      });
+      zones[it.id] = list;
+    });
+    return { warns, zones };
+  }
+
+  // ── drawing ──────────────────────────────────────────────────────────────
+  const f = (n) => Math.round(n * 10) / 10;
+  const rectSvg = (r, attrs) => `<rect x="${f(r.x)}" y="${f(r.y)}" width="${f(r.w)}" height="${f(r.h)}" ${attrs}/>`;
+
+  function furnitureDetail(it) {
+    const { w, d } = CATALOG[it.t];
+    const st = `fill="none" stroke="${C.itemStroke}" stroke-width="1.2"`;
+    const hw = w / 2, hd = d / 2;
+    switch (it.t) {
+      case 'bed6': case 'bed5':
+        return `<rect x="${-hw + 12}" y="${-hd + 8}" width="${hw - 18}" height="26" rx="6" ${st}/>` +
+               `<rect x="${6}" y="${-hd + 8}" width="${hw - 18}" height="26" rx="6" ${st}/>` +
+               `<path d="M${-hw} ${-hd + 48}H${hw}" ${st}/>`;
+      case 'bed35':
+        return `<rect x="${-hw + 12}" y="${-hd + 8}" width="${w - 24}" height="26" rx="6" ${st}/><path d="M${-hw} ${-hd + 48}H${hw}" ${st}/>`;
+      case 'sofa3': case 'sofa2':
+        return `<path d="M${-hw} ${-hd + 20}H${hw}M${-hw + 16} ${-hd + 20}V${hd}M${hw - 16} ${-hd + 20}V${hd}" ${st}/>`;
+      case 'wardrobe':
+        return `<path d="M0 ${-hd}V${hd}M${-hw} ${hd - 5}H${hw}" ${st}/>`;
+      case 'fridge':
+        return `<path d="M${-hw} ${hd - 6}H${hw}M${-hw + 10} ${-hd + 12}V${hd - 14}" ${st}/>`;
+      case 'washer':
+        return `<circle cx="0" cy="3" r="${Math.min(w, d) / 3}" ${st}/>`;
+      case 'tv':
+        return `<path d="M${-hw + 15} ${hd - 6}H${hw - 15}" fill="none" stroke="${C.itemStroke}" stroke-width="3"/>`;
+      case 'desk': case 'dresser':
+        return `<rect x="-22" y="${hd + 4}" width="44" height="34" rx="8" ${st} stroke-dasharray="3 3"/>`;
+      case 'dining4':
+        return [-w / 4, w / 4].map((x) =>
+          `<rect x="${x - 20}" y="${hd + 4}" width="40" height="34" rx="8" ${st} stroke-dasharray="3 3"/>` +
+          `<rect x="${x - 20}" y="${-hd - 38}" width="40" height="34" rx="8" ${st} stroke-dasharray="3 3"/>`).join('');
+      default:
+        return '';
+    }
+  }
+
+  function build(opts) {
+    const exporting = !!(opts && opts.exporting);
+    const { W, L } = S;
+    const an = analyse();
+    const badIds = new Set(an.warns.map((w) => w.id));
+    let out = '';
+
+    out += `<defs>
+      <pattern id="rpG1" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="${C.grid}" stroke-width="1"/></pattern>
+      <pattern id="rpG2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#rpG1)"/><path d="M100 0H0V100" fill="none" stroke="${C.grid2}" stroke-width="1.2"/></pattern>
+    </defs>`;
+    out += `<rect x="${-PAD}" y="${-PAD}" width="${W + PAD * 2}" height="${L + PAD * 2}" fill="#ffffff"/>`;
+    out += `<rect x="${-WALL}" y="${-WALL}" width="${W + WALL * 2}" height="${L + WALL * 2}" fill="${C.wall}"/>`;
+    out += `<rect x="0" y="0" width="${W}" height="${L}" fill="${C.floor}"/>`;
+    out += `<rect x="0" y="0" width="${W}" height="${L}" fill="url(#rpG2)" data-floor="1"/>`;
+
+    // clearance zones (all zones of the selected item; failing zones of every item)
+    if (!exporting) {
+      S.items.forEach((it) => {
+        (an.zones[it.id] || []).forEach((z) => {
+          const show = it.id === sel || (z.bad && z.fail);
+          if (!show) return;
+          const bad = z.bad && (z.fail || it.id === sel);
+          out += rectSvg(z.r, `fill="${bad ? C.zoneBad : C.zoneOk}" stroke="${bad ? C.bad : C.sel}" stroke-width="1" stroke-dasharray="4 3" pointer-events="none"`);
+        });
+      });
+    }
+
+    // furniture
+    S.items.forEach((it) => {
+      const c = CATALOG[it.t];
+      const isSel = !exporting && it.id === sel;
+      const isBad = !exporting && badIds.has(it.id);
+      const fill = isBad ? C.badFill : C.item;
+      const stroke = isSel ? C.sel : isBad ? C.bad : C.itemStroke;
+      out += `<g data-id="${it.id}" style="cursor:move" transform="translate(${f(it.cx)} ${f(it.cy)}) rotate(${it.rot})">` +
+        `<rect x="${-c.w / 2}" y="${-c.d / 2}" width="${c.w}" height="${c.d}" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="${isSel ? 3 : 1.6}"/>` +
+        furnitureDetail(it) + `</g>`;
+    });
+    // labels stay readable whatever the rotation — narrow, tall items get a label
+    // running along their long side instead of a tiny horizontal one
+    S.items.forEach((it) => {
+      const b = bbox(it);
+      const label = nm(it);
+      const chars = label.length * 0.56;
+      const fsH = Math.min(15, Math.min(b.w, b.h) / 3.2, (b.w - 6) / chars);
+      const fsV = b.h > b.w ? Math.min(15, (b.w - 6) * 0.7, (b.h - 6) / chars) : 0;
+      const vertical = fsV > fsH * 1.15;
+      const fs = Math.max(7, vertical ? fsV : fsH);
+      const showSize = !exporting && it.id === sel && !vertical;
+      const c = CATALOG[it.t];
+      const pos = vertical
+        ? `transform="translate(${f(it.cx)} ${f(it.cy)}) rotate(-90)"`
+        : `x="${f(it.cx)}" y="${f(it.cy - (showSize ? fs * 0.45 : 0))}"`;
+      out += `<text ${pos} font-size="${f(fs)}" font-family="${FONT}" font-weight="600" fill="${C.text}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${esc(label)}</text>`;
+      if (showSize) out += `<text x="${f(it.cx)}" y="${f(it.cy + fs * 0.75)}" font-size="${f(fs * 0.78)}" font-family="${FONT}" fill="${C.dim}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${c.w}×${c.d}</text>`;
+    });
+
+    // doors & windows
+    S.open.forEach((o) => {
+      const a0 = o.pos - o.w / 2, a1 = o.pos + o.w / 2;
+      const isSel = !exporting && o.id === sel;
+      let g = `<g data-id="${o.id}" style="cursor:grab">`;
+      g += rectSvg(rectOf(w2w(o.wall, a0, -WALL - 14), w2w(o.wall, a1, 26)), `fill="rgba(0,0,0,0)"`);
+      g += rectSvg(rectOf(w2w(o.wall, a0, -WALL - 1), w2w(o.wall, a1, 1)), `fill="${C.floor}"`);
+      if (o.t === 'window') {
+        g += rectSvg(rectOf(w2w(o.wall, a0, -WALL), w2w(o.wall, a1, 0)), `fill="${C.glass}" stroke="${isSel ? C.sel : C.glassLine}" stroke-width="${isSel ? 2.5 : 1.4}"`);
+        const m0 = w2w(o.wall, a0, -WALL / 2), m1 = w2w(o.wall, a1, -WALL / 2);
+        g += `<path d="M${f(m0.x)} ${f(m0.y)}L${f(m1.x)} ${f(m1.y)}" stroke="${C.glassLine}" stroke-width="1"/>`;
+      } else {
+        const ah = o.flip ? a1 : a0, s = o.flip ? -1 : 1;
+        const h = w2w(o.wall, ah, 0), leaf = w2w(o.wall, ah, o.w);
+        const pts = [];
+        for (let k = 0; k <= 12; k++) {
+          const th = (Math.PI / 2) * (k / 12);
+          const p = w2w(o.wall, ah + s * o.w * Math.cos(th), o.w * Math.sin(th));
+          pts.push(`${f(p.x)},${f(p.y)}`);
+        }
+        g += `<polyline points="${pts.join(' ')}" fill="none" stroke="${isSel ? C.sel : C.dim}" stroke-width="1.2" stroke-dasharray="5 4"/>`;
+        g += `<path d="M${f(h.x)} ${f(h.y)}L${f(leaf.x)} ${f(leaf.y)}" stroke="${isSel ? C.sel : C.wall}" stroke-width="${isSel ? 4 : 3}" stroke-linecap="round"/>`;
+      }
+      out += g + `</g>`;
+    });
+
+    // room dimensions
+    const dimTxt = (cm) => `${(cm / 100).toFixed(2)} ${isEn() ? 'm' : 'ม.'}`;
+    out += `<text x="${W / 2}" y="${-WALL - 16}" font-size="15" font-family="${FONT}" font-weight="600" fill="${C.dim}" text-anchor="middle" dominant-baseline="central">${dimTxt(W)}</text>`;
+    out += `<text transform="translate(${-WALL - 16} ${L / 2}) rotate(-90)" font-size="15" font-family="${FONT}" font-weight="600" fill="${C.dim}" text-anchor="middle" dominant-baseline="central">${dimTxt(L)}</text>`;
+
+    return { markup: out, an, vb: [-PAD, -PAD, W + PAD * 2, L + PAD * 2] };
+  }
+
+  // ── render UI ────────────────────────────────────────────────────────────
+  const inpW = $('rpW'), inpL = $('rpL');
+  function render(syncInputs) {
+    const { markup, an, vb } = build();
+    svg.setAttribute('viewBox', vb.join(' '));
+    svg.innerHTML = markup;
+
+    if (syncInputs) {
+      inpW.value = (S.W / 100).toFixed(2);
+      inpL.value = (S.L / 100).toFixed(2);
+    }
+    $('rpArea').textContent = ((S.W * S.L) / 10000).toFixed(1);
+
+    // status + warnings
+    const en = isEn();
+    const status = $('rpStatus'), list = $('rpWarns');
+    if (!S.items.length) {
+      status.className = 'rp-status ok';
+      status.innerHTML = en ? 'Add furniture from the list to start planning.' : 'เพิ่มเฟอร์นิเจอร์จากรายการเพื่อเริ่มจัดห้อง';
+    } else if (!an.warns.length) {
+      status.className = 'rp-status ok';
+      status.innerHTML = en ? '<b>✓ All clear</b> — this layout leaves enough room to live comfortably.' : '<b>✓ ผ่านทุกข้อ</b> — จัดวางแบบนี้มีพื้นที่ใช้งานสะดวก';
+    } else {
+      status.className = 'rp-status bad';
+      status.innerHTML = en ? `<b>${an.warns.length} point${an.warns.length > 1 ? 's' : ''} to fix</b> — tap one to select the item.` : `<b>พบ ${an.warns.length} จุดที่ควรปรับ</b> — แตะรายการเพื่อเลือกชิ้นนั้น`;
+    }
+    list.innerHTML = an.warns.map((w) => `<li><button type="button" data-warn="${w.id}">${en ? w.en : w.th}</button></li>`).join('');
+
+    // selection bar
+    const o = sel && find(sel);
+    const bar = $('rpSel');
+    if (!o) { sel = null; bar.hidden = true; return; }
+    bar.hidden = false;
+    const opening = isOpening(o);
+    $('rpSelName').textContent = nm(o);
+    $('rpSelSize').textContent = opening ? `${o.w} ${en ? 'cm' : 'ซม.'}` : `${CATALOG[o.t].w} × ${CATALOG[o.t].d} ${en ? 'cm' : 'ซม.'}`;
+    $('rpRotate').hidden = opening;
+    $('rpDup').hidden = opening;
+    $('rpFlip').hidden = !(opening && o.t === 'door');
+  }
+  const commit = () => { render(false); save(); };
+
+  // ── pointer interaction ──────────────────────────────────────────────────
+  function svgPoint(e) {
+    const p = svg.createSVGPoint();
+    p.x = e.clientX; p.y = e.clientY;
+    return p.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  svg.addEventListener('pointerdown', (e) => {
+    const g = e.target.closest('[data-id]');
+    if (!g) { if (sel) { sel = null; render(false); } return; }
+    const o = find(g.dataset.id);
+    if (!o) return;
+    sel = o.id;
+    const p = svgPoint(e);
+    drag = isOpening(o) ? { id: o.id, moved: false } : { id: o.id, dx: o.cx - p.x, dy: o.cy - p.y, moved: false };
+    try { svg.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    e.preventDefault();
+    render(false);
+  });
+  svg.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const o = find(drag.id);
+    if (!o) return;
+    const p = svgPoint(e);
+    if (isOpening(o)) {
+      const px = Math.min(Math.max(p.x, 0), S.W), py = Math.min(Math.max(p.y, 0), S.L);
+      const d = { top: py, bottom: S.L - py, left: px, right: S.W - px };
+      const wall = Object.keys(d).reduce((a, b) => (d[a] <= d[b] ? a : b));
+      const along = wall === 'top' || wall === 'bottom' ? px : py;
+      const next = { wall, pos: Math.round(along / GRID) * GRID };
+      if (next.wall !== o.wall || next.pos !== o.pos) {
+        o.wall = next.wall; o.pos = next.pos; clampOpening(o);
+        drag.moved = true; render(false);
+      }
+      return;
+    }
+    const b = bbox(o);
+    const others = S.items.filter((i) => i.id !== o.id).map(bbox);
+    const x = snapAxis(p.x + drag.dx - b.w / 2, b.w, S.W, others.flatMap((r) => [r.x, r.x + r.w]));
+    const y = snapAxis(p.y + drag.dy - b.h / 2, b.h, S.L, others.flatMap((r) => [r.y, r.y + r.h]));
+    const cx = x + b.w / 2, cy = y + b.h / 2;
+    if (cx !== o.cx || cy !== o.cy) { o.cx = cx; o.cy = cy; drag.moved = true; render(false); }
+  });
+  const endDrag = () => { if (drag && drag.moved) save(); drag = null; };
+  svg.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointercancel', endDrag);
+
+  // ── actions ──────────────────────────────────────────────────────────────
+  function rotateSel() {
+    const o = sel && find(sel);
+    if (!o || isOpening(o)) return;
+    o.rot = (o.rot + 90) % 360; clampItem(o); commit();
+  }
+  function deleteSel() {
+    if (!sel) return;
+    S.items = S.items.filter((i) => i.id !== sel);
+    S.open = S.open.filter((o) => o.id !== sel);
+    sel = null; commit();
+  }
+  function act(kind) {
+    const o = sel && find(sel);
+    if (!o) return;
+    if (kind === 'rotate') rotateSel();
+    else if (kind === 'del') deleteSel();
+    else if (kind === 'flip' && o.t === 'door') { o.flip = !o.flip; commit(); }
+    else if (kind === 'dup' && !isOpening(o)) {
+      const copy = { ...o, id: uid(), cx: o.cx + 25, cy: o.cy + 25 };
+      clampItem(copy); S.items.push(copy); sel = copy.id; commit();
+    }
+  }
+  document.querySelectorAll('[data-act]').forEach((b) => b.addEventListener('click', () => act(b.dataset.act)));
+
+  document.querySelectorAll('[data-add]').forEach((b) => b.addEventListener('click', () => {
+    const t = b.dataset.add;
+    if (OPENINGS[t]) {
+      const o = { id: uid(), t, wall: t === 'window' ? 'top' : 'bottom', pos: S.W / 2, w: OPENINGS[t].w, flip: false };
+      clampOpening(o); S.open.push(o); sel = o.id;
+    } else {
+      const it = { id: uid(), t, cx: S.W / 2, cy: S.L / 2, rot: 0 };
+      clampItem(it); S.items.push(it); sel = it.id;
+    }
+    commit();
+    svg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }));
+
+  document.querySelectorAll('[data-tpl]').forEach((b) => b.addEventListener('click', () => {
+    if (S.items.length && !confirm(isEn() ? 'Replace the current layout with this template?' : 'แทนที่ห้องที่จัดไว้ด้วยแบบห้องนี้?')) return;
+    S = fromTemplate(b.dataset.tpl); sel = null; render(true); save();
+  }));
+
+  $('rpClear').addEventListener('click', () => {
+    if (!S.items.length) return;
+    if (!confirm(isEn() ? 'Remove all furniture? (doors and windows stay)' : 'ลบเฟอร์นิเจอร์ทั้งหมด? (ประตูและหน้าต่างยังอยู่)')) return;
+    S.items = []; sel = null; commit();
+  });
+
+  $('rpWarns').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-warn]');
+    if (!btn) return;
+    sel = btn.dataset.warn; render(false);
+    svg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  function applySize() {
+    const w = Math.round(parseFloat(inpW.value) * 100), l = Math.round(parseFloat(inpL.value) * 100);
+    if (!(w >= 150 && w <= 1500 && l >= 150 && l <= 1500)) return;
+    S.W = w; S.L = l;
+    S.items.forEach(clampItem);
+    S.open.forEach(clampOpening);
+    commit();
+  }
+  inpW.addEventListener('input', applySize);
+  inpL.addEventListener('input', applySize);
+  [inpW, inpL].forEach((i) => i.addEventListener('change', () => render(true)));
+
+  document.addEventListener('keydown', (e) => {
+    if (!sel) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    const o = find(sel);
+    if (!o) return;
+    const step = e.shiftKey ? 25 : GRID;
+    const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+    if (moves[e.key]) {
+      e.preventDefault();
+      if (isOpening(o)) {
+        const [dx, dy] = moves[e.key];
+        o.pos += o.wall === 'top' || o.wall === 'bottom' ? dx : dy; clampOpening(o);
+      } else {
+        o.cx += moves[e.key][0]; o.cy += moves[e.key][1]; clampItem(o);
+      }
+      commit();
+    } else if (e.key === 'r' || e.key === 'R') { rotateSel(); }
+    else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSel(); }
+    else if (e.key === 'Escape') { sel = null; render(false); }
+  });
+
+  // re-render labels in the other language when TH/EN is toggled
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-lang-btn]')) setTimeout(() => render(false), 0);
+  });
+
+  // ── export PNG ───────────────────────────────────────────────────────────
+  $('rpExport').addEventListener('click', async () => {
+    const prevSel = sel; sel = null;
+    const { markup, vb } = build({ exporting: true });
+    sel = prevSel;
+    const [, , vw, vh] = vb;
+    const scale = Math.min(3, 1600 / Math.max(vw, vh));
+    const cw = Math.round(vw * scale), chPlan = Math.round(vh * scale), footer = 76;
+    const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.join(' ')}" width="${cw}" height="${chPlan}">${markup}</svg>`;
+    const img = new Image();
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
+    try { await img.decode(); } catch (err) { alert(isEn() ? 'Could not create the image.' : 'สร้างรูปภาพไม่สำเร็จ'); return; }
+
+    // keep the image at least 1000px wide so the footer text never cramps; centre narrow plans
+    const outW = Math.max(cw, 1000);
+    const canvas = document.createElement('canvas');
+    canvas.width = outW; canvas.height = chPlan + footer;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, Math.round((outW - cw) / 2), 0, cw, chPlan);
+    ctx.fillStyle = '#16181a'; ctx.fillRect(0, chPlan, outW, footer);
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ffffff'; ctx.font = `700 24px ${FONT}`;
+    ctx.fillText('WHAT THE HOUSE', 24, chPlan + 28);
+    ctx.fillStyle = '#9aa39c'; ctx.font = `400 17px ${FONT}`;
+    const area = ((S.W * S.L) / 10000).toFixed(1);
+    ctx.fillText(isEn()
+      ? `Room ${(S.W / 100).toFixed(2)} × ${(S.L / 100).toFixed(2)} m (${area} sq.m.) · rough sketch, not a construction drawing`
+      : `ห้อง ${(S.W / 100).toFixed(2)} × ${(S.L / 100).toFixed(2)} ม. (${area} ตร.ม.) · แบบร่างคร่าว ๆ ไม่ใช่แบบก่อสร้าง`, 24, chPlan + 54);
+    ctx.textAlign = 'right'; ctx.fillStyle = '#2fe07c'; ctx.font = `600 18px ${FONT}`;
+    ctx.fillText('whatthehouse.net', outW - 24, chPlan + 28);
+
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'wth-room-plan.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }, 'image/png');
+  });
+
+  // ── boot ─────────────────────────────────────────────────────────────────
+  S = load() || fromTemplate('bedroom');
+  S.items.forEach(clampItem);
+  S.open.forEach(clampOpening);
+  render(true);
+})();
+</script>
