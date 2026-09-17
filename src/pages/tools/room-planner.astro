@@ -66,14 +66,6 @@ const OPENINGS = {
   window: { th: 'หน้าต่าง',  en: 'Window', w: 120 },
 };
 
-// Ready-made rooms (size measured wall-centre to wall-centre, cm).
-const ROOM_PRESETS = [
-  { th: 'ห้องนอน',     en: 'Bedroom',     w: 310, h: 360 },
-  { th: 'ห้องนั่งเล่น', en: 'Living room', w: 400, h: 420 },
-  { th: 'ห้องครัว',    en: 'Kitchen',     w: 250, h: 300 },
-  { th: 'ห้องน้ำ',     en: 'Bathroom',    w: 160, h: 210 },
-  { th: 'ระเบียง',     en: 'Balcony',     w: 150, h: 300 },
-];
 const ROOM_NAMES = ['ห้องนอน', 'ห้องนอนใหญ่', 'ห้องนั่งเล่น', 'ห้องครัว', 'ห้องทานข้าว', 'ห้องน้ำ', 'ห้องทำงาน', 'ห้องเก็บของ', 'ห้องซักล้าง', 'ระเบียง', 'ทางเดิน',
   'Bedroom', 'Living room', 'Kitchen', 'Dining room', 'Bathroom', 'Study', 'Storage', 'Laundry', 'Balcony', 'Hallway'];
 
@@ -162,17 +154,6 @@ const TEMPLATES = {
             <!-- palette -->
             <div class="rp-palette">
               <div class="rp-pal-group">
-                <span class="rp-cap"><span class="lang-th">ห้องสำเร็จรูป</span><span class="lang-en">Quick rooms</span></span>
-                <div class="rp-pal-list">
-                  {ROOM_PRESETS.map((r, i) => (
-                    <button type="button" class="rp-add rp-add-room" data-preset={i}>
-                      <b><span class="lang-th">{r.th}</span><span class="lang-en">{r.en}</span></b>
-                      <small>{(r.w / 100).toFixed(1)}×{(r.h / 100).toFixed(1)} m</small>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div class="rp-pal-group">
                 <span class="rp-cap"><span class="lang-th">ประตู &amp; หน้าต่าง</span><span class="lang-en">Doors &amp; windows</span></span>
                 <div class="rp-pal-list">
                   {Object.entries(OPENINGS).map(([id, c]) => (
@@ -226,7 +207,7 @@ const TEMPLATES = {
               <div id="rpHelp">
                 <h3><span class="lang-th">เริ่มต้นใช้งาน</span><span class="lang-en">How it works</span></h3>
                 <ol class="rp-steps-help">
-                  <li><span class="lang-th"><b>ลากบนพื้นที่ว่าง</b>เพื่อวาดห้อง หรือกดห้องสำเร็จรูป วาดห้องถัดไปชิดกันผนังจะต่อกันเอง</span><span class="lang-en block"><b>Drag on empty space</b> to draw a room, or tap a quick room. Rooms drawn side by side join up.</span></li>
+                  <li><span class="lang-th"><b>ลากบนพื้นที่ว่าง</b>เพื่อวาดห้อง วาดห้องถัดไปชิดกันผนังจะต่อกันเอง</span><span class="lang-en block"><b>Drag on empty space</b> to draw a room. Rooms drawn side by side join up.</span></li>
                   <li><span class="lang-th">แตะห้องเพื่อ<b>ตั้งชื่อ ใส่ขนาด</b> หรือเปลี่ยนเป็น<b>ห้องตัว L / มุมเฉียง</b></span><span class="lang-en block">Tap a room to <b>name it, set sizes</b> or make it <b>L-shaped / angled</b>.</span></li>
                   <li><span class="lang-th">เพิ่ม<b>ประตูและหน้าต่าง</b> แล้วลากไปวางบนผนัง</span><span class="lang-en block">Add <b>doors and windows</b> and drag them onto walls.</span></li>
                   <li><span class="lang-th">เพิ่ม<b>เฟอร์นิเจอร์</b> แล้วดูผลตรวจความสะดวกด้านล่าง</span><span class="lang-en block">Add <b>furniture</b> and watch the livability check below.</span></li>
@@ -356,7 +337,6 @@ const TEMPLATES = {
 .rp-add small { font-family: var(--mono); font-size: .64rem; color: var(--grey); }
 .rp-add:hover { border-color: var(--green); background: var(--green-soft); }
 .rp-add-open { border-style: dashed; }
-.rp-add-room { border-color: rgba(47,224,124,.22); }
 
 /* stage */
 .rp-stage { position: relative; background: #efeee8; border-radius: var(--radius-sm); overflow: hidden; }
@@ -451,7 +431,7 @@ const TEMPLATES = {
 }
 </style>
 
-<script define:vars={{ CATALOG, OPENINGS, TEMPLATES, ROOM_PRESETS }}>
+<script define:vars={{ CATALOG, OPENINGS, TEMPLATES }}>
 (function () {
   const $ = (id) => document.getElementById(id);
   const svg = $('rpSvg');
@@ -1043,7 +1023,7 @@ const TEMPLATES = {
       out += vtxt(pb.x - HW - px(16), pb.y + pb.h / 2, px(13), `${m2(pb.h)} ${unitM}`, `font-weight="600" fill="${C.dim}"`);
     } else if (!pb && live && !(drag && drag.moved)) {
       out += txt(vx + vw / 2, vy + vh / 2 - px(14), px(20), en ? 'Drag on the grid to draw your first room' : 'ลากบนตารางเพื่อวาดห้องแรก', `font-weight="700" fill="${C.dim}"`);
-      out += txt(vx + vw / 2, vy + vh / 2 + px(16), px(14), en ? 'or tap a quick room · or open a sample plan' : 'หรือกดเลือกห้องสำเร็จรูป · หรือเปิดแปลนตัวอย่าง', `fill="${C.dim}"`);
+      out += txt(vx + vw / 2, vy + vh / 2 + px(16), px(14), en ? 'or open a sample plan above' : 'หรือเปิดแปลนตัวอย่างด้านบน', `fill="${C.dim}"`);
     }
     return out;
   }
@@ -1470,17 +1450,6 @@ const TEMPLATES = {
       const copy = { ...it, id: uid(), cx: it.cx + 25, cy: it.cy + 25 };
       clampItem(copy); S.items.push(copy); sel = copy.id; commit();
     }
-  }));
-
-  // quick rooms join onto the right-hand side of the plan
-  document.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => {
-    const p = ROOM_PRESETS[Number(b.dataset.preset)];
-    const pb = planBox();
-    pushHistory();
-    const room = { id: uid(), name: isEn() ? p.en : p.th, x: pb ? pb.x + pb.w : 0, y: pb ? pb.y : 0, w: p.w, h: p.h, cut: null };
-    S.rooms.push(room); sel = room.id;
-    reveal(room);
-    commit();
   }));
 
   // doors, windows and furniture
