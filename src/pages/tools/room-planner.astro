@@ -201,7 +201,7 @@ const TEMPLATES = {
               <div id="rpPlanHelp">
                 <h3><span class="lang-th">ขั้นที่ 1: วาดแปลน</span><span class="lang-en">Step 1: draw the plan</span></h3>
                 <ol class="rp-steps-help">
-                  <li><span class="lang-th"><b>ลากบนตาราง</b>เพื่อวาดห้อง หรือกดห้องสำเร็จรูปทางซ้าย</span><span class="lang-en block"><b>Drag on the grid</b> to draw a room, or pick a quick room on the left.</span></li>
+                  <li><span class="lang-th"><b>ลากบนตาราง</b>เพื่อวาดห้อง หรือกดเลือกห้องสำเร็จรูป</span><span class="lang-en block"><b>Drag on the grid</b> to draw a room, or tap a quick room.</span></li>
                   <li><span class="lang-th">วาดห้องถัดไป<b>ชิดห้องเดิม</b> ผนังจะต่อกันเป็นแปลนเดียว</span><span class="lang-en block">Draw the next room <b>against the first</b> — the walls join up into one plan.</span></li>
                   <li><span class="lang-th">แตะห้องเพื่อ<b>ตั้งชื่อและใส่ขนาดจริง</b></span><span class="lang-en block">Tap a room to <b>name it and type exact sizes</b>.</span></li>
                   <li><span class="lang-th">เพิ่ม<b>ประตูและหน้าต่าง</b> แล้วลากไปวางบนผนัง</span><span class="lang-en block">Add <b>doors and windows</b> and drag them onto walls.</span></li>
@@ -377,22 +377,25 @@ const TEMPLATES = {
 .rp-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
 .rp-disclaimer { margin: 16px 4px 0; font-size: .78rem; color: var(--faint); line-height: 1.7; }
 
-/* Built mainly for iPad, Mac and PC. Down to iPad-landscape width (1000px) the
-   side panel stays beside the plan, so edits and warnings stay in view. */
+/* Built mainly for iPad, Mac and PC. On iPad-sized screens the item list becomes one
+   scrolling row above the plan, so the drawing itself gets as much width as possible;
+   down to iPad-landscape width (1000px) the side panel still sits beside the plan. */
 @media (max-width: 1240px) {
-  .rp-body { grid-template-columns: 150px minmax(0, 1fr) 240px; gap: 16px; }
   .rp { padding: 18px; }
+  .rp-body { grid-template-columns: minmax(0, 1fr) 250px; gap: 14px 16px; }
+  .rp-palette { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .rp-palette .rp-cap { margin: 0 2px 0 0; white-space: nowrap; flex: none; }
+  .rp-palette .rp-cap-gap { margin-left: 8px; padding-left: 12px; border-left: 1px solid var(--line); }
+  .rp-pal-list, .rp-pal-scroll { flex-direction: row; flex: none; max-height: none; overflow: visible; padding: 0; }
+  .rp-add { flex: none; padding: 8px 12px; }
+  .rp-add b { white-space: nowrap; }
 }
 @media (max-width: 999px) {
-  .rp-body { grid-template-columns: 150px minmax(0, 1fr); }
+  .rp-body { grid-template-columns: minmax(0, 1fr); }
   .rp-side { grid-column: 1 / -1; }
 }
 @media (max-width: 720px) {
   .rp { padding: 14px; }
-  .rp-body { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .rp-pal-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; max-height: none; padding-bottom: 6px; }
-  .rp-add { flex: none; }
-  .rp-add b { white-space: nowrap; }
   #rpSvg { max-height: 62vh; }
 }
 </style>
@@ -655,9 +658,10 @@ const TEMPLATES = {
     if (frozenVB) return frozenVB;
     const pb = planBox();
     if (S.step === 'furnish' && pb) return [pb.x - PAD, pb.y - PAD, pb.w + PAD * 2, pb.h + PAD * 2];
-    // step 1: a drawing sheet of at least 10 × 7 m that grows around the plan
-    let x0 = -150, y0 = -150, x1 = 1000, y1 = 700;
-    if (pb) { x0 = Math.min(x0, pb.x - 150); y0 = Math.min(y0, pb.y - 150); x1 = Math.max(x1, pb.x + pb.w + 250); y1 = Math.max(y1, pb.y + pb.h + 250); }
+    // step 1: a drawing sheet of about 9 × 6.5 m that grows around the plan — kept
+    // small so rooms are big enough on an iPad to draw and grab with a finger
+    let x0 = -80, y0 = -80, x1 = 820, y1 = 570;
+    if (pb) { x0 = Math.min(x0, pb.x - 80); y0 = Math.min(y0, pb.y - 80); x1 = Math.max(x1, pb.x + pb.w + 200); y1 = Math.max(y1, pb.y + pb.h + 180); }
     return [x0, y0, x1 - x0, y1 - y0];
   }
 
@@ -760,21 +764,36 @@ const TEMPLATES = {
       });
     }
 
-    // room captions: big and centred while planning; small in the corner once furnished
+    // room captions: big and centred while planning; small in the bottom corner once furnished
     const centred = plan || (exporting && !S.items.length);
     const en = isEn();
+    const unitM = en ? 'm' : 'ม.';
+    const halo = `stroke="${C.floor}" stroke-width="${f(px(3.5))}" paint-order="stroke"`;
     S.rooms.forEach((r) => {
       const i = interior(r);
-      const area = ((r.w * r.h) / 10000).toFixed(1);
+      const area = `${((r.w * r.h) / 10000).toFixed(1)} ${en ? 'sq.m.' : 'ตร.ม.'}`;
       if (centred) {
-        const name = esc(r.name);
         const fs = Math.max(px(9), Math.min(px(16), (i.w - px(10)) / (Math.max(r.name.length, 3) * 0.6)));
-        const sub = `${m2(r.w)} × ${m2(r.h)} ${en ? 'm' : 'ม.'} · ${area} ${en ? 'sq.m.' : 'ตร.ม.'}`;
-        const fs2 = Math.max(px(8), Math.min(px(12), (i.w - px(10)) / (sub.length * 0.52)));
-        out += txt(r.x + r.w / 2, r.y + r.h / 2 - fs * 0.6, fs, name, `font-weight="700" fill="${C.text}"`);
-        out += txt(r.x + r.w / 2, r.y + r.h / 2 + fs2 * 0.9, fs2, sub, `fill="${C.dim}"`);
+        out += txt(r.x + r.w / 2, r.y + r.h / 2 - fs * 0.55, fs, esc(r.name), `font-weight="700" fill="${C.text}" ${halo}`);
+        out += txt(r.x + r.w / 2, r.y + r.h / 2 + fs * 0.75, Math.min(px(12), fs * 0.8), area, `fill="${C.dim}" ${halo}`);
       } else {
-        out += `<text x="${f(i.x + px(7))}" y="${f(i.y + px(12))}" font-size="${f(px(11))}" font-family="${FONT}" font-weight="600" fill="${C.dim}" stroke="${C.floor}" stroke-width="${f(px(3))}" paint-order="stroke" pointer-events="none">${esc(r.name)} · ${area} ${en ? 'sq.m.' : 'ตร.ม.'}</text>`;
+        out += `<text x="${f(i.x + px(22))}" y="${f(i.y + i.h - px(9))}" font-size="${f(px(11))}" font-family="${FONT}" font-weight="600" fill="${C.dim}" ${halo} pointer-events="none">${esc(r.name)} · ${area}</text>`;
+      }
+
+      // dimension lines just inside the walls: width along the top, length down the left side
+      const dimCol = plan && r.id === sel ? C.sel : C.dim;
+      const off = px(15), tick = px(5), fsD = px(11.5);
+      const line = `stroke="${dimCol}" stroke-width="${f(px(1))}"`;
+      const label = (cm) => `${m2(cm)} ${unitM}`;
+      if (i.w > px(56)) {
+        const y = i.y + off, x0 = i.x + px(3), x1 = i.x + i.w - px(3);
+        out += `<path d="M${f(x0)} ${f(y)}H${f(x1)}M${f(x0)} ${f(y - tick)}V${f(y + tick)}M${f(x1)} ${f(y - tick)}V${f(y + tick)}" ${line} pointer-events="none"/>`;
+        out += txt((x0 + x1) / 2, y, fsD, label(r.w), `font-weight="600" fill="${dimCol}" ${halo}`);
+      }
+      if (i.h > px(56)) {
+        const x = i.x + off, y0 = i.y + px(3), y1 = i.y + i.h - px(3);
+        out += `<path d="M${f(x)} ${f(y0)}V${f(y1)}M${f(x - tick)} ${f(y0)}H${f(x + tick)}M${f(x - tick)} ${f(y1)}H${f(x + tick)}" ${line} pointer-events="none"/>`;
+        out += `<text transform="translate(${f(x)} ${f((y0 + y1) / 2)}) rotate(-90)" font-size="${f(fsD)}" font-family="${FONT}" font-weight="600" fill="${dimCol}" ${halo} text-anchor="middle" dominant-baseline="central" pointer-events="none">${label(r.h)}</text>`;
       }
     });
 
@@ -797,28 +816,33 @@ const TEMPLATES = {
       const ok = r.w >= MIN_ROOM && r.h >= MIN_ROOM;
       const col = ok ? C.sel : C.bad;
       out += rectSvg(r, `fill="${ok ? 'rgba(18,153,90,.10)' : 'rgba(217,67,74,.08)'}" stroke="${col}" stroke-width="${f(px(2))}" stroke-dasharray="${f(px(8))} ${f(px(5))}" pointer-events="none"`);
-      out += txt(r.x + r.w / 2, r.y + r.h / 2, px(14), `${m2(r.w)} × ${m2(r.h)} ${en ? 'm' : 'ม.'}`, `font-weight="700" fill="${col}"`);
+      // size readout sits above the shape so a finger dragging the corner never covers it
+      const ly = r.y - px(22) > vy + px(14) ? r.y - px(22) : r.y + r.h + px(22);
+      out += txt(r.x + r.w / 2, ly, px(16), `${m2(r.w)} × ${m2(r.h)} ${unitM}`, `font-weight="700" fill="${col}" stroke="#ffffff" stroke-width="${f(px(4))}" paint-order="stroke"`);
     }
 
-    // overall plan dimensions
+    // overall plan dimensions (only worth showing once there is more than one room)
     const pb = planBox();
-    if (pb) {
+    if (pb && S.rooms.length > 1) {
       out += txt(pb.x + pb.w / 2, pb.y - HW - px(16), px(13), `${m2(pb.w)} ${en ? 'm' : 'ม.'}`, `font-weight="600" fill="${C.dim}"`);
       out += `<text transform="translate(${f(pb.x - HW - px(16))} ${f(pb.y + pb.h / 2)}) rotate(-90)" font-size="${f(px(13))}" font-family="${FONT}" font-weight="600" fill="${C.dim}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${m2(pb.h)} ${en ? 'm' : 'ม.'}</text>`;
-    } else if (plan && !(drag && drag.active)) {
+    } else if (!pb && plan && !(drag && drag.active)) {
       out += txt(vx + vw / 2, vy + vh / 2 - px(14), px(20), en ? 'Drag on the grid to draw your first room' : 'ลากบนตารางเพื่อวาดห้องแรก', `font-weight="700" fill="${C.dim}"`);
-      out += txt(vx + vw / 2, vy + vh / 2 + px(16), px(14), en ? 'or pick a quick room on the left · or open a sample plan' : 'หรือกดห้องสำเร็จรูปด้านซ้าย · หรือเปิดแปลนตัวอย่างด้านบน', `fill="${C.dim}"`);
+      out += txt(vx + vw / 2, vy + vh / 2 + px(16), px(14), en ? 'or tap a quick room · or open a sample plan' : 'หรือกดเลือกห้องสำเร็จรูป · หรือเปิดแปลนตัวอย่าง', `fill="${C.dim}"`);
     }
     return out;
   }
 
   // ── render ───────────────────────────────────────────────────────────────
+  svg.innerHTML = '<g id="rpScene"></g><rect id="rpHitLayer" fill="rgba(0,0,0,0)"/>';
+  const scene = $('rpScene'), hitLayer = $('rpHitLayer');
   function render() {
     const vb = computeVB();
     svg.setAttribute('viewBox', vb.join(' '));
+    ['x', 'y', 'width', 'height'].forEach((a, i) => hitLayer.setAttribute(a, vb[i]));
     const ctm = svg.getScreenCTM();
     if (ctm && ctm.a > 0) pxPerCm = ctm.a;
-    svg.innerHTML = build(vb, 1 / pxPerCm, false);
+    scene.innerHTML = build(vb, 1 / pxPerCm, false);
     updatePanels();
   }
   const commit = () => { render(); save(); };
@@ -890,25 +914,51 @@ const TEMPLATES = {
     if (!drag.moved) { if (drag.kind !== 'draw') pushHistory(); drag.moved = true; }
   }
 
+  // What is under the pointer, worked out from the plan data rather than from DOM targets.
+  // All touches land on one permanent transparent layer: iPad Safari stops following a
+  // finger whose touched element gets replaced, and the drawing is redrawn on every move.
+  function hitTest(p) {
+    const k = 1 / pxPerCm;
+    if (S.step === 'plan') {
+      const r = sel && roomById(sel);
+      if (r) {
+        const reach = 30 * k;   // generous finger-sized reach around each handle
+        const handles = [['top', r.x + r.w / 2, r.y], ['bottom', r.x + r.w / 2, r.y + r.h], ['left', r.x, r.y + r.h / 2], ['right', r.x + r.w, r.y + r.h / 2]];
+        const hit = handles.find(([, x, y]) => Math.abs(p.x - x) <= reach && Math.abs(p.y - y) <= reach);
+        if (hit) return { kind: 'handle', edge: hit[0] };
+      }
+      for (const o of S.open.slice().reverse()) {
+        const rr = roomById(o.room);
+        if (rr && containsPt(rectOf(w2w(rr, o.wall, o.pos - o.w / 2, -22 * k), w2w(rr, o.wall, o.pos + o.w / 2, 22 * k)), p.x, p.y)) return { kind: 'open', id: o.id };
+      }
+      const room = S.rooms.slice().reverse().find((x) => containsPt(interior(x), p.x, p.y));
+      return room ? { kind: 'room', id: room.id } : null;
+    }
+    const pad = 4 * k;
+    const grow = (b) => ({ x: b.x - pad, y: b.y - pad, w: b.w + pad * 2, h: b.h + pad * 2 });
+    const cur = sel && itemById(sel);
+    if (cur && containsPt(grow(bbox(cur)), p.x, p.y)) return { kind: 'item', id: cur.id };
+    const it = S.items.slice().reverse().find((x) => containsPt(grow(bbox(x)), p.x, p.y));
+    return it ? { kind: 'item', id: it.id } : null;
+  }
+
   svg.addEventListener('pointerdown', (e) => {
     if (e.button) return;
     frozenVB = null;
     frozenVB = computeVB();
     const p = svgPoint(e);
     const plan = S.step === 'plan';
-    const handle = e.target.closest('[data-handle]');
-    const idEl = e.target.closest('[data-id]');
-    const roomEl = e.target.closest('[data-room]');
+    const hit = hitTest(p);
     drag = null;
 
-    if (plan && handle && roomById(sel)) {
-      drag = { kind: 'resize', id: sel, edge: handle.dataset.handle };
-    } else if (idEl && (itemById(idEl.dataset.id) || openById(idEl.dataset.id))) {
-      const id = idEl.dataset.id, it = itemById(id);
-      sel = id;
-      drag = it ? { kind: 'item', id, dx: it.cx - p.x, dy: it.cy - p.y } : { kind: 'open', id };
-    } else if (plan && roomEl && roomById(roomEl.dataset.room)) {
-      const r = roomById(roomEl.dataset.room), inr = interior(r);
+    if (hit && hit.kind === 'handle') {
+      drag = { kind: 'resize', id: sel, edge: hit.edge };
+    } else if (hit && (hit.kind === 'item' || hit.kind === 'open')) {
+      const it = itemById(hit.id);
+      sel = hit.id;
+      drag = it ? { kind: 'item', id: hit.id, dx: it.cx - p.x, dy: it.cy - p.y } : { kind: 'open', id: hit.id };
+    } else if (hit && hit.kind === 'room') {
+      const r = roomById(hit.id), inr = interior(r);
       sel = r.id;
       drag = { kind: 'room', id: r.id, dx: r.x - p.x, dy: r.y - p.y, sx: r.x, sy: r.y,
         carry: S.items.filter((it) => containsPt(inr, it.cx, it.cy)).map((it) => ({ id: it.id, cx: it.cx, cy: it.cy })) };
@@ -926,8 +976,17 @@ const TEMPLATES = {
     render();
   });
 
+  const CURSORS = { handle: null, open: 'grab', room: 'move', item: 'move' };
   svg.addEventListener('pointermove', (e) => {
-    if (!drag) return;
+    if (!drag) {
+      // mouse hover: show what a drag would do
+      if (e.pointerType === 'mouse') {
+        const h = hitTest(svgPoint(e));
+        hitLayer.style.cursor = !h ? (S.step === 'plan' ? 'crosshair' : 'default')
+          : h.kind === 'handle' ? (h.edge === 'top' || h.edge === 'bottom' ? 'ns-resize' : 'ew-resize') : CURSORS[h.kind];
+      }
+      return;
+    }
     const p = svgPoint(e);
 
     if (drag.kind === 'draw') {
