@@ -47,52 +47,63 @@ const OPENINGS = {
   window: { th: 'หน้าต่าง',  en: 'Window', w: 120 },
 };
 
-// Starter rooms. Items are { t, cx, cy, rot } — centre point in cm, rotation in
-// degrees clockwise (0 = front faces down). Openings sit on a wall at `pos` cm.
+// Ready-made rooms for step 1 (size measured wall-centre to wall-centre, cm).
+const ROOM_PRESETS = [
+  { th: 'ห้องนอน',     en: 'Bedroom',     w: 310, h: 360 },
+  { th: 'ห้องนั่งเล่น', en: 'Living room', w: 400, h: 420 },
+  { th: 'ห้องครัว',    en: 'Kitchen',     w: 250, h: 300 },
+  { th: 'ห้องน้ำ',     en: 'Bathroom',    w: 160, h: 210 },
+  { th: 'ระเบียง',     en: 'Balcony',     w: 150, h: 300 },
+];
+const ROOM_NAMES = ['ห้องนอน', 'ห้องนอนใหญ่', 'ห้องนั่งเล่น', 'ห้องครัว', 'ห้องทานข้าว', 'ห้องน้ำ', 'ห้องทำงาน', 'ห้องเก็บของ', 'ห้องซักล้าง', 'ระเบียง', 'ทางเดิน',
+  'Bedroom', 'Living room', 'Kitchen', 'Dining room', 'Bathroom', 'Study', 'Storage', 'Laundry', 'Balcony', 'Hallway'];
+
+// Sample plans. Rooms are rectangles on wall centre-lines (walls are 10 cm thick,
+// so the usable floor is 5 cm in from each line). Openings sit on one room's wall
+// at `pos` cm along it. Furniture is { t, cx, cy, rot }: centre point in cm and
+// rotation in degrees clockwise (0 = the front faces down the screen).
 const TEMPLATES = {
-  bedroom: { th: 'ห้องนอนคอนโด', en: 'Condo bedroom', W: 300, L: 350,
-    items: [
-      { t: 'bed5', cx: 150, cy: 100, rot: 0 },
-      { t: 'nightstand', cx: 52.5, cy: 20, rot: 0 },
-      { t: 'nightstand', cx: 247.5, cy: 20, rot: 0 },
-      { t: 'wardrobe', cx: 30, cy: 270, rot: 270 },
+  condo1: { th: 'คอนโด 1 ห้องนอน', en: '1-bedroom condo',
+    rooms: [
+      { key: 'living', th: 'ห้องนั่งเล่น + ครัว', en: 'Living & kitchen', x: 0,   y: 0,   w: 400, h: 530 },
+      { key: 'bed',    th: 'ห้องนอน',           en: 'Bedroom',          x: 400, y: 0,   w: 350, h: 350 },
+      { key: 'bath',   th: 'ห้องน้ำ',            en: 'Bathroom',         x: 400, y: 350, w: 200, h: 180 },
     ],
     open: [
-      { t: 'window', wall: 'top', pos: 150, w: 150 },
-      { t: 'door', wall: 'bottom', pos: 240, w: 80 },
-    ] },
-  living: { th: 'ห้องนั่งเล่น + ทานข้าว', en: 'Living & dining', W: 400, L: 500,
-    items: [
-      { t: 'sofa3', cx: 42.5, cy: 160, rot: 270 },
-      { t: 'coffee', cx: 155, cy: 160, rot: 90 },
-      { t: 'tv', cx: 380, cy: 160, rot: 90 },
-      { t: 'dining4', cx: 300, cy: 390, rot: 0 },
+      { t: 'door',   room: 'living', wall: 'bottom', pos: 80,  w: 90 },
+      { t: 'window', room: 'living', wall: 'left',   pos: 220, w: 200 },
+      { t: 'door',   room: 'bed',    wall: 'left',   pos: 280, w: 80 },
+      { t: 'window', room: 'bed',    wall: 'top',    pos: 175, w: 180 },
+      { t: 'door',   room: 'bath',   wall: 'top',    pos: 150, w: 70 },
     ],
-    open: [
-      { t: 'window', wall: 'top', pos: 200, w: 200 },
-      { t: 'door', wall: 'left', pos: 420, w: 90 },
-    ] },
-  studio: { th: 'คอนโดสตูดิโอ 24 ตร.ม.', en: 'Studio condo 24 sq.m.', W: 350, L: 700,
     items: [
-      { t: 'bed5', cx: 100, cy: 100, rot: 0 },
-      { t: 'nightstand', cx: 197.5, cy: 20, rot: 0 },
-      { t: 'wardrobe', cx: 320, cy: 160, rot: 90 },
-      { t: 'sofa2', cx: 42.5, cy: 400, rot: 270 },
-      { t: 'tv', cx: 330, cy: 400, rot: 90 },
-      { t: 'fridge', cx: 35, cy: 665, rot: 180 },
-    ],
-    open: [
-      { t: 'window', wall: 'top', pos: 175, w: 250 },
-      { t: 'door', wall: 'bottom', pos: 290, w: 80 },
+      { t: 'sofa3', cx: 47.5, cy: 200, rot: 270 },
+      { t: 'coffee', cx: 160, cy: 200, rot: 90 },
+      { t: 'tv', cx: 375, cy: 150, rot: 90 },
+      { t: 'dining4', cx: 250, cy: 410, rot: 0 },
+      { t: 'fridge', cx: 360, cy: 490, rot: 90 },
+      { t: 'bed5', cx: 575, cy: 105, rot: 0 },
+      { t: 'nightstand', cx: 477.5, cy: 25, rot: 0 },
+      { t: 'nightstand', cx: 672.5, cy: 25, rot: 0 },
+      { t: 'wardrobe', cx: 715, cy: 280, rot: 90 },
     ] },
-  empty: { th: 'ห้องว่าง', en: 'Empty room', W: 300, L: 400, items: [], open: [
-      { t: 'door', wall: 'bottom', pos: 250, w: 80 },
+  bedroom: { th: 'ห้องนอนเดี่ยว', en: 'Single bedroom',
+    rooms: [ { key: 'bed', th: 'ห้องนอน', en: 'Bedroom', x: 0, y: 0, w: 310, h: 360 } ],
+    open: [
+      { t: 'window', room: 'bed', wall: 'top',    pos: 155, w: 150 },
+      { t: 'door',   room: 'bed', wall: 'bottom', pos: 245, w: 80 },
+    ],
+    items: [
+      { t: 'bed5', cx: 155, cy: 105, rot: 0 },
+      { t: 'nightstand', cx: 57.5, cy: 25, rot: 0 },
+      { t: 'nightstand', cx: 252.5, cy: 25, rot: 0 },
+      { t: 'wardrobe', cx: 35, cy: 275, rot: 270 },
     ] },
 };
 ---
 <BaseLayout
-  title="จัดวางเฟอร์นิเจอร์ในห้องออนไลน์ ฟรี | วาดแปลนห้องง่าย ๆ | WHAT THE HOUSE"
-  description="ลองจัดวางเฟอร์นิเจอร์ในห้องด้วยตัวเอง ฟรี ไม่ต้องสมัคร ใช้ขนาดเฟอร์นิเจอร์จริงแบบไทย พร้อมเตือนเมื่อทางเดินแคบ ประตูเปิดชน หรือเปิดตู้ไม่สุด บันทึกเป็นรูปภาพได้ | Free room & furniture layout planner"
+  title="วาดแปลนห้องและจัดวางเฟอร์นิเจอร์ออนไลน์ ฟรี | WHAT THE HOUSE"
+  description="วาดแปลนบ้านหรือคอนโดง่าย ๆ แล้วลองจัดวางเฟอร์นิเจอร์ขนาดจริงด้วยตัวเอง ฟรี ไม่ต้องสมัคร พร้อมเตือนเมื่อทางเดินแคบ ประตูเปิดชน หรือเปิดตู้ไม่สุด บันทึกเป็นรูปภาพได้ | Free floor plan & furniture layout planner"
 >
   <Header />
   <main>
@@ -100,56 +111,68 @@ const TEMPLATES = {
     <!-- PAGE HERO -->
     <section class="page-hero">
       <div class="container">
-        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">จัดวางเฟอร์นิเจอร์</span><span class="lang-en">Room Planner</span></p>
+        <p class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/tools"><span class="lang-th">เครื่องมือ</span><span class="lang-en">Tools</span></a> / <span class="lang-th">วาดแปลน &amp; จัดเฟอร์นิเจอร์</span><span class="lang-en">Room Planner</span></p>
         <span class="eyebrow"><span class="lang-th">เครื่องมือ · ต้นแบบ</span><span class="lang-en">Free Tool · Beta</span></span>
-        <h1><span class="lang-th">ลองจัดวางเฟอร์นิเจอร์<br>ก่อนซื้อ ก่อนย้ายเข้า</span><span class="lang-en">Plan your furniture before you buy or move in</span></h1>
-        <p><span class="lang-th">ลากวางเฟอร์นิเจอร์ขนาดจริงลงในห้อง ระบบช่วยเช็กว่าวางแล้ว<b>ใช้ชีวิตได้จริง</b> — ทางเดินพอไหม ประตูเปิดชนไหม ตู้เปิดสุดไหม</span><span class="lang-en block">Drag real-size furniture into your room and we check it actually <b>works day to day</b> — enough walkway, doors that open, wardrobes that swing fully.</span></p>
+        <h1><span class="lang-th">วาดแปลนห้อง<br>แล้วลองจัดเฟอร์นิเจอร์</span><span class="lang-en">Sketch your floor plan, then plan the furniture</span></h1>
+        <p><span class="lang-th">วาดแปลนคร่าว ๆ ของบ้านหรือคอนโด แล้วลากวางเฟอร์นิเจอร์ขนาดจริง ระบบช่วยเช็กว่าวางแล้ว<b>ใช้ชีวิตได้จริง</b> — ทางเดินพอไหม ประตูเปิดชนไหม ตู้เปิดสุดไหม</span><span class="lang-en block">Sketch a rough plan of your home, then drag in real-size furniture — we check it actually <b>works day to day</b>: enough walkway, doors that open, wardrobes that swing fully.</span></p>
       </div>
     </section>
 
     <section class="section rp-section">
       <div class="container">
-        <div class="rp">
+        <div class="rp" id="rp">
 
-          <!-- top bar: templates + room size -->
+          <!-- top bar: steps + samples + undo -->
           <div class="rp-top">
-            <div class="rp-tpls">
-              <span class="rp-cap"><span class="lang-th">เริ่มจากแบบห้อง</span><span class="lang-en">Start from</span></span>
-              <div class="rp-tpl-btns">
-                {Object.entries(TEMPLATES).map(([id, t]) => (
-                  <button type="button" class="rp-chip" data-tpl={id}><span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span></button>
-                ))}
-              </div>
+            <div class="rp-steps" role="tablist">
+              <button type="button" class="rp-step on" id="rpStepPlan" role="tab">
+                <i>1</i><span><span class="lang-th">วาดแปลน</span><span class="lang-en">Draw the plan</span></span>
+              </button>
+              <span class="rp-step-line"></span>
+              <button type="button" class="rp-step" id="rpStepFurn" role="tab">
+                <i>2</i><span><span class="lang-th">จัดเฟอร์นิเจอร์</span><span class="lang-en">Add furniture</span></span>
+              </button>
             </div>
-            <div class="rp-size">
-              <label>
-                <span class="rp-cap"><span class="lang-th">กว้าง (ม.)</span><span class="lang-en">Width (m)</span></span>
-                <input type="number" id="rpW" min="1.5" max="15" step="0.05" inputmode="decimal" />
-              </label>
-              <span class="rp-x">×</span>
-              <label>
-                <span class="rp-cap"><span class="lang-th">ยาว (ม.)</span><span class="lang-en">Length (m)</span></span>
-                <input type="number" id="rpL" min="1.5" max="15" step="0.05" inputmode="decimal" />
-              </label>
-              <span class="rp-area"><b id="rpArea">—</b> <span class="lang-th">ตร.ม.</span><span class="lang-en">sq.m.</span></span>
+            <div class="rp-top-right">
+              <span class="rp-cap rp-cap-inline"><span class="lang-th">แปลนตัวอย่าง</span><span class="lang-en">Samples</span></span>
+              {Object.entries(TEMPLATES).map(([id, t]) => (
+                <button type="button" class="rp-chip" data-tpl={id}><span class="lang-th">{t.th}</span><span class="lang-en">{t.en}</span></button>
+              ))}
+              <button type="button" class="rp-chip rp-undo" id="rpUndo" disabled title="Ctrl/⌘ + Z">↶ <span class="lang-th">ย้อนกลับ</span><span class="lang-en">Undo</span></button>
             </div>
           </div>
 
           <div class="rp-body">
-            <!-- palette -->
-            <div class="rp-palette">
-              <span class="rp-cap rp-pal-head"><span class="lang-th">แตะเพื่อเพิ่ม</span><span class="lang-en">Tap to add</span></span>
+            <!-- palette: step 1 -->
+            <div class="rp-palette" id="rpPalPlan">
+              <span class="rp-cap"><span class="lang-th">ห้องสำเร็จรูป</span><span class="lang-en">Quick rooms</span></span>
               <div class="rp-pal-list">
+                {ROOM_PRESETS.map((r, i) => (
+                  <button type="button" class="rp-add" data-preset={i}>
+                    <b><span class="lang-th">{r.th}</span><span class="lang-en">{r.en}</span></b>
+                    <small>{(r.w / 100).toFixed(1)}×{(r.h / 100).toFixed(1)} m</small>
+                  </button>
+                ))}
+              </div>
+              <span class="rp-cap rp-cap-gap"><span class="lang-th">ประตู &amp; หน้าต่าง</span><span class="lang-en">Doors &amp; windows</span></span>
+              <div class="rp-pal-list">
+                {Object.entries(OPENINGS).map(([id, c]) => (
+                  <button type="button" class="rp-add rp-add-open" data-add={id}>
+                    <b><span class="lang-th">{c.th}</span><span class="lang-en">{c.en}</span></b>
+                    <small>{c.w} cm</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <!-- palette: step 2 -->
+            <div class="rp-palette" id="rpPalFurn" hidden>
+              <span class="rp-cap"><span class="lang-th">แตะเพื่อเพิ่ม</span><span class="lang-en">Tap to add</span></span>
+              <div class="rp-pal-list rp-pal-scroll">
                 {Object.entries(CATALOG).map(([id, c]) => (
                   <button type="button" class="rp-add" data-add={id}>
                     <b><span class="lang-th">{c.th}</span><span class="lang-en">{c.en}</span></b>
                     <small>{c.w}×{c.d}</small>
-                  </button>
-                ))}
-                {Object.entries(OPENINGS).map(([id, c]) => (
-                  <button type="button" class="rp-add rp-add-open" data-add={id}>
-                    <b><span class="lang-th">{c.th}</span><span class="lang-en">{c.en}</span></b>
-                    <small>{c.w}</small>
                   </button>
                 ))}
               </div>
@@ -158,23 +181,81 @@ const TEMPLATES = {
             <!-- drawing -->
             <div class="rp-main">
               <div class="rp-stage">
-                <svg id="rpSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Room plan"></svg>
+                <svg id="rpSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Floor plan"></svg>
               </div>
 
               <div class="rp-selbar" id="rpSel" hidden>
                 <div class="rp-sel-info"><b id="rpSelName"></b> <small id="rpSelSize"></small></div>
                 <div class="rp-sel-btns">
-                  <button type="button" class="rp-btn" data-act="rotate" id="rpRotate">⟳ <span class="lang-th">หมุน</span><span class="lang-en">Rotate</span></button>
-                  <button type="button" class="rp-btn" data-act="flip" id="rpFlip">⇋ <span class="lang-th">กลับด้านบาน</span><span class="lang-en">Flip swing</span></button>
-                  <button type="button" class="rp-btn" data-act="dup" id="rpDup">⧉ <span class="lang-th">ทำซ้ำ</span><span class="lang-en">Duplicate</span></button>
+                  <button type="button" class="rp-btn" data-act="rotate">⟳ <span class="lang-th">หมุน</span><span class="lang-en">Rotate</span></button>
+                  <button type="button" class="rp-btn" data-act="dup">⧉ <span class="lang-th">ทำซ้ำ</span><span class="lang-en">Duplicate</span></button>
                   <button type="button" class="rp-btn rp-btn-del" data-act="del">✕ <span class="lang-th">ลบ</span><span class="lang-en">Delete</span></button>
                 </div>
               </div>
-              <p class="rp-hint"><span class="lang-th">ลากเพื่อย้าย · คลิก/แตะสองครั้งเพื่อหมุน · ประตู/หน้าต่างลากไปติดผนังไหนก็ได้ · คีย์บอร์ด: ลูกศรขยับ (Shift = ทีละ 25 ซม.), R หมุน, Delete ลบ</span><span class="lang-en block">Drag to move · double-click or double-tap to rotate · doors &amp; windows snap to any wall · keyboard: arrows nudge (Shift = 25 cm), R rotates, Delete removes</span></p>
+              <p class="rp-hint" id="rpHintPlan"><span class="lang-th">ลากบนตารางว่างเพื่อวาดห้อง · ลากตัวห้องเพื่อย้าย (วางชิดกันผนังจะต่อกันเอง) · ลากปุ่มสีเขียวที่ขอบเพื่อปรับขนาด · ลากประตู/หน้าต่างไปวางบนผนังไหนก็ได้</span><span class="lang-en block">Drag on empty grid to draw a room · drag a room to move it (rooms snap wall-to-wall) · drag the green handles to resize · drag doors &amp; windows onto any wall</span></p>
+              <p class="rp-hint" id="rpHintFurn" hidden><span class="lang-th">ลากเพื่อย้าย · คลิก/แตะสองครั้งเพื่อหมุน · คีย์บอร์ด: ลูกศรขยับ (Shift = ทีละ 25 ซม.), R หมุน, Delete ลบ</span><span class="lang-en block">Drag to move · double-click or double-tap to rotate · keyboard: arrows nudge (Shift = 25 cm), R rotates, Delete removes</span></p>
             </div>
 
-            <!-- checks + actions -->
-            <aside class="rp-side">
+            <!-- side: step 1 -->
+            <aside class="rp-side" id="rpPlanSide">
+              <div id="rpPlanHelp">
+                <h3><span class="lang-th">ขั้นที่ 1: วาดแปลน</span><span class="lang-en">Step 1: draw the plan</span></h3>
+                <ol class="rp-steps-help">
+                  <li><span class="lang-th"><b>ลากบนตาราง</b>เพื่อวาดห้อง หรือกดห้องสำเร็จรูปทางซ้าย</span><span class="lang-en block"><b>Drag on the grid</b> to draw a room, or pick a quick room on the left.</span></li>
+                  <li><span class="lang-th">วาดห้องถัดไป<b>ชิดห้องเดิม</b> ผนังจะต่อกันเป็นแปลนเดียว</span><span class="lang-en block">Draw the next room <b>against the first</b> — the walls join up into one plan.</span></li>
+                  <li><span class="lang-th">แตะห้องเพื่อ<b>ตั้งชื่อและใส่ขนาดจริง</b></span><span class="lang-en block">Tap a room to <b>name it and type exact sizes</b>.</span></li>
+                  <li><span class="lang-th">เพิ่ม<b>ประตูและหน้าต่าง</b> แล้วลากไปวางบนผนัง</span><span class="lang-en block">Add <b>doors and windows</b> and drag them onto walls.</span></li>
+                </ol>
+              </div>
+
+              <div class="rp-edit" id="rpRoomEdit" hidden>
+                <h3><span class="lang-th">ห้องที่เลือก</span><span class="lang-en">Selected room</span></h3>
+                <label class="rp-field">
+                  <span class="rp-cap"><span class="lang-th">ชื่อห้อง</span><span class="lang-en">Room name</span></span>
+                  <input type="text" id="rpRoomName" list="rpRoomNames" maxlength="30" />
+                  <datalist id="rpRoomNames">{ROOM_NAMES.map((n) => <option value={n} />)}</datalist>
+                </label>
+                <div class="rp-field-row">
+                  <label class="rp-field">
+                    <span class="rp-cap"><span class="lang-th">กว้าง (ม.)</span><span class="lang-en">Width (m)</span></span>
+                    <input type="number" id="rpRoomW" min="1" max="30" step="0.05" inputmode="decimal" />
+                  </label>
+                  <label class="rp-field">
+                    <span class="rp-cap"><span class="lang-th">ยาว (ม.)</span><span class="lang-en">Length (m)</span></span>
+                    <input type="number" id="rpRoomL" min="1" max="30" step="0.05" inputmode="decimal" />
+                  </label>
+                </div>
+                <p class="rp-mini"><span class="lang-th">ขนาดวัดจากกึ่งกลางผนัง</span><span class="lang-en">Measured wall-centre to wall-centre</span></p>
+                <button type="button" class="rp-btn rp-btn-del" id="rpRoomDel">✕ <span class="lang-th">ลบห้องนี้</span><span class="lang-en">Delete room</span></button>
+              </div>
+
+              <div class="rp-edit" id="rpOpenEdit" hidden>
+                <h3 id="rpOpenTitle"></h3>
+                <label class="rp-field">
+                  <span class="rp-cap"><span class="lang-th">ความกว้าง (ซม.)</span><span class="lang-en">Width (cm)</span></span>
+                  <input type="number" id="rpOpenW" min="40" max="400" step="5" inputmode="numeric" />
+                </label>
+                <div class="rp-sel-btns">
+                  <button type="button" class="rp-btn" id="rpOpenFlip">⇋ <span class="lang-th">สลับฝั่งบานพับ</span><span class="lang-en">Flip hinge</span></button>
+                  <button type="button" class="rp-btn" id="rpOpenOut">⇅ <span class="lang-th">สลับทิศเปิด</span><span class="lang-en">Swing other way</span></button>
+                  <button type="button" class="rp-btn rp-btn-del" id="rpOpenDel">✕ <span class="lang-th">ลบ</span><span class="lang-en">Delete</span></button>
+                </div>
+              </div>
+
+              <div class="rp-summary">
+                <span class="rp-cap"><span class="lang-th">ห้องในแปลน</span><span class="lang-en">Rooms in the plan</span></span>
+                <ul class="rp-roomlist" id="rpRoomList"></ul>
+                <ul class="rp-warns" id="rpPlanWarns"></ul>
+              </div>
+
+              <div class="rp-actions">
+                <button type="button" class="btn btn-primary" id="rpToFurnish"><span class="lang-th">ถัดไป: จัดเฟอร์นิเจอร์ →</span><span class="lang-en">Next: add furniture →</span></button>
+                <button type="button" class="btn btn-ghost" id="rpClearAll"><span class="lang-th">เริ่มวาดใหม่</span><span class="lang-en">Start over</span></button>
+              </div>
+            </aside>
+
+            <!-- side: step 2 -->
+            <aside class="rp-side" id="rpFurnSide" hidden>
               <h3><span class="lang-th">ตรวจความสะดวกในการใช้งาน</span><span class="lang-en">Livability check</span></h3>
               <div class="rp-status" id="rpStatus"></div>
               <ul class="rp-warns" id="rpWarns"></ul>
@@ -185,10 +266,11 @@ const TEMPLATES = {
               </div>
 
               <div class="rp-actions">
-                <button type="button" class="btn btn-primary" id="rpExport"><span class="lang-th">บันทึกเป็นรูปภาพ</span><span class="lang-en">Save as image</span></button>
+                <button type="button" class="btn btn-primary rp-export"><span class="lang-th">บันทึกเป็นรูปภาพ</span><span class="lang-en">Save as image</span></button>
+                <button type="button" class="btn btn-ghost" id="rpToPlan"><span class="lang-th">← กลับไปแก้แปลน</span><span class="lang-en">← Edit the plan</span></button>
                 <button type="button" class="btn btn-ghost" id="rpClear"><span class="lang-th">ล้างเฟอร์นิเจอร์</span><span class="lang-en">Clear furniture</span></button>
               </div>
-              <p class="rp-note"><span class="lang-th">งานจะถูกเก็บไว้ในเครื่องของคุณอัตโนมัติ ไม่ต้องสมัครสมาชิก และไม่ส่งข้อมูลให้ใคร</span><span class="lang-en block">Your layout is saved on this device automatically — no sign-up, nothing sent anywhere.</span></p>
+              <p class="rp-note"><span class="lang-th">งานจะถูกเก็บไว้ในเครื่องของคุณอัตโนมัติ ไม่ต้องสมัครสมาชิก และไม่ส่งข้อมูลให้ใคร</span><span class="lang-en block">Your plan is saved on this device automatically — no sign-up, nothing sent anywhere.</span></p>
 
               <div class="rp-tip"><span class="lang-th">จัดห้องเสร็จแล้ว ก่อนย้ายเข้าให้เราตรวจบ้านให้ก่อน — รอยร้าว รั่วซึม ระบบไฟ เจอก่อนแก้ง่ายกว่า</span><span class="lang-en block">Layout sorted? Have us inspect the home before you move in — cracks, leaks and wiring are far easier to fix before the furniture arrives.</span> <a href="/services"><span class="lang-th">ดูบริการตรวจบ้าน →</span><span class="lang-en">See inspection services →</span></a></div>
             </aside>
@@ -208,25 +290,30 @@ const TEMPLATES = {
 .rp [hidden] { display: none !important; }
 .rp { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
 .rp-cap { display: block; font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: 7px; }
+.rp-cap-gap { margin-top: 16px; }
 
 /* top bar */
-.rp-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
-.rp-tpl-btns { display: flex; flex-wrap: wrap; gap: 8px; }
-.rp-chip { font-family: inherit; font-size: .85rem; padding: 8px 14px; border-radius: 50px; border: 1px solid var(--line); background: var(--panel-2); color: var(--heading); cursor: pointer; transition: .18s; }
-.rp-chip:hover { border-color: var(--green); color: var(--green-bright); }
-.rp-size { display: flex; align-items: flex-end; gap: 10px; }
-.rp-size label { display: block; }
-.rp-size input { width: 92px; font-family: var(--mono); font-size: 1rem; padding: 9px 10px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); color: var(--heading); }
-.rp-size input:focus { outline: none; border-color: var(--green); }
-.rp-x { color: var(--faint); font-family: var(--mono); padding-bottom: 10px; }
-.rp-area { padding-bottom: 10px; color: var(--grey); font-size: .9rem; white-space: nowrap; }
-.rp-area b { font-family: var(--mono); color: var(--green-bright); font-size: 1.05rem; }
+.rp-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.rp-steps { display: flex; align-items: center; gap: 10px; }
+.rp-step { display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: .95rem; font-weight: 600; color: var(--grey); background: none; border: 0; padding: 4px 2px; cursor: pointer; }
+.rp-step i { font-style: normal; font-family: var(--mono); font-size: .8rem; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--line-2, var(--line)); color: var(--grey); }
+.rp-step.on { color: var(--heading); }
+.rp-step.on i { background: var(--green); border-color: var(--green); color: #06130b; }
+.rp-step:disabled { opacity: .45; cursor: not-allowed; }
+.rp-step-line { width: 34px; height: 1.5px; background: var(--line); }
+.rp-top-right { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rp-cap-inline { margin: 0 4px 0 0; }
+.rp-chip { font-family: inherit; font-size: .84rem; padding: 7px 13px; border-radius: 50px; border: 1px solid var(--line); background: var(--panel-2); color: var(--heading); cursor: pointer; transition: .18s; }
+.rp-chip:hover:not(:disabled) { border-color: var(--green); color: var(--green-bright); }
+.rp-chip:disabled { opacity: .4; cursor: default; }
+.rp-undo { margin-left: 6px; }
 
 /* body grid */
 .rp-body { display: grid; grid-template-columns: 170px minmax(0, 1fr) 270px; gap: 20px; align-items: start; }
 
 /* palette */
-.rp-pal-list { display: flex; flex-direction: column; gap: 6px; max-height: 620px; overflow-y: auto; padding-right: 2px; }
+.rp-pal-list { display: flex; flex-direction: column; gap: 6px; }
+.rp-pal-scroll { max-height: 640px; overflow-y: auto; padding-right: 2px; }
 .rp-add { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; text-align: left; font-family: inherit; padding: 8px 11px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); cursor: pointer; transition: .18s; }
 .rp-add b { font-size: .84rem; font-weight: 600; color: var(--heading); }
 .rp-add small { font-family: var(--mono); font-size: .66rem; color: var(--grey); }
@@ -234,8 +321,8 @@ const TEMPLATES = {
 .rp-add-open { border-style: dashed; }
 
 /* stage */
-.rp-stage { background: #efeee8; border-radius: var(--radius-sm); overflow: hidden; display: flex; justify-content: center; }
-#rpSvg { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.rp-stage { background: #efeee8; border-radius: var(--radius-sm); overflow: hidden; }
+#rpSvg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .rp-selbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding: 10px 12px; border: 1px solid rgba(47,224,124,.3); background: var(--green-soft); border-radius: var(--radius-sm); }
 .rp-sel-info b { color: var(--heading); font-size: .92rem; }
 .rp-sel-info small { font-family: var(--mono); color: var(--grey); font-size: .72rem; margin-left: 6px; }
@@ -247,11 +334,33 @@ const TEMPLATES = {
 
 /* side */
 .rp-side h3 { font-size: 1rem; margin: 0 0 10px; }
+.rp-steps-help { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; font-size: .85rem; color: var(--body); line-height: 1.55; }
+.rp-steps-help b { color: var(--heading); }
+.rp-edit { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid rgba(47,224,124,.3); background: var(--green-soft); border-radius: var(--radius-sm); }
+.rp-edit h3 { margin: 0; }
+.rp-edit > .rp-btn { align-self: flex-start; }
+.rp-field { display: block; }
+.rp-field .rp-cap { margin-bottom: 5px; }
+.rp-field input { width: 100%; box-sizing: border-box; font-family: inherit; font-size: .95rem; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); color: var(--heading); }
+.rp-field input[type="number"] { font-family: var(--mono); }
+.rp-field input:focus { outline: none; border-color: var(--green); }
+.rp-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rp-mini { margin: -4px 0 0; font-size: .72rem; color: var(--faint); }
+.rp-summary { margin-top: 18px; }
+.rp-roomlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.rp-roomlist button, .rp-roomlist .rp-total { width: 100%; display: flex; justify-content: space-between; gap: 10px; font-family: inherit; font-size: .84rem; color: var(--body); background: none; border: 0; border-radius: 6px; padding: 6px 8px; text-align: left; box-sizing: border-box; }
+.rp-roomlist button { cursor: pointer; }
+.rp-roomlist button:hover, .rp-roomlist button.on { background: var(--panel-2); color: var(--heading); }
+.rp-roomlist b { font-family: var(--mono); font-weight: 600; color: var(--grey); }
+.rp-roomlist .rp-total { border-top: 1px solid var(--line); border-radius: 0; margin-top: 4px; padding-top: 9px; color: var(--heading); font-weight: 600; }
+.rp-roomlist .rp-total b { color: var(--green-bright); }
+.rp-roomlist .rp-empty { font-size: .84rem; color: var(--faint); padding: 4px 8px; }
 .rp-status { border-radius: var(--radius-sm); padding: 11px 13px; font-size: .88rem; line-height: 1.55; }
 .rp-status.ok { background: var(--green-soft); border: 1px solid rgba(47,224,124,.3); color: var(--body); }
 .rp-status.bad { background: rgba(229,72,77,.08); border: 1px solid rgba(229,72,77,.35); color: var(--body); }
 .rp-status b { color: var(--heading); }
 .rp-warns { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
+.rp-warns:empty { display: none; }
 .rp-warns button { width: 100%; text-align: left; font-family: inherit; font-size: .82rem; line-height: 1.5; color: var(--body); background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid #E5484D; border-radius: 6px; padding: 8px 10px; cursor: pointer; }
 .rp-warns button:hover { border-color: rgba(229,72,77,.5); border-left-color: #E5484D; }
 .rp-warns b { color: var(--heading); }
@@ -262,27 +371,21 @@ const TEMPLATES = {
 .rp-legend .lg-bad { background: rgba(217,67,74,.35); border: 1px dashed #d9434a; }
 .rp-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
 .rp-actions .btn { width: 100%; justify-content: center; }
+.rp-actions .btn:disabled { opacity: .45; cursor: not-allowed; }
 .rp-note { margin: 10px 0 0; font-size: .76rem; color: var(--faint); line-height: 1.6; }
 .rp-tip { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: .84rem; color: var(--grey); line-height: 1.6; }
 .rp-tip a { color: var(--green-bright); font-weight: 600; display: inline-block; margin-top: 6px; }
 .rp-disclaimer { margin: 16px 4px 0; font-size: .78rem; color: var(--faint); line-height: 1.7; }
 
 /* Built mainly for iPad, Mac and PC. Down to iPad-landscape width (1000px) the
-   livability check stays beside the plan, so warnings update in view while dragging. */
-#rpSvg { max-height: 78vh; }
+   side panel stays beside the plan, so edits and warnings stay in view. */
 @media (max-width: 1240px) {
   .rp-body { grid-template-columns: 150px minmax(0, 1fr) 240px; gap: 16px; }
   .rp { padding: 18px; }
 }
 @media (max-width: 999px) {
   .rp-body { grid-template-columns: 150px minmax(0, 1fr); }
-  .rp-side { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; align-items: start; }
-  .rp-side > h3, .rp-side > .rp-status, .rp-side > .rp-warns, .rp-side > .rp-legend { grid-column: 1; }
-  .rp-side > .rp-actions { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
-  .rp-side > .rp-note, .rp-side > .rp-tip { grid-column: 2; }
-}
-@media (max-width: 720px) {
-  .rp-side { display: block; }
+  .rp-side { grid-column: 1 / -1; }
 }
 @media (max-width: 720px) {
   .rp { padding: 14px; }
@@ -291,69 +394,103 @@ const TEMPLATES = {
   .rp-add { flex: none; }
   .rp-add b { white-space: nowrap; }
   #rpSvg { max-height: 62vh; }
-  .rp-size input { width: 78px; }
 }
 </style>
 
-<script define:vars={{ CATALOG, OPENINGS, TEMPLATES }}>
+<script define:vars={{ CATALOG, OPENINGS, TEMPLATES, ROOM_PRESETS }}>
 (function () {
-  const svg = document.getElementById('rpSvg');
+  const $ = (id) => document.getElementById(id);
+  const svg = $('rpSvg');
   if (!svg) return;
 
-  const STORE_KEY = 'wth-room-planner-v1';
-  const PAD = 48, WALL = 10, GRID = 5, MAGNET = 8;
+  const STORE_KEY = 'wth-room-planner-v2';
+  const WALL = 10, HW = WALL / 2;          // walls are drawn centred on the room lines
+  const GRID = 5, MAGNET = 8;              // furniture snapping (cm)
+  const ROOM_GRID = 10, ROOM_MAGNET = 20;  // room snapping (cm) — generous so walls join up
+  const MIN_ROOM = 100, PAD = 70;
   // same face as the site (Prompt); system fonts cover the exported image, where web fonts can't load
   const FONT = "Prompt, system-ui, 'Segoe UI', Tahoma, sans-serif";
   const C = {
+    paper: '#ffffff', paperGrid: '#eff0ec', paperGrid2: '#dfe2dc',
     floor: '#fbfaf6', grid: '#ecebe4', grid2: '#d9d6cb', wall: '#2b302d', item: '#e4eee7', itemStroke: '#5b6a61',
     sel: '#12995a', bad: '#d9434a', badFill: '#fde6e6', zoneOk: 'rgba(18,153,90,.14)', zoneBad: 'rgba(217,67,74,.22)',
-    text: '#2b302d', dim: '#6b726d', glass: '#dcecf7', glassLine: '#6aa8d2',
+    roomSel: 'rgba(18,153,90,.08)', text: '#2b302d', dim: '#6b726d', glass: '#dcecf7', glassLine: '#6aa8d2',
   };
 
-  const $ = (id) => document.getElementById(id);
   const isEn = () => document.body.classList.contains('en');
   const uid = () => Math.random().toString(36).slice(2, 9);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const f = (n) => Math.round(n * 10) / 10;
+  const m2 = (cm) => (cm / 100).toFixed(2);
 
   // ── state ────────────────────────────────────────────────────────────────
-  let S = null;          // { W, L, items:[{id,t,cx,cy,rot}], open:[{id,t,wall,pos,w,flip}] }
-  let sel = null;        // selected id
-  let drag = null;       // { id, dx, dy, moved }
+  // S = { step:'plan'|'furnish', rooms:[{id,name,x,y,w,h}],
+  //       open:[{id,t,room,wall,pos,w,flip,out}], items:[{id,t,cx,cy,rot}] }
+  let S = null;
+  let sel = null;        // selected room / opening / item id
+  let drag = null;
+  let frozenVB = null;   // the view is held still while dragging so the pointer never slips
+  let pxPerCm = 0.6;
+  const history = [];
 
+  const blank = () => ({ step: 'plan', rooms: [], open: [], items: [] });
   function fromTemplate(key) {
-    const t = TEMPLATES[key];
+    const t = TEMPLATES[key], en = isEn(), ids = {};
+    const rooms = t.rooms.map((r) => { const id = uid(); ids[r.key] = id; return { id, name: en ? r.en : r.th, x: r.x, y: r.y, w: r.w, h: r.h }; });
     return {
-      W: t.W, L: t.L,
+      step: 'plan', rooms,
+      open: t.open.map((o) => ({ id: uid(), t: o.t, room: ids[o.room], wall: o.wall, pos: o.pos, w: o.w, flip: !!o.flip, out: !!o.out })),
       items: t.items.map((i) => ({ id: uid(), ...i })),
-      open: t.open.map((o) => ({ id: uid(), flip: false, ...o })),
     };
   }
   function load() {
     try {
-      const raw = localStorage.getItem(STORE_KEY);
-      if (!raw) return null;
-      const d = JSON.parse(raw);
-      if (!d || typeof d.W !== 'number' || typeof d.L !== 'number' || !Array.isArray(d.items) || !Array.isArray(d.open)) return null;
+      const d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (!d || !Array.isArray(d.rooms) || !Array.isArray(d.open) || !Array.isArray(d.items)) return null;
+      d.rooms = d.rooms.filter((r) => [r.x, r.y, r.w, r.h].every((n) => typeof n === 'number') && r.w >= MIN_ROOM && r.h >= MIN_ROOM);
+      d.open = d.open.filter((o) => OPENINGS[o.t] && d.rooms.some((r) => r.id === o.room) && ['top', 'bottom', 'left', 'right'].includes(o.wall));
       d.items = d.items.filter((i) => CATALOG[i.t] && [0, 90, 180, 270].includes(i.rot));
-      d.open = d.open.filter((o) => OPENINGS[o.t] && ['top', 'bottom', 'left', 'right'].includes(o.wall));
+      d.step = d.step === 'furnish' && d.rooms.length ? 'furnish' : 'plan';
       return d;
     } catch (e) { return null; }
   }
   function save() {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* private mode etc. — still works, just not remembered */ }
   }
+  function pushHistory() {
+    history.push(JSON.stringify(S));
+    if (history.length > 80) history.shift();
+  }
+  function undo() {
+    if (!history.length) return;
+    S = JSON.parse(history.pop());
+    sel = null; commit();
+  }
 
   // ── geometry ─────────────────────────────────────────────────────────────
+  const roomById = (id) => S.rooms.find((r) => r.id === id);
+  const itemById = (id) => S.items.find((i) => i.id === id);
+  const openById = (id) => S.open.find((o) => o.id === id);
   const nm = (o) => { const c = CATALOG[o.t] || OPENINGS[o.t]; return isEn() ? c.en : c.th; };
-  const find = (id) => S.items.find((i) => i.id === id) || S.open.find((o) => o.id === id);
-  const isOpening = (o) => !!OPENINGS[o.t];
+  const rectOf = (p, q) => ({ x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(p.x - q.x), h: Math.abs(p.y - q.y) });
+  const inter = (a, b) => a.x < b.x + b.w - 1 && b.x < a.x + a.w - 1 && a.y < b.y + b.h - 1 && b.y < a.y + a.h - 1;
+  const within = (a, b) => a.x >= b.x - 1 && a.y >= b.y - 1 && a.x + a.w <= b.x + b.w + 1 && a.y + a.h <= b.y + b.h + 1;
+  const containsPt = (r, x, y) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h;
+  const interior = (r) => ({ x: r.x + HW, y: r.y + HW, w: r.w - WALL, h: r.h - WALL });
+  const roomAt = (x, y) => S.rooms.find((r) => containsPt(interior(r), x, y));
+
+  function planBox() {
+    if (!S.rooms.length) return null;
+    const x = Math.min(...S.rooms.map((r) => r.x)), y = Math.min(...S.rooms.map((r) => r.y));
+    return { x, y, w: Math.max(...S.rooms.map((r) => r.x + r.w)) - x, h: Math.max(...S.rooms.map((r) => r.y + r.h)) - y };
+  }
 
   function bbox(it) {
     const c = CATALOG[it.t];
     const sw = it.rot % 180 ? c.d : c.w, sh = it.rot % 180 ? c.w : c.d;
     return { x: it.cx - sw / 2, y: it.cy - sh / 2, w: sw, h: sh };
   }
-  // local (u across the width, v front-to-back; +v = front) → room coordinates
+  // item-local (u across the width, v back→front) → plan coordinates
   function toWorld(it, u, v) {
     let x, y;
     if (it.rot === 0) { x = u; y = v; }
@@ -362,10 +499,6 @@ const TEMPLATES = {
     else { x = v; y = -u; }
     return { x: it.cx + x, y: it.cy + y };
   }
-  const rectOf = (p, q) => ({ x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(p.x - q.x), h: Math.abs(p.y - q.y) });
-  const inter = (a, b) => a.x < b.x + b.w - 1 && b.x < a.x + a.w - 1 && a.y < b.y + b.h - 1 && b.y < a.y + a.h - 1;
-  const inside = (r) => r.x >= -1 && r.y >= -1 && r.x + r.w <= S.W + 1 && r.y + r.h <= S.L + 1;
-
   function zoneRect(it, side, D, from) {
     const { w, d } = CATALOG[it.t];
     const vf = -d / 2 + (from || 0) * d;
@@ -377,67 +510,102 @@ const TEMPLATES = {
     return rectOf(toWorld(it, u0, v0), toWorld(it, u1, v1));
   }
 
-  // walls: `a` runs along the wall, `n` points into the room
-  const wallLen = (wall) => (wall === 'top' || wall === 'bottom' ? S.W : S.L);
-  function w2w(wall, a, n) {
-    if (wall === 'top') return { x: a, y: n };
-    if (wall === 'bottom') return { x: a, y: S.L - n };
-    if (wall === 'left') return { x: n, y: a };
-    return { x: S.W - n, y: a };
+  // room walls: `a` runs along the wall, `n` points into that room from the wall centre-line
+  const wallLen = (r, wall) => (wall === 'top' || wall === 'bottom' ? r.w : r.h);
+  function w2w(r, wall, a, n) {
+    if (wall === 'top') return { x: r.x + a, y: r.y + n };
+    if (wall === 'bottom') return { x: r.x + a, y: r.y + r.h - n };
+    if (wall === 'left') return { x: r.x + n, y: r.y + a };
+    return { x: r.x + r.w - n, y: r.y + a };
   }
-  const doorZone = (o) => rectOf(w2w(o.wall, o.pos - o.w / 2, 0), w2w(o.wall, o.pos + o.w / 2, o.w));
-  const windowZone = (o) => rectOf(w2w(o.wall, o.pos - o.w / 2, 0), w2w(o.wall, o.pos + o.w / 2, 20));
+  function doorZone(o) {
+    const r = roomById(o.room);
+    const n0 = o.out ? -HW - o.w : HW, n1 = o.out ? -HW : HW + o.w;
+    return rectOf(w2w(r, o.wall, o.pos - o.w / 2, n0), w2w(r, o.wall, o.pos + o.w / 2, n1));
+  }
+  const windowZone = (o) => { const r = roomById(o.room); return rectOf(w2w(r, o.wall, o.pos - o.w / 2, HW), w2w(r, o.wall, o.pos + o.w / 2, HW + 20)); };
 
+  function clampOpening(o) {
+    const r = roomById(o.room);
+    if (!r) return;
+    const len = wallLen(r, o.wall);
+    o.w = Math.max(40, Math.min(o.w, len - WALL * 2));
+    o.pos = Math.min(Math.max(o.pos, o.w / 2 + HW), len - o.w / 2 - HW);
+  }
   function clampItem(it) {
-    const b = bbox(it);
-    const x = Math.min(Math.max(b.x, 0), Math.max(S.W - b.w, 0));
-    const y = Math.min(Math.max(b.y, 0), Math.max(S.L - b.h, 0));
+    const pb = planBox();
+    if (!pb) return;
+    const inr = interior(pb), b = bbox(it);
+    const x = Math.min(Math.max(b.x, inr.x), Math.max(inr.x + inr.w - b.w, inr.x));
+    const y = Math.min(Math.max(b.y, inr.y), Math.max(inr.y + inr.h - b.h, inr.y));
     it.cx = x + b.w / 2; it.cy = y + b.h / 2;
   }
-  function clampOpening(o) {
-    const len = wallLen(o.wall);
-    o.w = Math.min(o.w, len);
-    o.pos = Math.min(Math.max(o.pos, o.w / 2), len - o.w / 2);
-  }
 
-  // snap one axis: magnet to walls / other items' edges, otherwise the 5 cm grid
-  function snapAxis(start, size, roomSize, edges) {
+  // ── snapping ─────────────────────────────────────────────────────────────
+  function nearestDelta(starts, edges, limit) {
     let best = null;
-    edges.concat([0, roomSize]).forEach((e) => {
-      [e - start, e - (start + size)].forEach((delta) => {
-        if (Math.abs(delta) <= MAGNET && (best === null || Math.abs(delta) < Math.abs(best))) best = delta;
-      });
-    });
-    const v = best !== null ? start + best : Math.round(start / GRID) * GRID;
-    return Math.min(Math.max(v, 0), Math.max(roomSize - size, 0));
+    edges.forEach((e) => starts.forEach((s) => {
+      const d = e - s;
+      if (Math.abs(d) <= limit && (best === null || Math.abs(d) < Math.abs(best))) best = d;
+    }));
+    return best;
+  }
+  const roomEdges = (axis, exceptId) => S.rooms.filter((r) => r.id !== exceptId).flatMap((r) => (axis === 'x' ? [r.x, r.x + r.w] : [r.y, r.y + r.h]));
+  function snapRoomValue(v, edges) {
+    const d = nearestDelta([v], edges, ROOM_MAGNET);
+    return d !== null ? v + d : Math.round(v / ROOM_GRID) * ROOM_GRID;
+  }
+  function snapRoomStart(start, size, edges) {
+    const d = nearestDelta([start, start + size], edges, ROOM_MAGNET);
+    return d !== null ? start + d : Math.round(start / ROOM_GRID) * ROOM_GRID;
+  }
+  function snapItemAxis(start, size, lo, hi, edges) {
+    const d = nearestDelta([start, start + size], edges, MAGNET);
+    const v = d !== null ? start + d : Math.round(start / GRID) * GRID;
+    return Math.min(Math.max(v, lo), Math.max(hi - size, lo));
   }
 
-  // ── livability analysis ──────────────────────────────────────────────────
-  function analyse() {
-    const warns = [];
-    const zones = {};
+  // ── checks ───────────────────────────────────────────────────────────────
+  function analysePlan() {
+    const out = [];
+    S.rooms.forEach((a, i) => {
+      for (let j = i + 1; j < S.rooms.length; j++) {
+        const b = S.rooms[j];
+        if (inter(interior(a), interior(b))) {
+          out.push({ id: a.id, other: b.id, th: `<b>${esc(a.name)}</b> ซ้อนทับกับ ${esc(b.name)}`, en: `<b>${esc(a.name)}</b> overlaps ${esc(b.name)}` });
+        }
+      }
+    });
+    return out;
+  }
+
+  function analyseFurnish() {
+    const warns = [], zones = {};
     const boxes = S.items.map(bbox);
-    const doors = S.open.filter((o) => o.t === 'door').map((o) => doorZone(o));
-    const windows = S.open.filter((o) => o.t === 'window').map((o) => windowZone(o));
+    const doors = S.open.filter((o) => o.t === 'door').map(doorZone);
+    const windows = S.open.filter((o) => o.t === 'window').map(windowZone);
     const add = (id, th, en) => { if (!warns.some((w) => w.id === id && w.th === th)) warns.push({ id, th, en }); };
 
     S.items.forEach((it, i) => {
       const c = CATALOG[it.t], b = boxes[i];
-      if (!inside(b)) add(it.id, `<b>${esc(c.th)}</b> ใหญ่เกินห้อง`, `<b>${esc(c.en)}</b> does not fit in the room`);
+      const room = roomAt(it.cx, it.cy);
+      const inr = room ? interior(room) : null;
+      if (!room) add(it.id, `<b>${esc(c.th)}</b> อยู่นอกห้อง`, `<b>${esc(c.en)}</b> is outside the rooms`);
+      else if (!within(b, inr)) add(it.id, `<b>${esc(c.th)}</b> ชนผนังหรือล้นออกนอก${esc(room.name)}`, `<b>${esc(c.en)}</b> runs into a wall of the ${esc(room.name)}`);
       for (let j = i + 1; j < S.items.length; j++) {
         if (inter(b, boxes[j])) {
           const o = CATALOG[S.items[j].t];
           add(it.id, `<b>${esc(c.th)}</b> วางทับกับ${esc(o.th)}`, `<b>${esc(c.en)}</b> overlaps the ${esc(o.en.toLowerCase())}`);
         }
       }
-      if (doors.some((z) => inter(b, z))) add(it.id, `บานประตูเปิดชน<b>${esc(c.th)}</b>`, `The door swings into the <b>${esc(c.en.toLowerCase())}</b>`);
+      if (doors.some((z) => inter(b, z))) add(it.id, `บานประตูเปิดชน<b>${esc(c.th)}</b>`, `A door swings into the <b>${esc(c.en.toLowerCase())}</b>`);
       if (c.tall && windows.some((z) => inter(b, z))) add(it.id, `<b>${esc(c.th)}</b> เป็นของสูง วางบังหน้าต่าง`, `<b>${esc(c.en)}</b> is tall and blocks a window`);
 
       const list = [];
       (c.clear || []).forEach((rule) => {
         const res = rule.s.map((side) => {
           const r = zoneRect(it, side, rule.d, rule.from);
-          const bad = !inside(r) || boxes.some((ob, k) => k !== i && inter(r, ob));
+          const bad = !inr || !within(r, inr) || boxes.some((ob, k) => k !== i && inter(r, ob));
           return { r, bad };
         });
         const fail = rule.any ? res.every((z) => z.bad) : res.some((z) => z.bad);
@@ -450,18 +618,16 @@ const TEMPLATES = {
   }
 
   // ── drawing ──────────────────────────────────────────────────────────────
-  const f = (n) => Math.round(n * 10) / 10;
   const rectSvg = (r, attrs) => `<rect x="${f(r.x)}" y="${f(r.y)}" width="${f(r.w)}" height="${f(r.h)}" ${attrs}/>`;
+  const txt = (x, y, size, body, attrs) => `<text x="${f(x)}" y="${f(y)}" font-size="${f(size)}" font-family="${FONT}" text-anchor="middle" dominant-baseline="central" pointer-events="none" ${attrs || ''}>${body}</text>`;
 
-  function furnitureDetail(it) {
+  function furnitureDetail(it, sw) {
     const { w, d } = CATALOG[it.t];
-    const st = `fill="none" stroke="${C.itemStroke}" stroke-width="1.2"`;
+    const st = `fill="none" stroke="${C.itemStroke}" stroke-width="${f(sw)}"`;
     const hw = w / 2, hd = d / 2;
     switch (it.t) {
       case 'bed6': case 'bed5':
-        return `<rect x="${-hw + 12}" y="${-hd + 8}" width="${hw - 18}" height="26" rx="6" ${st}/>` +
-               `<rect x="${6}" y="${-hd + 8}" width="${hw - 18}" height="26" rx="6" ${st}/>` +
-               `<path d="M${-hw} ${-hd + 48}H${hw}" ${st}/>`;
+        return `<rect x="${-hw + 12}" y="${-hd + 8}" width="${hw - 18}" height="26" rx="6" ${st}/><rect x="6" y="${-hd + 8}" width="${hw - 18}" height="26" rx="6" ${st}/><path d="M${-hw} ${-hd + 48}H${hw}" ${st}/>`;
       case 'bed35':
         return `<rect x="${-hw + 12}" y="${-hd + 8}" width="${w - 24}" height="26" rx="6" ${st}/><path d="M${-hw} ${-hd + 48}H${hw}" ${st}/>`;
       case 'sofa3': case 'sofa2':
@@ -485,114 +651,214 @@ const TEMPLATES = {
     }
   }
 
-  function build(opts) {
-    const exporting = !!(opts && opts.exporting);
-    const { W, L } = S;
-    const an = analyse();
+  function computeVB() {
+    if (frozenVB) return frozenVB;
+    const pb = planBox();
+    if (S.step === 'furnish' && pb) return [pb.x - PAD, pb.y - PAD, pb.w + PAD * 2, pb.h + PAD * 2];
+    // step 1: a drawing sheet of at least 10 × 7 m that grows around the plan
+    let x0 = -150, y0 = -150, x1 = 1000, y1 = 700;
+    if (pb) { x0 = Math.min(x0, pb.x - 150); y0 = Math.min(y0, pb.y - 150); x1 = Math.max(x1, pb.x + pb.w + 250); y1 = Math.max(y1, pb.y + pb.h + 250); }
+    return [x0, y0, x1 - x0, y1 - y0];
+  }
+
+  // k = centimetres per screen pixel, so strokes, handles and captions keep a steady on-screen size
+  function build(vb, k, exporting) {
+    const plan = S.step === 'plan' && !exporting;
+    const px = (n) => n * k;
+    const an = S.step === 'furnish' && !exporting ? analyseFurnish() : { warns: [], zones: {} };
     const badIds = new Set(an.warns.map((w) => w.id));
+    const badRooms = new Set();
+    if (plan) analysePlan().forEach((w) => { badRooms.add(w.id); badRooms.add(w.other); });
+    const [vx, vy, vw, vh] = vb;
     let out = '';
 
     out += `<defs>
-      <pattern id="rpG1" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="${C.grid}" stroke-width="1"/></pattern>
-      <pattern id="rpG2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#rpG1)"/><path d="M100 0H0V100" fill="none" stroke="${C.grid2}" stroke-width="1.2"/></pattern>
+      <pattern id="rpPaper1" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="${C.paperGrid}" stroke-width="${f(px(1))}"/></pattern>
+      <pattern id="rpPaper2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#rpPaper1)"/><path d="M100 0H0V100" fill="none" stroke="${C.paperGrid2}" stroke-width="${f(px(1))}"/></pattern>
+      <pattern id="rpFloor1" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="${C.grid}" stroke-width="${f(px(1))}"/></pattern>
+      <pattern id="rpFloor2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#rpFloor1)"/><path d="M100 0H0V100" fill="none" stroke="${C.grid2}" stroke-width="${f(px(1.2))}"/></pattern>
     </defs>`;
-    out += `<rect x="${-PAD}" y="${-PAD}" width="${W + PAD * 2}" height="${L + PAD * 2}" fill="#ffffff"/>`;
-    out += `<rect x="${-WALL}" y="${-WALL}" width="${W + WALL * 2}" height="${L + WALL * 2}" fill="${C.wall}"/>`;
-    out += `<rect x="0" y="0" width="${W}" height="${L}" fill="${C.floor}"/>`;
-    out += `<rect x="0" y="0" width="${W}" height="${L}" fill="url(#rpG2)" data-floor="1"/>`;
+    out += `<rect x="${f(vx)}" y="${f(vy)}" width="${f(vw)}" height="${f(vh)}" fill="${C.paper}"/>`;
+    if (plan) out += `<rect x="${f(vx)}" y="${f(vy)}" width="${f(vw)}" height="${f(vh)}" fill="url(#rpPaper2)"/>`;
 
-    // clearance zones (all zones of the selected item; failing zones of every item)
-    if (!exporting) {
-      S.items.forEach((it) => {
-        (an.zones[it.id] || []).forEach((z) => {
-          const show = it.id === sel || (z.bad && z.fail);
-          if (!show) return;
-          const bad = z.bad && (z.fail || it.id === sel);
-          out += rectSvg(z.r, `fill="${bad ? C.zoneBad : C.zoneOk}" stroke="${bad ? C.bad : C.sel}" stroke-width="1" stroke-dasharray="4 3" pointer-events="none"`);
-        });
-      });
-    }
-
-    // furniture
-    S.items.forEach((it) => {
-      const c = CATALOG[it.t];
-      const isSel = !exporting && it.id === sel;
-      const isBad = !exporting && badIds.has(it.id);
-      const fill = isBad ? C.badFill : C.item;
-      const stroke = isSel ? C.sel : isBad ? C.bad : C.itemStroke;
-      out += `<g data-id="${it.id}" style="cursor:move" transform="translate(${f(it.cx)} ${f(it.cy)}) rotate(${it.rot})">` +
-        `<rect x="${-c.w / 2}" y="${-c.d / 2}" width="${c.w}" height="${c.d}" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="${isSel ? 3 : 1.6}"/>` +
-        furnitureDetail(it) + `</g>`;
-    });
-    // labels stay readable whatever the rotation — narrow, tall items get a label
-    // running along their long side instead of a tiny horizontal one
-    S.items.forEach((it) => {
-      const b = bbox(it);
-      const label = nm(it);
-      const chars = label.length * 0.56;
-      const fsH = Math.min(15, Math.min(b.w, b.h) / 3.2, (b.w - 6) / chars);
-      const fsV = b.h > b.w ? Math.min(15, (b.w - 6) * 0.7, (b.h - 6) / chars) : 0;
-      const vertical = fsV > fsH * 1.15;
-      const fs = Math.max(7, vertical ? fsV : fsH);
-      const showSize = !exporting && it.id === sel && !vertical;
-      const c = CATALOG[it.t];
-      const pos = vertical
-        ? `transform="translate(${f(it.cx)} ${f(it.cy)}) rotate(-90)"`
-        : `x="${f(it.cx)}" y="${f(it.cy - (showSize ? fs * 0.45 : 0))}"`;
-      out += `<text ${pos} font-size="${f(fs)}" font-family="${FONT}" font-weight="600" fill="${C.text}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${esc(label)}</text>`;
-      if (showSize) out += `<text x="${f(it.cx)}" y="${f(it.cy + fs * 0.75)}" font-size="${f(fs * 0.78)}" font-family="${FONT}" fill="${C.dim}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${c.w}×${c.d}</text>`;
+    // walls, then floors on top — shared walls come out a single 10 cm thick
+    S.rooms.forEach((r) => { out += `<rect x="${f(r.x - HW)}" y="${f(r.y - HW)}" width="${f(r.w + WALL)}" height="${f(r.h + WALL)}" fill="${C.wall}"/>`; });
+    S.rooms.forEach((r) => {
+      const i = interior(r);
+      out += rectSvg(i, `fill="${C.floor}"`);
+      out += rectSvg(i, `fill="url(#rpFloor2)"${plan ? ` data-room="${r.id}" style="cursor:move"` : ''}`);
+      if (plan && r.id === sel) out += rectSvg(i, `fill="${C.roomSel}" stroke="${C.sel}" stroke-width="${f(px(2.5))}" pointer-events="none"`);
+      if (plan && badRooms.has(r.id)) out += rectSvg(i, `fill="none" stroke="${C.bad}" stroke-width="${f(px(2))}" stroke-dasharray="${f(px(7))} ${f(px(5))}" pointer-events="none"`);
     });
 
     // doors & windows
     S.open.forEach((o) => {
+      const r = roomById(o.room);
+      if (!r) return;
       const a0 = o.pos - o.w / 2, a1 = o.pos + o.w / 2;
-      const isSel = !exporting && o.id === sel;
-      let g = `<g data-id="${o.id}" style="cursor:grab">`;
-      g += rectSvg(rectOf(w2w(o.wall, a0, -WALL - 14), w2w(o.wall, a1, 26)), `fill="rgba(0,0,0,0)"`);
-      g += rectSvg(rectOf(w2w(o.wall, a0, -WALL - 1), w2w(o.wall, a1, 1)), `fill="${C.floor}"`);
+      const isSel = plan && o.id === sel;
+      let g = plan ? `<g data-id="${o.id}" style="cursor:grab">` : '<g pointer-events="none">';
+      if (plan) g += rectSvg(rectOf(w2w(r, o.wall, a0, -px(18)), w2w(r, o.wall, a1, px(18))), 'fill="rgba(0,0,0,0)"');
+      g += rectSvg(rectOf(w2w(r, o.wall, a0, -HW - 0.5), w2w(r, o.wall, a1, HW + 0.5)), `fill="${C.floor}"`);
       if (o.t === 'window') {
-        g += rectSvg(rectOf(w2w(o.wall, a0, -WALL), w2w(o.wall, a1, 0)), `fill="${C.glass}" stroke="${isSel ? C.sel : C.glassLine}" stroke-width="${isSel ? 2.5 : 1.4}"`);
-        const m0 = w2w(o.wall, a0, -WALL / 2), m1 = w2w(o.wall, a1, -WALL / 2);
-        g += `<path d="M${f(m0.x)} ${f(m0.y)}L${f(m1.x)} ${f(m1.y)}" stroke="${C.glassLine}" stroke-width="1"/>`;
+        g += rectSvg(rectOf(w2w(r, o.wall, a0, -HW), w2w(r, o.wall, a1, HW)), `fill="${C.glass}" stroke="${isSel ? C.sel : C.glassLine}" stroke-width="${f(px(isSel ? 2.5 : 1.3))}"`);
+        const m0 = w2w(r, o.wall, a0, 0), m1 = w2w(r, o.wall, a1, 0);
+        g += `<path d="M${f(m0.x)} ${f(m0.y)}L${f(m1.x)} ${f(m1.y)}" stroke="${C.glassLine}" stroke-width="${f(px(1))}"/>`;
       } else {
+        const face = o.out ? -HW : HW, dir = o.out ? -1 : 1;
         const ah = o.flip ? a1 : a0, s = o.flip ? -1 : 1;
-        const h = w2w(o.wall, ah, 0), leaf = w2w(o.wall, ah, o.w);
+        const h = w2w(r, o.wall, ah, face), leaf = w2w(r, o.wall, ah, face + dir * o.w);
         const pts = [];
-        for (let k = 0; k <= 12; k++) {
-          const th = (Math.PI / 2) * (k / 12);
-          const p = w2w(o.wall, ah + s * o.w * Math.cos(th), o.w * Math.sin(th));
+        for (let q = 0; q <= 12; q++) {
+          const th = (Math.PI / 2) * (q / 12);
+          const p = w2w(r, o.wall, ah + s * o.w * Math.cos(th), face + dir * o.w * Math.sin(th));
           pts.push(`${f(p.x)},${f(p.y)}`);
         }
-        g += `<polyline points="${pts.join(' ')}" fill="none" stroke="${isSel ? C.sel : C.dim}" stroke-width="1.2" stroke-dasharray="5 4"/>`;
-        g += `<path d="M${f(h.x)} ${f(h.y)}L${f(leaf.x)} ${f(leaf.y)}" stroke="${isSel ? C.sel : C.wall}" stroke-width="${isSel ? 4 : 3}" stroke-linecap="round"/>`;
+        g += `<polyline points="${pts.join(' ')}" fill="none" stroke="${isSel ? C.sel : C.dim}" stroke-width="${f(px(1.2))}" stroke-dasharray="${f(px(5))} ${f(px(4))}"/>`;
+        g += `<path d="M${f(h.x)} ${f(h.y)}L${f(leaf.x)} ${f(leaf.y)}" stroke="${isSel ? C.sel : C.wall}" stroke-width="${f(px(isSel ? 4 : 3))}" stroke-linecap="round"/>`;
       }
-      out += g + `</g>`;
+      out += g + '</g>';
     });
 
-    // room dimensions
-    const dimTxt = (cm) => `${(cm / 100).toFixed(2)} ${isEn() ? 'm' : 'ม.'}`;
-    out += `<text x="${W / 2}" y="${-WALL - 16}" font-size="15" font-family="${FONT}" font-weight="600" fill="${C.dim}" text-anchor="middle" dominant-baseline="central">${dimTxt(W)}</text>`;
-    out += `<text transform="translate(${-WALL - 16} ${L / 2}) rotate(-90)" font-size="15" font-family="${FONT}" font-weight="600" fill="${C.dim}" text-anchor="middle" dominant-baseline="central">${dimTxt(L)}</text>`;
+    // clearance zones (all zones of the selected item; failing zones of every item)
+    if (S.step === 'furnish' && !exporting) {
+      S.items.forEach((it) => {
+        (an.zones[it.id] || []).forEach((z) => {
+          if (!(it.id === sel || (z.bad && z.fail))) return;
+          const bad = z.bad && (z.fail || it.id === sel);
+          out += rectSvg(z.r, `fill="${bad ? C.zoneBad : C.zoneOk}" stroke="${bad ? C.bad : C.sel}" stroke-width="${f(px(1))}" stroke-dasharray="${f(px(4))} ${f(px(3))}" pointer-events="none"`);
+        });
+      });
+    }
 
-    return { markup: out, an, vb: [-PAD, -PAD, W + PAD * 2, L + PAD * 2] };
+    // furniture — faded and untouchable while drawing the plan
+    S.items.forEach((it) => {
+      const c = CATALOG[it.t];
+      const isSel = !plan && !exporting && it.id === sel;
+      const isBad = !plan && !exporting && badIds.has(it.id);
+      const stroke = isSel ? C.sel : isBad ? C.bad : C.itemStroke;
+      const attrs = plan ? 'opacity=".35" pointer-events="none"' : `data-id="${it.id}" style="cursor:move"`;
+      out += `<g ${attrs} transform="translate(${f(it.cx)} ${f(it.cy)}) rotate(${it.rot})">` +
+        `<rect x="${-c.w / 2}" y="${-c.d / 2}" width="${c.w}" height="${c.d}" rx="3" fill="${isBad ? C.badFill : C.item}" stroke="${stroke}" stroke-width="${f(px(isSel ? 3 : 1.4))}"/>` +
+        furnitureDetail(it, px(1.1)) + '</g>';
+    });
+    if (!plan) {
+      // labels stay readable whatever the rotation — narrow, tall items get a label along their long side
+      S.items.forEach((it) => {
+        const b = bbox(it), label = nm(it), chars = label.length * 0.56;
+        const fsH = Math.min(px(14), Math.min(b.w, b.h) / 3.2, (b.w - 6) / chars);
+        const fsV = b.h > b.w ? Math.min(px(14), (b.w - 6) * 0.7, (b.h - 6) / chars) : 0;
+        const vertical = fsV > fsH * 1.15;
+        const fs = Math.max(px(7), vertical ? fsV : fsH);
+        const showSize = !exporting && it.id === sel && !vertical;
+        if (vertical) {
+          out += `<text transform="translate(${f(it.cx)} ${f(it.cy)}) rotate(-90)" font-size="${f(fs)}" font-family="${FONT}" font-weight="600" fill="${C.text}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${esc(label)}</text>`;
+        } else {
+          out += txt(it.cx, it.cy - (showSize ? fs * 0.45 : 0), fs, esc(label), `font-weight="600" fill="${C.text}"`);
+          if (showSize) out += txt(it.cx, it.cy + fs * 0.75, fs * 0.78, `${CATALOG[it.t].w}×${CATALOG[it.t].d}`, `fill="${C.dim}"`);
+        }
+      });
+    }
+
+    // room captions: big and centred while planning; small in the corner once furnished
+    const centred = plan || (exporting && !S.items.length);
+    const en = isEn();
+    S.rooms.forEach((r) => {
+      const i = interior(r);
+      const area = ((r.w * r.h) / 10000).toFixed(1);
+      if (centred) {
+        const name = esc(r.name);
+        const fs = Math.max(px(9), Math.min(px(16), (i.w - px(10)) / (Math.max(r.name.length, 3) * 0.6)));
+        const sub = `${m2(r.w)} × ${m2(r.h)} ${en ? 'm' : 'ม.'} · ${area} ${en ? 'sq.m.' : 'ตร.ม.'}`;
+        const fs2 = Math.max(px(8), Math.min(px(12), (i.w - px(10)) / (sub.length * 0.52)));
+        out += txt(r.x + r.w / 2, r.y + r.h / 2 - fs * 0.6, fs, name, `font-weight="700" fill="${C.text}"`);
+        out += txt(r.x + r.w / 2, r.y + r.h / 2 + fs2 * 0.9, fs2, sub, `fill="${C.dim}"`);
+      } else {
+        out += `<text x="${f(i.x + px(7))}" y="${f(i.y + px(12))}" font-size="${f(px(11))}" font-family="${FONT}" font-weight="600" fill="${C.dim}" stroke="${C.floor}" stroke-width="${f(px(3))}" paint-order="stroke" pointer-events="none">${esc(r.name)} · ${area} ${en ? 'sq.m.' : 'ตร.ม.'}</text>`;
+      }
+    });
+
+    // resize handles on the selected room
+    const sr = plan && sel && roomById(sel);
+    if (sr) {
+      const hit = px(34), long = px(30), thick = px(11);
+      [['top', sr.x + sr.w / 2, sr.y], ['bottom', sr.x + sr.w / 2, sr.y + sr.h], ['left', sr.x, sr.y + sr.h / 2], ['right', sr.x + sr.w, sr.y + sr.h / 2]].forEach(([edge, x, y]) => {
+        const horiz = edge === 'top' || edge === 'bottom';
+        const hw = horiz ? long : thick, hh = horiz ? thick : long;
+        out += `<g data-handle="${edge}" style="cursor:${horiz ? 'ns-resize' : 'ew-resize'}">` +
+          `<rect x="${f(x - hit / 2)}" y="${f(y - hit / 2)}" width="${f(hit)}" height="${f(hit)}" fill="rgba(0,0,0,0)"/>` +
+          `<rect x="${f(x - hw / 2)}" y="${f(y - hh / 2)}" width="${f(hw)}" height="${f(hh)}" rx="${f(thick / 2)}" fill="#ffffff" stroke="${C.sel}" stroke-width="${f(px(2.5))}"/></g>`;
+      });
+    }
+
+    // live preview while drawing a new room
+    if (plan && drag && drag.kind === 'draw' && drag.active) {
+      const r = rectOf({ x: drag.x0, y: drag.y0 }, { x: drag.x1, y: drag.y1 });
+      const ok = r.w >= MIN_ROOM && r.h >= MIN_ROOM;
+      const col = ok ? C.sel : C.bad;
+      out += rectSvg(r, `fill="${ok ? 'rgba(18,153,90,.10)' : 'rgba(217,67,74,.08)'}" stroke="${col}" stroke-width="${f(px(2))}" stroke-dasharray="${f(px(8))} ${f(px(5))}" pointer-events="none"`);
+      out += txt(r.x + r.w / 2, r.y + r.h / 2, px(14), `${m2(r.w)} × ${m2(r.h)} ${en ? 'm' : 'ม.'}`, `font-weight="700" fill="${col}"`);
+    }
+
+    // overall plan dimensions
+    const pb = planBox();
+    if (pb) {
+      out += txt(pb.x + pb.w / 2, pb.y - HW - px(16), px(13), `${m2(pb.w)} ${en ? 'm' : 'ม.'}`, `font-weight="600" fill="${C.dim}"`);
+      out += `<text transform="translate(${f(pb.x - HW - px(16))} ${f(pb.y + pb.h / 2)}) rotate(-90)" font-size="${f(px(13))}" font-family="${FONT}" font-weight="600" fill="${C.dim}" text-anchor="middle" dominant-baseline="central" pointer-events="none">${m2(pb.h)} ${en ? 'm' : 'ม.'}</text>`;
+    } else if (plan && !(drag && drag.active)) {
+      out += txt(vx + vw / 2, vy + vh / 2 - px(14), px(20), en ? 'Drag on the grid to draw your first room' : 'ลากบนตารางเพื่อวาดห้องแรก', `font-weight="700" fill="${C.dim}"`);
+      out += txt(vx + vw / 2, vy + vh / 2 + px(16), px(14), en ? 'or pick a quick room on the left · or open a sample plan' : 'หรือกดห้องสำเร็จรูปด้านซ้าย · หรือเปิดแปลนตัวอย่างด้านบน', `fill="${C.dim}"`);
+    }
+    return out;
   }
 
-  // ── render UI ────────────────────────────────────────────────────────────
-  const inpW = $('rpW'), inpL = $('rpL');
-  function render(syncInputs) {
-    const { markup, an, vb } = build();
+  // ── render ───────────────────────────────────────────────────────────────
+  function render() {
+    const vb = computeVB();
     svg.setAttribute('viewBox', vb.join(' '));
-    svg.innerHTML = markup;
+    const ctm = svg.getScreenCTM();
+    if (ctm && ctm.a > 0) pxPerCm = ctm.a;
+    svg.innerHTML = build(vb, 1 / pxPerCm, false);
+    updatePanels();
+  }
+  const commit = () => { render(); save(); };
 
-    if (syncInputs) {
-      inpW.value = (S.W / 100).toFixed(2);
-      inpL.value = (S.L / 100).toFixed(2);
+  const setVal = (el, v) => { if (document.activeElement !== el) el.value = v; };
+
+  function updatePanels() {
+    const en = isEn(), plan = S.step === 'plan';
+    $('rpStepPlan').classList.toggle('on', plan);
+    $('rpStepFurn').classList.toggle('on', !plan);
+    $('rpStepFurn').disabled = !S.rooms.length;
+    $('rpPalPlan').hidden = !plan; $('rpPalFurn').hidden = plan;
+    $('rpPlanSide').hidden = !plan; $('rpFurnSide').hidden = plan;
+    $('rpHintPlan').hidden = !plan; $('rpHintFurn').hidden = plan;
+    $('rpUndo').disabled = !history.length;
+
+    if (plan) {
+      $('rpSel').hidden = true;
+      const r = sel && roomById(sel), o = sel && openById(sel);
+      $('rpPlanHelp').hidden = !!(r || o);
+      $('rpRoomEdit').hidden = !r;
+      $('rpOpenEdit').hidden = !o;
+      if (r) { setVal($('rpRoomName'), r.name); setVal($('rpRoomW'), m2(r.w)); setVal($('rpRoomL'), m2(r.h)); }
+      if (o) {
+        $('rpOpenTitle').textContent = nm(o);
+        setVal($('rpOpenW'), o.w);
+        $('rpOpenFlip').hidden = $('rpOpenOut').hidden = o.t !== 'door';
+      }
+      const total = S.rooms.reduce((s, x) => s + x.w * x.h, 0) / 10000;
+      $('rpRoomList').innerHTML = S.rooms.length
+        ? S.rooms.map((x) => `<li><button type="button" data-pick="${x.id}" class="${x.id === sel ? 'on' : ''}"><span>${esc(x.name)}</span><b>${((x.w * x.h) / 10000).toFixed(1)}</b></button></li>`).join('') +
+          `<li class="rp-total"><span>${en ? 'Total' : 'รวม'}</span><b>${total.toFixed(1)} ${en ? 'sq.m.' : 'ตร.ม.'}</b></li>`
+        : `<li class="rp-empty">${en ? 'No rooms yet' : 'ยังไม่มีห้อง'}</li>`;
+      $('rpPlanWarns').innerHTML = analysePlan().map((w) => `<li><button type="button" data-pick="${w.id}">${en ? w.en : w.th}</button></li>`).join('');
+      $('rpToFurnish').disabled = !S.rooms.length;
+      return;
     }
-    $('rpArea').textContent = ((S.W * S.L) / 10000).toFixed(1);
 
-    // status + warnings
-    const en = isEn();
-    const status = $('rpStatus'), list = $('rpWarns');
+    const an = analyseFurnish();
+    const status = $('rpStatus');
     if (!S.items.length) {
       status.className = 'rp-status ok';
       status.innerHTML = en ? 'Add furniture from the list to start planning.' : 'เพิ่มเฟอร์นิเจอร์จากรายการเพื่อเริ่มจัดห้อง';
@@ -603,21 +869,15 @@ const TEMPLATES = {
       status.className = 'rp-status bad';
       status.innerHTML = en ? `<b>${an.warns.length} point${an.warns.length > 1 ? 's' : ''} to fix</b> — tap one to select the item.` : `<b>พบ ${an.warns.length} จุดที่ควรปรับ</b> — แตะรายการเพื่อเลือกชิ้นนั้น`;
     }
-    list.innerHTML = an.warns.map((w) => `<li><button type="button" data-warn="${w.id}">${en ? w.en : w.th}</button></li>`).join('');
+    $('rpWarns').innerHTML = an.warns.map((w) => `<li><button type="button" data-pick="${w.id}">${en ? w.en : w.th}</button></li>`).join('');
 
-    // selection bar
-    const o = sel && find(sel);
-    const bar = $('rpSel');
-    if (!o) { sel = null; bar.hidden = true; return; }
-    bar.hidden = false;
-    const opening = isOpening(o);
-    $('rpSelName').textContent = nm(o);
-    $('rpSelSize').textContent = opening ? `${o.w} ${en ? 'cm' : 'ซม.'}` : `${CATALOG[o.t].w} × ${CATALOG[o.t].d} ${en ? 'cm' : 'ซม.'}`;
-    $('rpRotate').hidden = opening;
-    $('rpDup').hidden = opening;
-    $('rpFlip').hidden = !(opening && o.t === 'door');
+    const it = sel && itemById(sel);
+    $('rpSel').hidden = !it;
+    if (it) {
+      $('rpSelName').textContent = nm(it);
+      $('rpSelSize').textContent = `${CATALOG[it.t].w} × ${CATALOG[it.t].d} ${en ? 'cm' : 'ซม.'}`;
+    }
   }
-  const commit = () => { render(false); save(); };
 
   // ── pointer interaction ──────────────────────────────────────────────────
   function svgPoint(e) {
@@ -625,165 +885,326 @@ const TEMPLATES = {
     p.x = e.clientX; p.y = e.clientY;
     return p.matrixTransform(svg.getScreenCTM().inverse());
   }
+  // first real movement of a drag: remember the state so it can be undone
+  function beginChange() {
+    if (!drag.moved) { if (drag.kind !== 'draw') pushHistory(); drag.moved = true; }
+  }
+
   svg.addEventListener('pointerdown', (e) => {
-    const g = e.target.closest('[data-id]');
-    if (!g) { if (sel) { sel = null; render(false); } return; }
-    const o = find(g.dataset.id);
-    if (!o) return;
-    sel = o.id;
+    if (e.button) return;
+    frozenVB = null;
+    frozenVB = computeVB();
     const p = svgPoint(e);
-    drag = isOpening(o) ? { id: o.id, moved: false } : { id: o.id, dx: o.cx - p.x, dy: o.cy - p.y, moved: false };
-    try { svg.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    const plan = S.step === 'plan';
+    const handle = e.target.closest('[data-handle]');
+    const idEl = e.target.closest('[data-id]');
+    const roomEl = e.target.closest('[data-room]');
+    drag = null;
+
+    if (plan && handle && roomById(sel)) {
+      drag = { kind: 'resize', id: sel, edge: handle.dataset.handle };
+    } else if (idEl && (itemById(idEl.dataset.id) || openById(idEl.dataset.id))) {
+      const id = idEl.dataset.id, it = itemById(id);
+      sel = id;
+      drag = it ? { kind: 'item', id, dx: it.cx - p.x, dy: it.cy - p.y } : { kind: 'open', id };
+    } else if (plan && roomEl && roomById(roomEl.dataset.room)) {
+      const r = roomById(roomEl.dataset.room), inr = interior(r);
+      sel = r.id;
+      drag = { kind: 'room', id: r.id, dx: r.x - p.x, dy: r.y - p.y, sx: r.x, sy: r.y,
+        carry: S.items.filter((it) => containsPt(inr, it.cx, it.cy)).map((it) => ({ id: it.id, cx: it.cx, cy: it.cy })) };
+    } else if (plan) {
+      sel = null;
+      const x0 = snapRoomValue(p.x, roomEdges('x')), y0 = snapRoomValue(p.y, roomEdges('y'));
+      drag = { kind: 'draw', x0, y0, x1: x0, y1: y0 };
+    } else {
+      sel = null;
+    }
+
+    if (drag) { drag.moved = false; try { svg.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ } }
+    else frozenVB = null;
     e.preventDefault();
-    render(false);
+    render();
   });
+
   svg.addEventListener('pointermove', (e) => {
     if (!drag) return;
-    const o = find(drag.id);
-    if (!o) return;
     const p = svgPoint(e);
-    if (isOpening(o)) {
-      const px = Math.min(Math.max(p.x, 0), S.W), py = Math.min(Math.max(p.y, 0), S.L);
-      const d = { top: py, bottom: S.L - py, left: px, right: S.W - px };
-      const wall = Object.keys(d).reduce((a, b) => (d[a] <= d[b] ? a : b));
-      const along = wall === 'top' || wall === 'bottom' ? px : py;
-      const next = { wall, pos: Math.round(along / GRID) * GRID };
-      if (next.wall !== o.wall || next.pos !== o.pos) {
-        o.wall = next.wall; o.pos = next.pos; clampOpening(o);
-        drag.moved = true; render(false);
-      }
+
+    if (drag.kind === 'draw') {
+      const x1 = snapRoomValue(p.x, roomEdges('x')), y1 = snapRoomValue(p.y, roomEdges('y'));
+      if (x1 !== drag.x1 || y1 !== drag.y1) { drag.x1 = x1; drag.y1 = y1; drag.active = true; render(); }
       return;
     }
-    const b = bbox(o);
-    const others = S.items.filter((i) => i.id !== o.id).map(bbox);
-    const x = snapAxis(p.x + drag.dx - b.w / 2, b.w, S.W, others.flatMap((r) => [r.x, r.x + r.w]));
-    const y = snapAxis(p.y + drag.dy - b.h / 2, b.h, S.L, others.flatMap((r) => [r.y, r.y + r.h]));
-    const cx = x + b.w / 2, cy = y + b.h / 2;
-    if (cx !== o.cx || cy !== o.cy) { o.cx = cx; o.cy = cy; drag.moved = true; render(false); }
-  });
-  // double-click (mouse) or double-tap (iPad) an item to rotate it
-  let lastTap = { id: null, t: 0 };
-  const endDrag = () => {
-    if (drag && drag.moved) save();
-    else if (drag) {
-      const now = Date.now();
-      if (lastTap.id === drag.id && now - lastTap.t < 350) { rotateSel(); lastTap = { id: null, t: 0 }; }
-      else lastTap = { id: drag.id, t: now };
+
+    if (drag.kind === 'room') {
+      const r = roomById(drag.id);
+      const x = snapRoomStart(p.x + drag.dx, r.w, roomEdges('x', r.id));
+      const y = snapRoomStart(p.y + drag.dy, r.h, roomEdges('y', r.id));
+      if (x === r.x && y === r.y) return;
+      beginChange();
+      r.x = x; r.y = y;
+      drag.carry.forEach((c) => { const it = itemById(c.id); if (it) { it.cx = c.cx + (x - drag.sx); it.cy = c.cy + (y - drag.sy); } });
+      render();
+      return;
     }
+
+    if (drag.kind === 'resize') {
+      const r = roomById(drag.id);
+      const ex = roomEdges('x', r.id), ey = roomEdges('y', r.id);
+      const before = [r.x, r.y, r.w, r.h].join();
+      const next = { x: r.x, y: r.y, w: r.w, h: r.h };
+      if (drag.edge === 'right') next.w = Math.max(snapRoomValue(p.x, ex), r.x + MIN_ROOM) - r.x;
+      if (drag.edge === 'bottom') next.h = Math.max(snapRoomValue(p.y, ey), r.y + MIN_ROOM) - r.y;
+      if (drag.edge === 'left') { const right = r.x + r.w; next.x = Math.min(snapRoomValue(p.x, ex), right - MIN_ROOM); next.w = right - next.x; }
+      if (drag.edge === 'top') { const bottom = r.y + r.h; next.y = Math.min(snapRoomValue(p.y, ey), bottom - MIN_ROOM); next.h = bottom - next.y; }
+      if ([next.x, next.y, next.w, next.h].join() === before) return;
+      beginChange();
+      // openings keep their place on screen when the far edge moves
+      const dx = next.x - r.x, dy = next.y - r.y;
+      S.open.filter((o) => o.room === r.id).forEach((o) => {
+        if (dx && (o.wall === 'top' || o.wall === 'bottom')) o.pos -= dx;
+        if (dy && (o.wall === 'left' || o.wall === 'right')) o.pos -= dy;
+      });
+      Object.assign(r, next);
+      S.open.filter((o) => o.room === r.id).forEach(clampOpening);
+      render();
+      return;
+    }
+
+    if (drag.kind === 'open') {
+      const o = openById(drag.id);
+      // nearest wall of any room
+      let best = null;
+      S.rooms.forEach((r) => {
+        [['top', p.x - r.x, Math.abs(p.y - r.y)], ['bottom', p.x - r.x, Math.abs(p.y - r.y - r.h)],
+         ['left', p.y - r.y, Math.abs(p.x - r.x)], ['right', p.y - r.y, Math.abs(p.x - r.x - r.w)]].forEach(([wall, a, dist]) => {
+          const len = wallLen(r, wall);
+          const off = a < 0 ? -a : a > len ? a - len : 0;
+          const score = dist + off * 2;
+          if (!best || score < best.score) best = { room: r.id, wall, a, score };
+        });
+      });
+      if (!best) return;
+      const pos = Math.round(best.a / GRID) * GRID;
+      if (best.room === o.room && best.wall === o.wall && pos === o.pos) return;
+      beginChange();
+      o.room = best.room; o.wall = best.wall; o.pos = pos;
+      clampOpening(o);
+      render();
+      return;
+    }
+
+    // furniture
+    const it = itemById(drag.id);
+    const pb = planBox();
+    if (!it || !pb) return;
+    const inr = interior(pb), b = bbox(it);
+    const others = S.items.filter((i) => i.id !== it.id).map(bbox);
+    const faceX = S.rooms.flatMap((r) => [r.x + HW, r.x + r.w - HW]), faceY = S.rooms.flatMap((r) => [r.y + HW, r.y + r.h - HW]);
+    const x = snapItemAxis(p.x + drag.dx - b.w / 2, b.w, inr.x, inr.x + inr.w, faceX.concat(others.flatMap((r) => [r.x, r.x + r.w])));
+    const y = snapItemAxis(p.y + drag.dy - b.h / 2, b.h, inr.y, inr.y + inr.h, faceY.concat(others.flatMap((r) => [r.y, r.y + r.h])));
+    const cx = x + b.w / 2, cy = y + b.h / 2;
+    if (cx === it.cx && cy === it.cy) return;
+    beginChange();
+    it.cx = cx; it.cy = cy;
+    render();
+  });
+
+  // double-click (mouse) or double-tap (iPad) a piece of furniture to rotate it
+  let lastTap = { id: null, t: 0 };
+  function endDrag() {
+    if (!drag) return;
+    const d = drag;
     drag = null;
-  };
+    frozenVB = null;
+    if (d.kind === 'draw') {
+      const r = rectOf({ x: d.x0, y: d.y0 }, { x: d.x1, y: d.y1 });
+      if (r.w >= MIN_ROOM && r.h >= MIN_ROOM) {
+        pushHistory();
+        const room = { id: uid(), name: `${isEn() ? 'Room' : 'ห้อง'} ${S.rooms.length + 1}`, ...r };
+        S.rooms.push(room);
+        sel = room.id;
+      }
+      commit();
+      return;
+    }
+    if (d.moved) { commit(); return; }
+    if (d.kind === 'item') {
+      const now = Date.now();
+      if (lastTap.id === d.id && now - lastTap.t < 350) { lastTap = { id: null, t: 0 }; rotateSel(); return; }
+      lastTap = { id: d.id, t: now };
+    }
+    render();
+  }
   svg.addEventListener('pointerup', endDrag);
   svg.addEventListener('pointercancel', endDrag);
 
   // ── actions ──────────────────────────────────────────────────────────────
   function rotateSel() {
-    const o = sel && find(sel);
-    if (!o || isOpening(o)) return;
-    o.rot = (o.rot + 90) % 360; clampItem(o); commit();
+    const it = sel && itemById(sel);
+    if (!it) return;
+    pushHistory();
+    it.rot = (it.rot + 90) % 360; clampItem(it); commit();
   }
   function deleteSel() {
     if (!sel) return;
+    pushHistory();
     S.items = S.items.filter((i) => i.id !== sel);
-    S.open = S.open.filter((o) => o.id !== sel);
+    S.open = S.open.filter((o) => o.id !== sel && o.room !== sel);
+    S.rooms = S.rooms.filter((r) => r.id !== sel);
     sel = null; commit();
   }
-  function act(kind) {
-    const o = sel && find(sel);
-    if (!o) return;
-    if (kind === 'rotate') rotateSel();
-    else if (kind === 'del') deleteSel();
-    else if (kind === 'flip' && o.t === 'door') { o.flip = !o.flip; commit(); }
-    else if (kind === 'dup' && !isOpening(o)) {
-      const copy = { ...o, id: uid(), cx: o.cx + 25, cy: o.cy + 25 };
+  function setStep(step) {
+    if (step === 'furnish' && !S.rooms.length) return;
+    S.step = step; sel = null; commit();
+    $('rp').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('rpStepPlan').addEventListener('click', () => setStep('plan'));
+  $('rpStepFurn').addEventListener('click', () => setStep('furnish'));
+  $('rpToFurnish').addEventListener('click', () => setStep('furnish'));
+  $('rpToPlan').addEventListener('click', () => setStep('plan'));
+  $('rpUndo').addEventListener('click', undo);
+
+  document.querySelectorAll('[data-act]').forEach((b) => b.addEventListener('click', () => {
+    const it = sel && itemById(sel);
+    if (!it) return;
+    if (b.dataset.act === 'rotate') rotateSel();
+    else if (b.dataset.act === 'del') deleteSel();
+    else if (b.dataset.act === 'dup') {
+      pushHistory();
+      const copy = { ...it, id: uid(), cx: it.cx + 25, cy: it.cy + 25 };
       clampItem(copy); S.items.push(copy); sel = copy.id; commit();
     }
-  }
-  document.querySelectorAll('[data-act]').forEach((b) => b.addEventListener('click', () => act(b.dataset.act)));
+  }));
 
+  // step 1: quick rooms join onto the right-hand side of the plan
+  document.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => {
+    const p = ROOM_PRESETS[Number(b.dataset.preset)];
+    const pb = planBox();
+    pushHistory();
+    const room = { id: uid(), name: isEn() ? p.en : p.th, x: pb ? pb.x + pb.w : 0, y: pb ? pb.y : 0, w: p.w, h: p.h };
+    S.rooms.push(room); sel = room.id;
+    if (S.step !== 'plan') S.step = 'plan';
+    commit();
+  }));
+
+  // doors / windows (step 1) and furniture (step 2)
   document.querySelectorAll('[data-add]').forEach((b) => b.addEventListener('click', () => {
     const t = b.dataset.add;
     if (OPENINGS[t]) {
-      const o = { id: uid(), t, wall: t === 'window' ? 'top' : 'bottom', pos: S.W / 2, w: OPENINGS[t].w, flip: false };
+      const host = (sel && roomById(sel)) || S.rooms[S.rooms.length - 1];
+      if (!host) { alert(isEn() ? 'Draw a room first, then add doors and windows.' : 'วาดห้องก่อน แล้วค่อยเพิ่มประตูหรือหน้าต่าง'); return; }
+      pushHistory();
+      const wall = t === 'window' ? 'top' : 'bottom';
+      const o = { id: uid(), t, room: host.id, wall, pos: wallLen(host, wall) / 2, w: OPENINGS[t].w, flip: false, out: false };
       clampOpening(o); S.open.push(o); sel = o.id;
     } else {
-      const it = { id: uid(), t, cx: S.W / 2, cy: S.L / 2, rot: 0 };
+      const pb = planBox();
+      if (!pb) return;
+      // drop it in the middle of the biggest room
+      const r = S.rooms.slice().sort((a, c) => c.w * c.h - a.w * a.h)[0];
+      pushHistory();
+      const it = { id: uid(), t, cx: r.x + r.w / 2, cy: r.y + r.h / 2, rot: 0 };
       clampItem(it); S.items.push(it); sel = it.id;
     }
     commit();
-    svg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }));
 
   document.querySelectorAll('[data-tpl]').forEach((b) => b.addEventListener('click', () => {
-    if (S.items.length && !confirm(isEn() ? 'Replace the current layout with this template?' : 'แทนที่ห้องที่จัดไว้ด้วยแบบห้องนี้?')) return;
-    S = fromTemplate(b.dataset.tpl); sel = null; render(true); save();
+    if (S.rooms.length && !confirm(isEn() ? 'Replace your current plan with this sample?' : 'แทนที่แปลนที่วาดไว้ด้วยแปลนตัวอย่างนี้?')) return;
+    pushHistory();
+    S = fromTemplate(b.dataset.tpl); sel = null; commit();
   }));
 
+  $('rpClearAll').addEventListener('click', () => {
+    if (!S.rooms.length) return;
+    if (!confirm(isEn() ? 'Clear the whole plan and start again? (Undo can bring it back)' : 'ล้างแปลนทั้งหมดแล้วเริ่มใหม่? (กดย้อนกลับได้)')) return;
+    pushHistory(); S = blank(); sel = null; commit();
+  });
   $('rpClear').addEventListener('click', () => {
     if (!S.items.length) return;
-    if (!confirm(isEn() ? 'Remove all furniture? (doors and windows stay)' : 'ลบเฟอร์นิเจอร์ทั้งหมด? (ประตูและหน้าต่างยังอยู่)')) return;
-    S.items = []; sel = null; commit();
+    if (!confirm(isEn() ? 'Remove all furniture? (the plan stays)' : 'ลบเฟอร์นิเจอร์ทั้งหมด? (แปลนยังอยู่)')) return;
+    pushHistory(); S.items = []; sel = null; commit();
   });
 
-  $('rpWarns').addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-warn]');
-    if (!btn) return;
-    sel = btn.dataset.warn; render(false);
-    svg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.querySelector('.rp').addEventListener('click', (e) => {
+    const pick = e.target.closest('[data-pick]');
+    if (!pick) return;
+    sel = pick.dataset.pick; render();
   });
 
-  function applySize() {
-    const w = Math.round(parseFloat(inpW.value) * 100), l = Math.round(parseFloat(inpL.value) * 100);
-    if (!(w >= 150 && w <= 1500 && l >= 150 && l <= 1500)) return;
-    S.W = w; S.L = l;
-    S.items.forEach(clampItem);
-    S.open.forEach(clampOpening);
+  // selected room / opening editors
+  let armed = false;   // one undo step per editing session of a field
+  const arm = () => { armed = true; };
+  const once = () => { if (armed) { pushHistory(); armed = false; } };
+  ['rpRoomName', 'rpRoomW', 'rpRoomL', 'rpOpenW'].forEach((id) => $(id).addEventListener('focus', arm));
+  $('rpRoomName').addEventListener('input', (e) => {
+    const r = roomById(sel); if (!r) return;
+    once(); r.name = e.target.value.slice(0, 30) || (isEn() ? 'Room' : 'ห้อง'); commit();
+  });
+  const roomSize = () => {
+    const r = roomById(sel); if (!r) return;
+    const w = Math.round(parseFloat($('rpRoomW').value) * 100), h = Math.round(parseFloat($('rpRoomL').value) * 100);
+    if (!(w >= MIN_ROOM && w <= 3000 && h >= MIN_ROOM && h <= 3000)) return;
+    once(); r.w = w; r.h = h;
+    S.open.filter((o) => o.room === r.id).forEach(clampOpening);
     commit();
-  }
-  inpW.addEventListener('input', applySize);
-  inpL.addEventListener('input', applySize);
-  [inpW, inpL].forEach((i) => i.addEventListener('change', () => render(true)));
+  };
+  $('rpRoomW').addEventListener('input', roomSize);
+  $('rpRoomL').addEventListener('input', roomSize);
+  $('rpRoomDel').addEventListener('click', deleteSel);
+  $('rpOpenW').addEventListener('input', (e) => {
+    const o = openById(sel); const w = parseInt(e.target.value, 10);
+    if (!o || !(w >= 40 && w <= 400)) return;
+    once(); o.w = w; clampOpening(o); commit();
+  });
+  $('rpOpenFlip').addEventListener('click', () => { const o = openById(sel); if (!o) return; pushHistory(); o.flip = !o.flip; commit(); });
+  $('rpOpenOut').addEventListener('click', () => { const o = openById(sel); if (!o) return; pushHistory(); o.out = !o.out; commit(); });
+  $('rpOpenDel').addEventListener('click', deleteSel);
 
   document.addEventListener('keydown', (e) => {
-    if (!sel) return;
     const tag = (e.target.tagName || '').toLowerCase();
-    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
-    const o = find(sel);
-    if (!o) return;
-    const step = e.shiftKey ? 25 : GRID;
+    const typing = tag === 'input' || tag === 'textarea' || tag === 'select';
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'z' || e.key === 'Z') && !typing) { e.preventDefault(); undo(); return; }
+    if (!sel || typing) return;
+    const step = e.shiftKey ? 25 : S.step === 'plan' ? ROOM_GRID : GRID;
     const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
     if (moves[e.key]) {
+      const [dx, dy] = moves[e.key];
+      const it = itemById(sel), r = roomById(sel), o = openById(sel);
+      if (!it && !r && !o) return;
       e.preventDefault();
-      if (isOpening(o)) {
-        const [dx, dy] = moves[e.key];
-        o.pos += o.wall === 'top' || o.wall === 'bottom' ? dx : dy; clampOpening(o);
-      } else {
-        o.cx += moves[e.key][0]; o.cy += moves[e.key][1]; clampItem(o);
-      }
+      pushHistory();
+      if (it) { it.cx += dx; it.cy += dy; clampItem(it); }
+      else if (r) { r.x += dx; r.y += dy; }
+      else { o.pos += o.wall === 'top' || o.wall === 'bottom' ? dx : dy; clampOpening(o); }
       commit();
     } else if (e.key === 'r' || e.key === 'R') { rotateSel(); }
     else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSel(); }
-    else if (e.key === 'Escape') { sel = null; render(false); }
+    else if (e.key === 'Escape') { sel = null; render(); }
   });
 
-  // re-render labels in the other language when TH/EN is toggled
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-lang-btn]')) setTimeout(() => render(false), 0);
-  });
+  // re-render labels in the other language when TH/EN is toggled; rescale captions on resize
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-lang-btn]')) setTimeout(render, 0); });
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 120); });
 
   // ── export PNG ───────────────────────────────────────────────────────────
-  $('rpExport').addEventListener('click', async () => {
+  document.querySelectorAll('.rp-export').forEach((btn) => btn.addEventListener('click', async () => {
+    const pb = planBox();
+    if (!pb) return;
+    const vb = [pb.x - PAD, pb.y - PAD, pb.w + PAD * 2, pb.h + PAD * 2];
+    const scale = Math.min(3, 1600 / Math.max(vb[2], vb[3]));   // px per cm in the image
     const prevSel = sel; sel = null;
-    const { markup, vb } = build({ exporting: true });
+    // captions ~1.8× larger than on screen: the image is usually viewed shrunk on a phone or in chat
+    const markup = build(vb, 1.8 / scale, true);
     sel = prevSel;
-    const [, , vw, vh] = vb;
-    const scale = Math.min(3, 1600 / Math.max(vw, vh));
-    const cw = Math.round(vw * scale), chPlan = Math.round(vh * scale), footer = 76;
-    const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.join(' ')}" width="${cw}" height="${chPlan}">${markup}</svg>`;
+    const cw = Math.round(vb[2] * scale), chPlan = Math.round(vb[3] * scale), footer = 76;
     const img = new Image();
-    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.join(' ')}" width="${cw}" height="${chPlan}">${markup}</svg>`);
     try { await img.decode(); } catch (err) { alert(isEn() ? 'Could not create the image.' : 'สร้างรูปภาพไม่สำเร็จ'); return; }
 
-    // keep the image at least 1000px wide so the footer text never cramps; centre narrow plans
+    // keep the image at least 1000px wide so the footer never cramps; centre narrow plans
     const outW = Math.max(cw, 1000);
     const canvas = document.createElement('canvas');
     canvas.width = outW; canvas.height = chPlan + footer;
@@ -795,10 +1216,10 @@ const TEMPLATES = {
     ctx.fillStyle = '#ffffff'; ctx.font = `700 24px ${FONT}`;
     ctx.fillText('WHAT THE HOUSE', 24, chPlan + 28);
     ctx.fillStyle = '#9aa39c'; ctx.font = `400 17px ${FONT}`;
-    const area = ((S.W * S.L) / 10000).toFixed(1);
+    const total = (S.rooms.reduce((s, r) => s + r.w * r.h, 0) / 10000).toFixed(1);
     ctx.fillText(isEn()
-      ? `Room ${(S.W / 100).toFixed(2)} × ${(S.L / 100).toFixed(2)} m (${area} sq.m.) · rough sketch, not a construction drawing`
-      : `ห้อง ${(S.W / 100).toFixed(2)} × ${(S.L / 100).toFixed(2)} ม. (${area} ตร.ม.) · แบบร่างคร่าว ๆ ไม่ใช่แบบก่อสร้าง`, 24, chPlan + 54);
+      ? `${S.rooms.length} room${S.rooms.length > 1 ? 's' : ''} · ${total} sq.m. · rough sketch, not a construction drawing`
+      : `${S.rooms.length} ห้อง · ${total} ตร.ม. · แบบร่างคร่าว ๆ ไม่ใช่แบบก่อสร้าง`, 24, chPlan + 54);
     ctx.textAlign = 'right'; ctx.fillStyle = '#2fe07c'; ctx.font = `600 18px ${FONT}`;
     ctx.fillText('whatthehouse.net', outW - 24, chPlan + 28);
 
@@ -806,16 +1227,16 @@ const TEMPLATES = {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = 'wth-room-plan.png';
+      a.href = url; a.download = 'wth-floor-plan.png';
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     }, 'image/png');
-  });
+  }));
 
   // ── boot ─────────────────────────────────────────────────────────────────
-  S = load() || fromTemplate('bedroom');
-  S.items.forEach(clampItem);
+  S = load() || blank();
   S.open.forEach(clampOpening);
-  render(true);
+  render();
+  requestAnimationFrame(render);   // second pass once the drawing has its real on-screen size
 })();
 </script>
