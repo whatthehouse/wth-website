@@ -187,20 +187,30 @@ const TEMPLATES = {
                   <button type="button" data-mode="rect" class="on">▭ <span class="lang-th">ลากเป็นห้อง</span><span class="lang-en">Box room</span></button>
                   <button type="button" data-mode="line">✎ <span class="lang-th">วาดทีละเส้น</span><span class="lang-en">Wall by wall</span></button>
                 </div>
-                <div class="rp-linebar" id="rpLineBar" hidden>
-                  <span id="rpLineMsg"></span>
-                  <div class="rp-linebar-btns">
-                    <button type="button" id="rpLineUndo">↶ <span class="lang-th">ลบเส้นล่าสุด</span><span class="lang-en">Undo wall</span></button>
-                    <button type="button" id="rpLineClose" class="primary"><span class="lang-th">ปิดห้อง</span><span class="lang-en">Close room</span></button>
-                    <button type="button" id="rpLineCancel"><span class="lang-th">ยกเลิก</span><span class="lang-en">Cancel</span></button>
-                  </div>
-                </div>
                 <div class="rp-zoom">
                   <button type="button" id="rpZoomOut" aria-label="Zoom out">−</button>
                   <button type="button" id="rpZoomFit" aria-label="Fit plan"><span class="lang-th">พอดี</span><span class="lang-en">Fit</span></button>
                   <button type="button" id="rpZoomIn" aria-label="Zoom in">+</button>
                 </div>
                 <input type="number" id="rpDimInput" class="rp-dim-input" step="0.05" min="0.3" max="30" inputmode="decimal" enterkeyhint="done" hidden />
+              </div>
+
+              <!-- wall-by-wall helper: sits right under the plan so it never covers the drawing -->
+              <div class="rp-linebar" id="rpLineBar" hidden>
+                <span id="rpLineMsg"></span>
+                <div class="rp-linelen" id="rpLineLen" hidden>
+                  <input type="number" id="rpLineLenInput" step="0.05" min="0.2" max="30" inputmode="decimal" enterkeyhint="done" aria-label="Wall length (m)" />
+                  <span class="rp-linelen-unit"><span class="lang-th">ม.</span><span class="lang-en">m</span></span>
+                  <button type="button" data-dir="up" aria-label="up">↑</button>
+                  <button type="button" data-dir="down" aria-label="down">↓</button>
+                  <button type="button" data-dir="left" aria-label="left">←</button>
+                  <button type="button" data-dir="right" aria-label="right">→</button>
+                </div>
+                <div class="rp-linebar-btns">
+                  <button type="button" id="rpLineUndo">↶ <span class="lang-th">ลบเส้นล่าสุด</span><span class="lang-en">Undo wall</span></button>
+                  <button type="button" id="rpLineClose" class="primary"><span class="lang-th">ปิดห้อง</span><span class="lang-en">Close room</span></button>
+                  <button type="button" id="rpLineCancel"><span class="lang-th">ยกเลิก</span><span class="lang-en">Cancel</span></button>
+                </div>
               </div>
 
               <div class="rp-selbar" id="rpSel" hidden>
@@ -252,7 +262,7 @@ const TEMPLATES = {
                     <button type="button" data-shape="free"><span class="lang-th">อิสระ</span><span class="lang-en">Free</span></button>
                   </div>
                 </div>
-                <p class="rp-mini" id="rpFreeNote" hidden><span class="lang-th">รูปทรงอิสระ: ลากวงกลมที่มุมเพื่อย้ายมุม · ลากจุด + กลางผนังเพื่อเพิ่มมุม · แตะมุมสองครั้งเพื่อลบมุม</span><span class="lang-en">Free shape: drag a corner circle to move it · drag a wall's + dot to add a corner · double-tap a corner to remove it</span></p>
+                <p class="rp-mini" id="rpFreeNote" hidden><span class="lang-th">รูปทรงอิสระ: แตะตัวเลขบนผนังเพื่อพิมพ์ความยาว · ลากวงกลมที่มุมเพื่อย้ายมุม · ลากจุด + กลางผนังเพื่อเพิ่มมุม · แตะมุมสองครั้งเพื่อลบมุม</span><span class="lang-en">Free shape: tap a wall's number to type its length · drag a corner circle to move it · drag a wall's + dot to add a corner · double-tap a corner to remove it</span></p>
                 <div id="rpCutFields" hidden>
                   <div class="rp-field">
                     <span class="rp-cap"><span class="lang-th">มุมที่ตัด</span><span class="lang-en">Corner</span></span>
@@ -359,11 +369,16 @@ const TEMPLATES = {
 .rp-modes button { height: 36px; padding: 0 12px; font-family: inherit; font-size: .82rem; font-weight: 600; color: #4a524c; background: transparent; border: 0; border-radius: 7px; cursor: pointer; white-space: nowrap; }
 .rp-modes button:hover { background: #e8ece6; }
 .rp-modes button.on { background: #12995a; color: #fff; }
-.rp-linebar { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; padding: 8px 10px 8px 14px; background: rgba(22,24,26,.9); color: #fff; border-radius: 12px; font-size: .84rem; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+.rp-linebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 10px; padding: 8px 10px 8px 14px; background: #16181a; color: #fff; border: 1px solid rgba(47,224,124,.35); border-radius: var(--radius-sm); font-size: .84rem; }
 .rp-linebar-btns { display: flex; gap: 6px; }
 .rp-linebar button { height: 34px; padding: 0 12px; font-family: inherit; font-size: .8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,.12); border: 0; border-radius: 8px; cursor: pointer; }
 .rp-linebar button.primary { background: #12995a; }
 .rp-linebar button:disabled { opacity: .35; cursor: default; }
+.rp-linelen { display: flex; align-items: center; gap: 4px; padding: 0 8px; border-left: 1px solid rgba(255,255,255,.18); border-right: 1px solid rgba(255,255,255,.18); }
+.rp-linelen input { width: 76px; height: 34px; box-sizing: border-box; font-family: var(--mono); font-size: .95rem; font-weight: 600; text-align: center; color: #16181a; background: #fff; border: 2px solid transparent; border-radius: 8px; padding: 0 4px; }
+.rp-linelen input:focus { outline: none; border-color: #2fe07c; }
+.rp-linelen-unit { font-size: .78rem; color: rgba(255,255,255,.7); margin-right: 2px; }
+.rp-linelen button { width: 34px; padding: 0; font-size: 1rem; }
 .rp-zoom { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; background: rgba(255,255,255,.92); border: 1px solid #d6d9d3; border-radius: 10px; padding: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
 .rp-zoom button { min-width: 40px; height: 36px; font-family: inherit; font-size: 1.05rem; font-weight: 600; color: #2b302d; background: transparent; border: 0; border-radius: 7px; cursor: pointer; }
 .rp-zoom button:hover { background: #e8ece6; }
@@ -1035,7 +1050,7 @@ const TEMPLATES = {
       const line = `stroke="${col}" stroke-width="${f(px(1))}"`;
       if (r.pts) {
         // free shape: every wall gets its own length, written along the wall and kept upright
-        edges(r).forEach((e) => {
+        edges(r).forEach((e, ei) => {
           if (e.len < px(56)) return;
           const a = e2w(e, px(3), HW + off), b = e2w(e, e.len - px(3), HW + off), m = e2w(e, e.len / 2, HW + off);
           const t0a = e2w(e, px(3), HW + off - tick), t0b = e2w(e, px(3), HW + off + tick);
@@ -1045,6 +1060,10 @@ const TEMPLATES = {
           if (ang > 90) ang -= 180;
           if (ang <= -90) ang += 180;
           out += `<text transform="translate(${f(m.x)} ${f(m.y)}) rotate(${f(ang)})" font-size="${f(fsD)}" font-family="${FONT}" font-weight="600" fill="${col}" ${halo} text-anchor="middle" dominant-baseline="central" pointer-events="none">${m2(e.len)} ${unitM}</text>`;
+          if (live) {
+            const flat = Math.abs(e.ux) >= Math.abs(e.uy);
+            dimHits.push({ room: r.id, key: `e${ei}`, x: m.x, y: m.y, w: flat ? px(64) : px(30), h: flat ? px(30) : px(64) });
+          }
         });
         return;
       }
@@ -1260,10 +1279,12 @@ const TEMPLATES = {
       $('rpLineMsg').textContent = !n
         ? (en ? 'Tap or drag to start the first wall' : 'แตะหรือลากเพื่อเริ่มผนังเส้นแรก')
         : n < 3
-          ? (en ? 'Tap or drag to place the next corner' : 'แตะหรือลากเพื่อวางมุมถัดไป')
+          ? (en ? 'Tap/drag the next corner, or type a length + arrow' : 'แตะ/ลากวางมุมถัดไป หรือพิมพ์ความยาว + กดลูกศร')
           : (en ? 'Back to the green circle to close the room' : 'กลับมาที่วงกลมเขียวเพื่อปิดห้อง');
       $('rpLineUndo').disabled = !n;
       $('rpLineClose').disabled = n < 3;
+      $('rpLineLen').hidden = !n;   // typing a length needs a corner to measure from
+      $('rpLineLenInput').placeholder = en ? 'length' : 'ความยาว';
     }
 
     const r = sel && roomById(sel), o = sel && openById(sel), it = sel && itemById(sel);
@@ -1709,10 +1730,28 @@ const TEMPLATES = {
 
   // ── tap-to-type dimensions ───────────────────────────────────────────────
   const dimInput = $('rpDimInput');
-  function dimValue(r, key) { return key === 'w' ? r.w : key === 'h' ? r.h : key === 'cw' ? r.cut.w : r.cut.h; }
+  function dimValue(r, key) {
+    if (key[0] === 'e') { const e = r.pts && edges(r)[Number(key.slice(1))]; return e ? Math.round(e.len) : 0; }
+    return key === 'w' ? r.w : key === 'h' ? r.h : key === 'cw' ? r.cut.w : r.cut.h;
+  }
+  // Free shape, one wall set to a new length: its start corner stays put and every
+  // corner lying beyond its end (along the wall's direction) slides by the difference,
+  // so the room stretches or shrinks on that side instead of twisting.
+  function setWallLength(r, i, len) {
+    const P = r.pts, e = edges(r)[i];
+    const delta = len - e.len, B = P[(i + 1) % P.length];
+    const edgeEnd = B[0] * e.ux + B[1] * e.uy;
+    const next = P.map(([x, y]) => (x * e.ux + y * e.uy >= edgeEnd - 0.5
+      ? [Math.round((x + e.ux * delta) * 10) / 10, Math.round((y + e.uy * delta) * 10) / 10] : [x, y]));
+    // refuse changes that would fold the room over or crush a wall
+    const tooShort = next.some((a, k) => { const b = next[(k + 1) % next.length]; return Math.hypot(a[0] - b[0], a[1] - b[1]) < 20; });
+    if (tooShort || signedArea2(next) <= 10000) return false;
+    r.pts = next; syncBox(r);
+    return true;
+  }
   function openDimInput(d) {
     const r = roomById(d.room);
-    if (!r || ((d.key === 'cw' || d.key === 'ch') && !r.cut)) return;
+    if (!r || ((d.key === 'cw' || d.key === 'ch') && !r.cut) || (d.key[0] === 'e' && !r.pts)) return;
     dimEdit = { room: d.room, key: d.key, x: d.x, y: d.y };
     dimInput.hidden = false;
     dimInput.value = m2(dimValue(r, d.key));
@@ -1734,6 +1773,20 @@ const TEMPLATES = {
     const r = roomById(edit.room);
     const cm = Math.round(parseFloat(dimInput.value) * 100);
     if (!apply || !r || !(cm > 0) || cm === dimValue(r, edit.key)) { render(); return; }
+    if (edit.key[0] === 'e') {
+      const snapshot = JSON.stringify(S);
+      let ok = false;
+      reshape(r, () => { ok = setWallLength(r, Number(edit.key.slice(1)), clamp(cm, 20, 3000)); });
+      if (!ok) {
+        render();
+        alert(isEn() ? 'That length would fold the room over — try a different length or move the corners instead.' : 'ความยาวนี้ทำให้รูปห้องพับทับกัน — ลองความยาวอื่น หรือลากจุดมุมแทน');
+        return;
+      }
+      history.push(snapshot);
+      if (history.length > 80) history.shift();
+      commit();
+      return;
+    }
     pushHistory();
     reshape(r, () => {
       if (edit.key === 'w') r.w = clamp(cm, Math.max(MIN_ROOM, r.cut ? r.cut.w + MIN_LEFT : 0), 3000);
@@ -1901,6 +1954,32 @@ const TEMPLATES = {
     if (!wallDraw.pts.length) wallDraw = null;
     render();
   }
+  // typed wall length: the next wall goes that far in the chosen direction
+  const lenInput = $('rpLineLenInput');
+  function placeTypedWall(ux, uy) {
+    if (!wallDraw || !wallDraw.pts.length) return;
+    const L = Math.round(parseFloat(lenInput.value) * 100);
+    if (!(L >= 20 && L <= 3000)) { lenInput.focus(); lenInput.select(); return; }
+    const P = wallDraw.pts, last = P[P.length - 1];
+    const pt = [Math.round((last[0] + ux * L) * 10) / 10, Math.round((last[1] + uy * L) * 10) / 10];
+    wallDraw.cur = null;
+    // landing on the start point closes the room
+    if (P.length >= 3 && Math.hypot(pt[0] - P[0][0], pt[1] - P[0][1]) < 1) { finishWalls(); render(); return; }
+    P.push(pt);
+    render();
+  }
+  const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+  document.querySelectorAll('[data-dir]').forEach((b) => b.addEventListener('click', () => placeTypedWall(...DIRS[b.dataset.dir])));
+  lenInput.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    // on a computer the mouse is pointing the way: use the direction of the live wall
+    const W = wallDraw;
+    if (!W || !W.cur) return;
+    const last = W.pts[W.pts.length - 1], dx = W.cur[0] - last[0], dy = W.cur[1] - last[1], d = Math.hypot(dx, dy);
+    if (d >= 1) placeTypedWall(dx / d, dy / d);
+  });
+
   document.querySelectorAll('[data-mode]').forEach((b) => b.addEventListener('click', () => { if (mode !== b.dataset.mode) setMode(b.dataset.mode); }));
   $('rpLineUndo').addEventListener('click', undoWall);
   $('rpLineClose').addEventListener('click', () => { if (wallDraw && wallDraw.pts.length >= 3) { wallDraw.cur = null; finishWalls(); render(); } });
