@@ -4,3 +4,16 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# PlanForge lives on its own subdomain (Vercel); keep the old path working.
+[[redirects]]
+  from = "/planforge"
+  to = "https://planforge.whatthehouse.net/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/planforge/*"
+  to = "https://planforge.whatthehouse.net/:splat"
+  status = 301
+  force = true
