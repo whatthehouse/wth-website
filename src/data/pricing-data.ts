@@ -118,22 +118,22 @@ export const included = {
   th: [
     'ตรวจครอบคลุมทุกระบบสำคัญ — โครงสร้าง งานสถาปัตยกรรม ระบบไฟฟ้า ประปา สุขาภิบาล หลังคา และจุดรั่วซึม',
     'ตรวจด้วยเครื่องมือระดับมืออาชีพ — กล้องถ่ายภาพความร้อน เครื่องวัดความชื้น และกล้องส่องท่อ เจาะหาปัญหาที่ซ่อนอยู่ซึ่งตาเปล่ามองไม่เห็น',
-    'ทีมผู้ตรวจมืออาชีพ ตรวจตามเช็กลิสต์มาตรฐานอย่างเป็นระบบทุกจุด ไม่ตกหล่น',
+    'ทีมผู้ตรวจมืออาชีพ ตรวจตามเช็กลิสต์มาตรฐานอย่างเป็นระบบ ครอบคลุมทุกระบบหลัก',
     'รายงาน PDF สองภาษา (ไทย-อังกฤษ) — ภาพถ่ายทุกจุดที่พบ ระดับความรุนแรง และแนวทางแก้ไข ส่งภายใน 24 ชั่วโมง',
     'กลับไปตรวจซ้ำอีก 1 รอบ ยืนยันว่าผู้รับเหมาแก้ไขครบก่อนคุณเซ็นรับมอบ (แพ็กเกจ 2 รอบ)',
     'เป็นกลาง 100% อยู่ข้างคุณ — ไม่มีส่วนได้เสียกับโครงการหรือผู้รับเหมา ใช้รายงานเป็นหลักฐานเจรจาได้',
     'ปรึกษาทีมงานเพิ่มเติมหลังรับรายงานได้ฟรี ทาง LINE หรือโทรศัพท์',
-    'รวมค่าเดินทางในเขตบริการแล้ว ไม่มีค่าใช้จ่ายแอบแฝง',
+    'รวมค่าเดินทางในเชียงใหม่แล้ว ไม่มีค่าใช้จ่ายแอบแฝง',
   ],
   en: [
     'Covers every key system — structure, architecture, electrical, plumbing, sanitary, roof and water leakage',
     'Professional-grade tools — thermal camera, moisture meter and pipe endoscope that reveal defects hidden from the naked eye',
-    'Professional inspectors working through a standardised, systematic checklist — nothing missed',
+    'Professional inspectors working through a standardised, systematic checklist covering every major system',
     'Bilingual (Thai–English) PDF report — photos of every finding, severity ratings and repair guidance, delivered within 24 hours',
     'One follow-up re-inspection to confirm every defect is fixed before you sign off (2-round package)',
     '100% independent and on your side — no ties to any developer or contractor; the report stands as evidence in negotiations',
     'Free follow-up consultation with our team by LINE or phone after you receive the report',
-    'Travel within our service area included — no hidden charges',
+    'Travel within Chiang Mai included — no hidden charges',
   ],
 };
 
@@ -145,7 +145,7 @@ export const extras = [
   { th: 'ตรวจสระว่ายน้ำ',                         en: 'Swimming pool inspection',            price: { th: 'เพิ่ม 25%', en: '+25%' } },
   { th: 'ตรวจระบบโซลาร์เซลล์',                    en: 'Solar panel system inspection',       price: { th: 'ประเมินราคา', en: 'Custom quote' } },
   { th: 'งานบิวต์อินจำนวนมาก',                    en: 'Extensive built-ins',                 price: { th: 'เพิ่ม 20%', en: '+20%' } },
-  { th: 'เดินทางนอกเขตบริการ',                    en: 'Travel outside the service area',     price: { th: 'คิดตามระยะทาง', en: 'By distance' } },
+  { th: 'เดินทางนอกเชียงใหม่',                    en: 'Travel outside Chiang Mai',     price: { th: 'คิดตามระยะทาง', en: 'By distance' } },
 ];
 
 export const customQuote = {
@@ -153,7 +153,7 @@ export const customQuote = {
     'พื้นที่เกินช่วงราคาที่กำหนดในตาราง',
     'อาคารตั้งแต่ 3 ชั้นขึ้นไปที่ไม่ได้ระบุในตาราง',
     'บ้านหรู คฤหาสน์ Penthouse หรืออาคารที่มีงานระบบซับซ้อน',
-    'บ้านที่มีสระว่ายน้ำ ลิฟต์ โซลาร์เซลล์ หรือระบบบ้านอัจฉริยะจำนวนมาก',
+    'บ้านที่มีระบบโซลาร์เซลล์ หรือระบบบ้านอัจฉริยะจำนวนมาก',
     'บ้านตัวอย่างหรือทรัพย์ที่มีเฟอร์นิเจอร์บิวต์อินเต็มพื้นที่',
     'บ้านมือสองที่มีอายุ สภาพ หรือประวัติการต่อเติมซับซ้อน',
     'หน้างานต่างจังหวัดหรือพื้นที่ที่มีข้อจำกัดในการเดินทาง',
@@ -162,7 +162,7 @@ export const customQuote = {
     'Areas beyond the tiers listed in the tables',
     'Buildings of 3 storeys or more not covered above',
     'Luxury homes, mansions, penthouses or complex building systems',
-    'Homes with a pool, lift, solar or extensive smart-home systems',
+    'Homes with solar or extensive smart-home systems',
     'Show homes or properties fully fitted with built-in furniture',
     'Older second-hand homes or complex renovation history',
     'Sites in other provinces or with access limitations',
