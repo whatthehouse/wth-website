@@ -98,12 +98,12 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
               <div class="area-btns">
                 <label class="area-radio">
                   <input type="radio" name="location" value="cm" checked />
-                  <span><span class="lang-th">ในเขตบริการ (เชียงใหม่)</span><span class="lang-en">Within our service area (Chiang Mai)</span></span>
+                  <span><span class="lang-th">เชียงใหม่</span><span class="lang-en">Chiang Mai</span></span>
                 </label>
                 <label class="area-radio">
                   <input type="radio" name="location" value="out" />
                   <span>
-                    <span class="lang-th">นอกเขตบริการ (ลำพูน / ลำปาง)</span><span class="lang-en">Outside the area (Lamphun / Lampang)</span>
+                    <span class="lang-th">ลำพูน / ลำปาง</span><span class="lang-en">Lamphun / Lampang</span>
                     <small class="lang-th"> (คิดค่าเดินทางตามระยะทาง)</small><small class="lang-en"> (travel charged by distance)</small>
                   </span>
                 </label>
@@ -675,7 +675,7 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       });
       if (location === 'out') {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${isEn() ? 'Travel outside the service area' : 'ค่าเดินทางนอกเขตบริการ'}</span><b>${isEn() ? 'by distance' : 'ตามระยะทาง'}</b>`;
+        li.innerHTML = `<span>${isEn() ? 'Travel outside Chiang Mai' : 'ค่าเดินทางนอกเชียงใหม่'}</span><b>${isEn() ? 'by distance' : 'ตามระยะทาง'}</b>`;
         breakdown.appendChild(li);
       }
 
@@ -737,8 +737,8 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
       });
       const areaRow = document.createElement('tr');
       const areaTxt = en
-        ? `Stated usable area: ${current.sqm} sq.m.${location === 'out' ? ' · site outside the service area (travel charged by distance)' : ''}`
-        : `พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.${location === 'out' ? ' · หน้างานนอกเขตบริการ (คิดค่าเดินทางตามระยะทาง)' : ''}`;
+        ? `Stated usable area: ${current.sqm} sq.m.${location === 'out' ? ' · site outside Chiang Mai (travel charged by distance)' : ''}`
+        : `พื้นที่ใช้สอยที่แจ้ง: ${current.sqm} ตร.ม.${location === 'out' ? ' · หน้างานนอกเชียงใหม่ (คิดค่าเดินทางตามระยะทาง)' : ''}`;
       areaRow.innerHTML = `<td colspan="2" style="border:0;padding:6px 0 0;font-size:10px;color:#5a625c">${areaTxt}</td>`;
       body.appendChild(areaRow);
 
@@ -756,8 +756,8 @@ import { VAT_NOTE, QUOTE_VALID_DAYS, ROUND1_RATIO, ROUND2_LATER_RATIO, onePrice,
           : 'รวมตรวจรอบแก้ไขอีก 1 ครั้ง (นัดภายใน 60 วันหลังการตรวจครั้งแรก)');
       }
       if (location === 'out') notes.push(en
-        ? 'Excludes travel outside the service area, which is charged by distance'
-        : 'ยังไม่รวมค่าเดินทางนอกเขตบริการ ซึ่งคิดตามระยะทาง');
+        ? 'Excludes travel outside Chiang Mai, which is charged by distance'
+        : 'ยังไม่รวมค่าเดินทางนอกเชียงใหม่ ซึ่งคิดตามระยะทาง');
       document.getElementById('qdVat').textContent = notes.join(' · ');
       fitQuoteToPage();
       return true;
