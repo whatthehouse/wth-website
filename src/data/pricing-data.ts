@@ -110,7 +110,7 @@ export const options = [
   { id: 'pool',     for: ['house1','house2'], pct: 0.25, th: 'ตรวจสระว่ายน้ำ',            en: 'Swimming pool inspection' },
   { id: 'solar',    for: ['house1','house2'], quote: true, th: 'ตรวจระบบโซลาร์เซลล์',     en: 'Solar panel system inspection' },
   { id: 'builtin',  for: ['condo','house1','house2','townhome'], pct: 0.20, th: 'งานบิวต์อินจำนวนมาก', en: 'Extensive built-in furniture' },
-  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.30, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
+  { id: 'used',     for: ['condo','house1','house2','townhome'], pct: 0.15, th: 'ทรัพย์มือสอง', en: 'Second-hand property' },
 ];
 
 // ── Included scope / extras / custom-quote conditions / terms ───────────────
@@ -141,7 +141,7 @@ export const extras = [
   { th: 'ซื้อตรวจรอบที่ 2 ภายหลัง', subTh: '(หลังเลือกแพ็กเกจรอบเดียว)', en: 'Adding round 2 later', subEn: '(after a single-round package)', price: { th: 'คิดค่าบริการเพิ่ม', en: 'Additional charge applies' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — คอนโด',        en: '3rd round onwards — condo',          price: { th: '1,000 บาท/ครั้ง', en: '1,000 THB/visit' } },
   { th: 'ตรวจรอบที่ 3 เป็นต้นไป — บ้าน/ทาวน์โฮม', en: '3rd round onwards — house/townhome', price: { th: '2,000 บาท/ครั้ง', en: '2,000 THB/visit' } },
-  { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 30%', en: '+30%' } },
+  { th: 'บ้านหรือคอนโดมือสอง',                    en: 'Second-hand property',                price: { th: 'เพิ่ม 15%', en: '+15%' } },
   { th: 'ตรวจสระว่ายน้ำ',                         en: 'Swimming pool inspection',            price: { th: 'เพิ่ม 25%', en: '+25%' } },
   { th: 'ตรวจระบบโซลาร์เซลล์',                    en: 'Solar panel system inspection',       price: { th: 'ประเมินราคา', en: 'Custom quote' } },
   { th: 'งานบิวต์อินจำนวนมาก',                    en: 'Extensive built-ins',                 price: { th: 'เพิ่ม 20%', en: '+20%' } },
